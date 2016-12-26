@@ -20,6 +20,6 @@ public class SocketVision extends BaseVision {
         String mapUpdate = socketCollector.waitForMapUpdate();
         // Do stuff with it
 
-        return null; // TODO: Implement get vision data from socket
+        return new ArrayList<>(); // TODO: Implement get vision data from socket
     }
 }

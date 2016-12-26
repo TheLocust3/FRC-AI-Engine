@@ -1,5 +1,7 @@
 package com.gmail.jakekinsella.background.socket;
 
+import org.json.simple.JSONArray;
+
 import java.net.Socket;
 import java.util.ArrayList;
 

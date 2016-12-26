@@ -24,7 +24,7 @@ public class Command {
     private String commandName;
     private JSONArray args;
 
-    public Command(Socket socket, String commandName, ArrayList<String> args) {
+    public Command(Socket socket, String commandName, JSONArray args) {
         try {
             this.socketOutput = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
@@ -32,17 +32,13 @@ public class Command {
         }
 
         this.commandName = commandName;
-        this.args.addAll(args);
+        this.args = args;
     }
 
     public Command(Socket socket, String commandName, String... args) {
-        this(socket, commandName, new ArrayList<>(Arrays.asList(args)));
-    }
+        this(socket, commandName, new JSONArray());
 
-    public Command(Socket socket, String commandName, JSONArray args) {
-        this(socket, commandName, new ArrayList<String>());
-
-        this.args = args;
+        this.args.add(args);
     }
 
     public Command(Socket socket, String rawJSON) {
@@ -52,6 +48,7 @@ public class Command {
         try {
             obj = parser.parse(rawJSON);
         } catch (ParseException e) {
+            logger.error(rawJSON);
             logger.error("Error in parsing JSON", e);
         }
 

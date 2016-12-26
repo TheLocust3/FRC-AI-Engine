@@ -6,6 +6,6 @@ package com.gmail.jakekinsella.map;
 public class Tower extends SolidObject {
 
     public Tower(int x, int y) {
-        super(x, y, 50, 50);
+        super(x, y, 50, 50, 1);
     }
 }

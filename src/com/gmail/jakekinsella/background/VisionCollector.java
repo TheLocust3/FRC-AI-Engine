@@ -20,6 +20,12 @@ public class VisionCollector implements Runnable {
     public void run() {
         while (true) {
             this.map.inputVisionData(this.vision.waitForVisionData());
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

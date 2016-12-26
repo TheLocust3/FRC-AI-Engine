@@ -1,5 +1,7 @@
 package com.gmail.jakekinsella.background.socket;
 
+import org.json.simple.JSONArray;
+
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -8,7 +10,7 @@ import java.util.ArrayList;
  */
 public class CommandResponse extends Command {
 
-    public CommandResponse(Socket socket, ArrayList<String> args) {
+    public CommandResponse(Socket socket, JSONArray args) {
         super(socket, "COMMAND_RESPONSE", args);
     }
 }
