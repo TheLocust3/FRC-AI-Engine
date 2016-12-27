@@ -21,17 +21,15 @@ public class SocketCollector implements Runnable {
     private Socket socket;
     private BufferedReader socketReader;
 
-    private SocketRobot robot;
-
-    public SocketCollector(SocketRobot robot) {
-        this.robot = robot;
-
+    public SocketCollector() {
         try {
             this.socket = new Socket("127.0.0.1", 2345);
             this.socketReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         } catch (IOException e) {
             logger.error("Connecting to socket", e);
         }
+
+        this.setup();
     }
 
     public String waitForMapUpdate() {
@@ -40,26 +38,39 @@ public class SocketCollector implements Runnable {
 
     @Override
     public void run() {
+        long lastTick = System.currentTimeMillis();
+        while (true) {
+            double deltaSeconds = (System.currentTimeMillis() - lastTick) / 1000.0;
+
+            this.tick(deltaSeconds);
+
+            lastTick = System.currentTimeMillis();
+        }
+    }
+
+    public void move(double speed) {
+        assert(speed < -1.0 && speed > 1.0);
+
+        new MoveCommand(this.socket, speed).sendCommand();
+    }
+
+    public void turn(long angle) {
+        new TurnCommand(this.socket, angle).sendCommand();
+    }
+
+    private void tick(double deltaSeconds) {
+        // TODO: Update map data
+        Command command = this.readCommand();
+        System.out.println(command.getCommandName());
+    }
+
+    private void setup() {
         try {
             this.startupRoutine();
             this.startupGame();
         } catch (Exception e) {
             logger.error("Failed to execute the start routine with the server", e);
         }
-
-        long lastTick = System.currentTimeMillis();
-        while (true) {
-            double deltaSeconds = (System.currentTimeMillis() - lastTick) / 1000.0;
-
-            this.tick(deltaSeconds, this.robot);
-
-            lastTick = System.currentTimeMillis();
-        }
-    }
-
-    private void tick(double deltaSeconds, SocketRobot robot) {
-        // TODO: Update robot position
-        // TODO: Update map data
     }
 
     private void startupRoutine() throws Exception {
@@ -103,14 +114,17 @@ public class SocketCollector implements Runnable {
 
         JSONArray responseArgs = new JSONArray();
         responseArgs.add(true);
-        new CommandResponse(this.socket, responseArgs);
+        new CommandResponse(this.socket, responseArgs).sendCommand();
+
+        logger.info("Game started");
 
         command = this.readCommand();
         if (!command.getCommandName().equals("START_AUTO")) {
             throw new Exception("Server sent back incorrect response!");
         }
 
-        new CommandResponse(this.socket, responseArgs);
+        new CommandResponse(this.socket, responseArgs).sendCommand();;
+        logger.info("Autonomous started");
     }
 
     private Command readCommand() {

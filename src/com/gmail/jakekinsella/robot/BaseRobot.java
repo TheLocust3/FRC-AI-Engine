@@ -13,7 +13,9 @@ public abstract class BaseRobot {
 
     public abstract double getVelocity();
 
-    public abstract void drive(double leftSpeed, double rightSpeed);
+    public abstract void drive(double speed);
+
+    public abstract void turn(long speed);
 
     public void gotoLocation() {
         // TODO: Implement pathfinding

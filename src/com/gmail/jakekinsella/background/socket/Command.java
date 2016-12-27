@@ -22,7 +22,7 @@ public class Command {
 
     private PrintWriter socketOutput;
     private String commandName;
-    private JSONArray args;
+    protected JSONArray args;
 
     public Command(Socket socket, String commandName, JSONArray args) {
         try {

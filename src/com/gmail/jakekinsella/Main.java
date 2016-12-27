@@ -13,15 +13,22 @@ public class Main {
 
     public static void main(String args[]) {
         Map map = new Map();
-        SocketRobot robot = new SocketRobot();
 
-        SocketCollector socketCollector = new SocketCollector(robot);
+        SocketCollector socketCollector = new SocketCollector();
+        SocketRobot robot = new SocketRobot(socketCollector);
         SocketVision vision = new SocketVision(socketCollector);
 
         VisionCollector visionCollector = new VisionCollector(map, vision);
 
         new Thread(visionCollector).start();
         new Thread(socketCollector).start();
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        robot.turn(180);
 
         long lastTick = System.currentTimeMillis();
         while (true) {
