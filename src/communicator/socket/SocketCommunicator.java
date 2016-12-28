@@ -1,27 +1,26 @@
-package com.gmail.jakekinsella.background.socket;
+package communicator.socket;
 
-import com.gmail.jakekinsella.robot.SocketRobot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
 
 /**
  * Created by jakekinsella on 12/20/16.
  */
-public class SocketCollector implements Runnable {
+public class SocketCommunicator {
 
     private static final Logger logger = LogManager.getLogger();
 
     private Socket socket;
     private BufferedReader socketReader;
 
-    public SocketCollector() {
+    public SocketCommunicator() {
         try {
             this.socket = new Socket("127.0.0.1", 2345);
             this.socketReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
@@ -32,20 +31,13 @@ public class SocketCollector implements Runnable {
         this.setup();
     }
 
-    public String waitForMapUpdate() {
-        return ""; // TODO: Implement waiting for a map update
-    }
-
-    @Override
-    public void run() {
-        long lastTick = System.currentTimeMillis();
-        while (true) {
-            double deltaSeconds = (System.currentTimeMillis() - lastTick) / 1000.0;
-
-            this.tick(deltaSeconds);
-
-            lastTick = System.currentTimeMillis();
+    public JSONObject waitForMapUpdate() {
+        Command command = readCommand();
+        while (!command.getCommandName().equals("MAP_UPDATE")) {
+            command = readCommand();
         }
+
+        return (JSONObject) command.getArgAt(0);
     }
 
     public void move(double speed) {
@@ -56,12 +48,6 @@ public class SocketCollector implements Runnable {
 
     public void turn(long angle) {
         new TurnCommand(this.socket, angle).sendCommand();
-    }
-
-    private void tick(double deltaSeconds) {
-        // TODO: Update map data
-        Command command = this.readCommand();
-        System.out.println(command.getCommandName());
     }
 
     private void setup() {

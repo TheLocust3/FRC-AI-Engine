@@ -36,8 +36,10 @@ public class Map {
         for (int[] visionObject : visionObjects) {
             switch (visionObject[2]) {
                 case 0:
-                    newMap.add(new Robot(visionObject[0], visionObject[1]));
+                    newMap.add(new Robot(visionObject[0], visionObject[1], "RED"));
                 case 1:
+                    newMap.add(new Robot(visionObject[0], visionObject[1], "BLUE"));
+                case 2:
                     newMap.add(new Ball(visionObject[0], visionObject[1]));
             }
         }

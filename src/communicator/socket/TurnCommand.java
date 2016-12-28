@@ -1,4 +1,4 @@
-package com.gmail.jakekinsella.background.socket;
+package communicator.socket;
 
 import org.json.simple.JSONArray;
 

@@ -1,6 +1,8 @@
 package com.gmail.jakekinsella.vision;
 
-import com.gmail.jakekinsella.background.socket.SocketCollector;
+import communicator.socket.SocketCommunicator;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 
@@ -9,17 +11,31 @@ import java.util.ArrayList;
  */
 public class SocketVision extends BaseVision {
 
-    private SocketCollector socketCollector;
+    private SocketCommunicator socketCommunicator;
 
-    public SocketVision(SocketCollector socketCollector) {
-        this.socketCollector = socketCollector;
+    public SocketVision(SocketCommunicator socketCommunicator) {
+        this.socketCommunicator = socketCommunicator;
     }
 
     @Override
     public ArrayList<int[]> waitForVisionData() {
-        String mapUpdate = socketCollector.waitForMapUpdate();
-        // Do stuff with it
+        ArrayList<int[]> rawMap = new ArrayList<>();
 
-        return new ArrayList<>(); // TODO: Implement get vision data from socket
+        JSONObject mapUpdate = socketCommunicator.waitForMapUpdate();
+        for (Object object : (JSONArray) mapUpdate.get("RED")) {
+            JSONObject jsonObject = (JSONObject)object;
+            int x = ((Long) jsonObject.get("x")).intValue();
+            int y = ((Long) jsonObject.get("y")).intValue();
+            rawMap.add(new int[]{x, y, 0});
+        }
+
+        for (Object object : (JSONArray) mapUpdate.get("BLUE")) {
+            JSONObject jsonObject = (JSONObject)object;
+            int x = ((Long) jsonObject.get("x")).intValue();
+            int y = ((Long) jsonObject.get("y")).intValue();
+            rawMap.add(new int[]{x, y, 1});
+        }
+
+        return rawMap;
     }
 }

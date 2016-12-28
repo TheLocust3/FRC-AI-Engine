@@ -1,6 +1,6 @@
 package com.gmail.jakekinsella;
 
-import com.gmail.jakekinsella.background.socket.SocketCollector;
+import communicator.socket.SocketCommunicator;
 import com.gmail.jakekinsella.background.VisionCollector;
 import com.gmail.jakekinsella.map.Map;
 import com.gmail.jakekinsella.robot.SocketRobot;
@@ -14,14 +14,13 @@ public class Main {
     public static void main(String args[]) {
         Map map = new Map();
 
-        SocketCollector socketCollector = new SocketCollector();
-        SocketRobot robot = new SocketRobot(socketCollector);
-        SocketVision vision = new SocketVision(socketCollector);
+        SocketCommunicator socketCommunicator = new SocketCommunicator();
+        SocketRobot robot = new SocketRobot(socketCommunicator);
+        SocketVision vision = new SocketVision(socketCommunicator);
 
         VisionCollector visionCollector = new VisionCollector(map, vision);
 
         new Thread(visionCollector).start();
-        new Thread(socketCollector).start();
 
         try {
             Thread.sleep(5000);

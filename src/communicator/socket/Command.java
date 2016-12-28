@@ -1,4 +1,4 @@
-package com.gmail.jakekinsella.background.socket;
+package communicator.socket;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,8 +10,6 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by jakekinsella on 12/21/16.

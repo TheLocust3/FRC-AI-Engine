@@ -1,9 +1,6 @@
-package com.gmail.jakekinsella.background.socket;
-
-import org.json.simple.JSONArray;
+package communicator.socket;
 
 import java.net.Socket;
-import java.util.ArrayList;
 
 /**
  * Created by jakekinsella on 12/21/16.

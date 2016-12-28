@@ -5,7 +5,14 @@ package com.gmail.jakekinsella.map;
  */
 public class Robot extends SolidObject{
 
-    public Robot(int x, int y) {
+    private String alliance;
+
+    public Robot(int x, int y, String alliance) {
         super(x, y, 50, 50, 0.5);
+        this.alliance = alliance;
+    }
+
+    public String getAlliance() {
+        return alliance;
     }
 }
