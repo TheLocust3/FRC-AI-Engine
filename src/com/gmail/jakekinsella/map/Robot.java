@@ -7,7 +7,7 @@ public class Robot extends SolidObject{
 
     private String alliance;
 
-    public Robot(int x, int y, String alliance) {
+    public Robot(int x, int y) {
         super(x, y, 50, 50, 0.5);
         this.alliance = alliance;
     }
