@@ -1,6 +1,6 @@
 package com.gmail.jakekinsella;
 
-import communicator.socket.SocketCommunicator;
+import com.gmail.jakekinsella.communicator.socket.SocketCommunicator;
 import com.gmail.jakekinsella.background.VisionCollector;
 import com.gmail.jakekinsella.map.Map;
 import com.gmail.jakekinsella.robot.SocketRobot;

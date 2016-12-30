@@ -1,4 +1,4 @@
-package communicator.socket;
+package com.gmail.jakekinsella.communicator.socket;
 
 import org.json.simple.JSONArray;
 

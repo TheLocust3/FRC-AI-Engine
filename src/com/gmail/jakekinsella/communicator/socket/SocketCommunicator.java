@@ -1,4 +1,4 @@
-package communicator.socket;
+package com.gmail.jakekinsella.communicator.socket;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

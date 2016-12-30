@@ -1,6 +1,6 @@
 package com.gmail.jakekinsella.robot;
 
-import communicator.socket.SocketCommunicator;
+import com.gmail.jakekinsella.communicator.socket.SocketCommunicator;
 
 /**
  * Created by jakekinsella on 12/20/16.

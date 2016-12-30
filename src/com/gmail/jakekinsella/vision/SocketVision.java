@@ -1,6 +1,6 @@
 package com.gmail.jakekinsella.vision;
 
-import communicator.socket.SocketCommunicator;
+import com.gmail.jakekinsella.communicator.socket.SocketCommunicator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
