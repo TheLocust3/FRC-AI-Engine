@@ -2,7 +2,7 @@ package com.gmail.jakekinsella;
 
 import com.gmail.jakekinsella.communicator.Communicator;
 import com.gmail.jakekinsella.background.VisionCollector;
-import com.gmail.jakekinsella.communicator.socket.SocketCommunicator;
+import com.gmail.jakekinsella.communicator.SocketCommunicator;
 import com.gmail.jakekinsella.map.Map;
 import com.gmail.jakekinsella.robot.RobotControl;
 
@@ -15,18 +15,10 @@ public class Main {
         Map map = new Map();
 
         Communicator communicator = new SocketCommunicator();
+        VisionCollector visionCollector = new VisionCollector(map, communicator);
         RobotControl robot = new RobotControl(communicator);
 
-        VisionCollector visionCollector = new VisionCollector(map, communicator);
-
         new Thread(visionCollector).start();
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        robot.turn(180);
 
         long lastTick = System.currentTimeMillis();
         while (true) {

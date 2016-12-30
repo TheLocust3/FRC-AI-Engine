@@ -1,6 +1,7 @@
-package com.gmail.jakekinsella.communicator.socket;
+package com.gmail.jakekinsella.communicator;
 
 import com.gmail.jakekinsella.communicator.Communicator;
+import com.gmail.jakekinsella.communicator.socket.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -34,6 +35,34 @@ public class SocketCommunicator implements Communicator {
         this.setup();
     }
 
+    @Override
+    public double getDegrees() {
+        return 0;
+    }
+
+    @Override
+    public double getAcceleration() {
+        return 0;
+    }
+
+    @Override
+    public double getVelocity() {
+        return 0;
+    }
+
+    @Override
+    public void move(double speed) {
+        assert(speed < -1.0 && speed > 1.0);
+
+        new MoveCommand(this.socket, speed).sendCommand();
+    }
+
+    @Override
+    public void turn(double angle) {
+        new TurnCommand(this.socket, (long) angle).sendCommand();
+    }
+
+    @Override
     public ArrayList<int[]> getVisionUpdate() {
         Command command = readCommand();
         while (!command.getCommandName().equals("MAP_UPDATE")) {
@@ -55,16 +84,6 @@ public class SocketCommunicator implements Communicator {
         }
 
         return rawMap;
-    }
-
-    public void move(double speed) {
-        assert(speed < -1.0 && speed > 1.0);
-
-        new MoveCommand(this.socket, speed).sendCommand();
-    }
-
-    public void turn(double angle) {
-        new TurnCommand(this.socket, (long) angle).sendCommand();
     }
 
     private void setup() {

@@ -9,37 +9,45 @@ import com.gmail.jakekinsella.map.Map;
 public class RobotControl {
 
     private Communicator communicator;
+    private AccelerationTracker accelerationTracker;
 
     public RobotControl(Communicator communicator) {
         this.communicator = communicator;
+        this.accelerationTracker = new AccelerationTracker();
     }
 
-    public double getDegrees() {
-        return 0;
-    }
+    public void tick(double deltaSeconds, Map map) {
+        this.accelerationTracker.addAcceleration(this.getAcceleration(), deltaSeconds);
+        if (this.accelerationTracker.isAccelerationSpike()) {
+            this.accelerationTracker.clearAcceleration();
 
-    public double getAcceleration() {
-        return 0;
-    }
+            // TODO: Place obstacle behind the robot
+        }
 
-    public double getVelocity() {
-        return 0;
-    }
-
-    public void drive(double speed) {
-        this.communicator.move(speed);
-    }
-
-    public void turn(double angle) {
-        this.communicator.turn(angle);
+        // TODO: Update position
     }
 
     public void gotoLocation() {
         // TODO: Implement pathfinding
     }
 
-    public void tick(double deltaSeconds, Map map) {
-        // TODO: Check acceleration for obstacle
-        // TODO: Update position
+    private double getDegrees() {
+        return communicator.getDegrees();
+    }
+
+    private double getAcceleration() {
+        return communicator.getAcceleration();
+    }
+
+    private double getVelocity() {
+        return communicator.getVelocity();
+    }
+
+    private void drive(double speed) {
+        this.communicator.move(speed);
+    }
+
+    private void turn(double angle) {
+        this.communicator.turn(angle);
     }
 }
