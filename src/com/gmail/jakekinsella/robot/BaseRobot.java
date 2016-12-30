@@ -1,11 +1,18 @@
 package com.gmail.jakekinsella.robot;
 
+import com.gmail.jakekinsella.communicator.Communicator;
 import com.gmail.jakekinsella.map.Map;
 
 /**
  * Created by jakekinsella on 12/20/16.
  */
 public abstract class BaseRobot {
+
+    protected Communicator communicator;
+
+    public BaseRobot(Communicator communicator) {
+        this.communicator = communicator;
+    }
 
     public abstract double getDegrees();
 

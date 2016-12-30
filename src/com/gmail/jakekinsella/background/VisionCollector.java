@@ -1,7 +1,7 @@
 package com.gmail.jakekinsella.background;
 
+import com.gmail.jakekinsella.communicator.Communicator;
 import com.gmail.jakekinsella.map.Map;
-import com.gmail.jakekinsella.vision.BaseVision;
 
 /**
  * Created by jakekinsella on 12/20/16.
@@ -9,17 +9,17 @@ import com.gmail.jakekinsella.vision.BaseVision;
 public class VisionCollector implements Runnable {
 
     private Map map;
-    private BaseVision vision;
+    private Communicator communicator;
 
-    public VisionCollector(Map map, BaseVision vision) {
+    public VisionCollector(Map map, Communicator communicator) {
         this.map = map;
-        this.vision = vision;
+        this.communicator = communicator;
     }
 
     @Override
     public void run() {
         while (true) {
-            this.map.inputVisionData(this.vision.waitForVisionData());
+            this.map.inputVisionData(this.communicator.getVisionUpdate());
 
             try {
                 Thread.sleep(1000);

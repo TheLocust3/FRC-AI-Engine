@@ -1,5 +1,6 @@
 package com.gmail.jakekinsella.communicator.socket;
 
+import com.gmail.jakekinsella.communicator.Communicator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -9,11 +10,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by jakekinsella on 12/20/16.
  */
-public class SocketCommunicator {
+public class SocketCommunicator implements Communicator {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -31,13 +34,27 @@ public class SocketCommunicator {
         this.setup();
     }
 
-    public JSONObject waitForMapUpdate() {
+    public ArrayList<int[]> getVisionUpdate() {
         Command command = readCommand();
         while (!command.getCommandName().equals("MAP_UPDATE")) {
             command = readCommand();
         }
 
-        return (JSONObject) command.getArgAt(0);
+        ArrayList<int[]> rawMap = new ArrayList<>();
+
+        JSONObject mapUpdate = (JSONObject) command.getArgAt(0);
+        JSONArray allRobots = new JSONArray();
+        allRobots.addAll((Collection) mapUpdate.get("RED"));
+        allRobots.addAll((Collection) mapUpdate.get("BLUE"));
+
+        for (Object object : allRobots) {
+            JSONObject jsonObject = (JSONObject)object;
+            int x = ((Long) jsonObject.get("x")).intValue();
+            int y = ((Long) jsonObject.get("y")).intValue();
+            rawMap.add(new int[]{x, y, 0});
+        }
+
+        return rawMap;
     }
 
     public void move(double speed) {
@@ -46,8 +63,8 @@ public class SocketCommunicator {
         new MoveCommand(this.socket, speed).sendCommand();
     }
 
-    public void turn(long angle) {
-        new TurnCommand(this.socket, angle).sendCommand();
+    public void turn(double angle) {
+        new TurnCommand(this.socket, (long) angle).sendCommand();
     }
 
     private void setup() {

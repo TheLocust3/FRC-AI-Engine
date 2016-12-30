@@ -1,16 +1,14 @@
 package com.gmail.jakekinsella.robot;
 
-import com.gmail.jakekinsella.communicator.socket.SocketCommunicator;
+import com.gmail.jakekinsella.communicator.Communicator;
 
 /**
  * Created by jakekinsella on 12/20/16.
  */
 public class SocketRobot extends BaseRobot {
 
-    private SocketCommunicator socketCommunicator;
-
-    public SocketRobot(SocketCommunicator socketCommunicator) {
-        this.socketCommunicator = socketCommunicator;
+    public SocketRobot(Communicator communicator) {
+        super(communicator);
     }
 
     @Override
@@ -30,11 +28,11 @@ public class SocketRobot extends BaseRobot {
 
     @Override
     public void drive(double speed) {
-        this.socketCommunicator.move(speed);
+        this.communicator.move(speed);
     }
 
     @Override
     public void turn(long angle) {
-        this.socketCommunicator.turn(angle);
+        this.communicator.turn(angle);
     }
 }
