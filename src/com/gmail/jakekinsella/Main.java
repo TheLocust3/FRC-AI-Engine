@@ -2,10 +2,9 @@ package com.gmail.jakekinsella;
 
 import com.gmail.jakekinsella.communicator.Communicator;
 import com.gmail.jakekinsella.background.VisionCollector;
-import com.gmail.jakekinsella.factory.LayerFactory;
-import com.gmail.jakekinsella.factory.SocketLayerFactory;
+import com.gmail.jakekinsella.communicator.socket.SocketCommunicator;
 import com.gmail.jakekinsella.map.Map;
-import com.gmail.jakekinsella.robot.BaseRobot;
+import com.gmail.jakekinsella.robot.RobotControl;
 
 /**
  * Created by jakekinsella on 12/19/16.
@@ -13,12 +12,10 @@ import com.gmail.jakekinsella.robot.BaseRobot;
 public class Main {
 
     public static void main(String args[]) {
-        LayerFactory layerFactory = new SocketLayerFactory();
-
         Map map = new Map();
 
-        Communicator communicator = layerFactory.createCommunicator();
-        BaseRobot robot = layerFactory.createRobot(communicator);
+        Communicator communicator = new SocketCommunicator();
+        RobotControl robot = new RobotControl(communicator);
 
         VisionCollector visionCollector = new VisionCollector(map, communicator);
 

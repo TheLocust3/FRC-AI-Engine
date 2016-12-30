@@ -6,23 +6,33 @@ import com.gmail.jakekinsella.map.Map;
 /**
  * Created by jakekinsella on 12/20/16.
  */
-public abstract class BaseRobot {
+public class RobotControl {
 
-    protected Communicator communicator;
+    private Communicator communicator;
 
-    public BaseRobot(Communicator communicator) {
+    public RobotControl(Communicator communicator) {
         this.communicator = communicator;
     }
 
-    public abstract double getDegrees();
+    public double getDegrees() {
+        return 0;
+    }
 
-    public abstract double getAcceleration();
+    public double getAcceleration() {
+        return 0;
+    }
 
-    public abstract double getVelocity();
+    public double getVelocity() {
+        return 0;
+    }
 
-    public abstract void drive(double speed);
+    public void drive(double speed) {
+        this.communicator.move(speed);
+    }
 
-    public abstract void turn(long speed);
+    public void turn(double angle) {
+        this.communicator.turn(angle);
+    }
 
     public void gotoLocation() {
         // TODO: Implement pathfinding
