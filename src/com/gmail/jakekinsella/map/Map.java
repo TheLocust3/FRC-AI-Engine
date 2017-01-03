@@ -1,5 +1,8 @@
 package com.gmail.jakekinsella.map;
 
+import com.gmail.jakekinsella.robot.RobotControl;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +23,7 @@ public class Map {
     }
 
     // visionObjects = 0 -> x, 1 -> y, 2 -> type
-    public void inputVisionData(ArrayList<int[]> visionObjects) {
+    public void inputVisionData(ArrayList<int[]> visionObjects, RobotControl robotControl) {
         ArrayList<SolidObject> newMap = this.createDefaultField();
 
         for (SolidObject solidObject : this.map) {
@@ -33,7 +36,10 @@ public class Map {
             switch (visionObject[2]) {
                 case 0:
                     newMap.add(new Robot(visionObject[0], visionObject[1]));
-                    // TODO: Check if the robot is close to the real robot and if it is then set position in-between the two values
+
+                    if (this.isObjectNearRobotBounds(visionObject[0], visionObject[1], robotControl.getRobotBounds())) {
+                        robotControl.updateInternalPositionFromVision(visionObject[0], visionObject[1]);
+                    }
                 case 1:
                     newMap.add(new Ball(visionObject[0], visionObject[1]));
             }
@@ -61,5 +67,17 @@ public class Map {
         newMap.add(new Tower(500, 1000));
 
         return newMap;
+    }
+
+    private boolean isObjectNearRobotBounds(int x, int y, Rectangle robotBounds) {
+        if (Math.abs(robotBounds.getX() - x) > 20) {
+            return false;
+        }
+
+        if (Math.abs(robotBounds.getY() - y) > 20) {
+            return false;
+        }
+
+        return true;
     }
 }

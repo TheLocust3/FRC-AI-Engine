@@ -24,6 +24,17 @@ public class RobotControl {
         this.boundingBox = new Rectangle2D.Double();
     }
 
+    public Rectangle getRobotBounds() {
+        return this.boundingBox.getBounds();
+    }
+
+    public void updateInternalPositionFromVision(int x, int y) {
+        double deltaX = (this.boundingBox.getBounds().getCenterX() + x) / 2.0; // Average them together
+        double deltaY = (this.boundingBox.getBounds().getCenterY() + y) / 2.0;
+
+        this.updateInternalPosition(deltaX, deltaY, this.getDegrees());
+    }
+
     public void tick(double deltaSeconds, Map map) {
         this.accelerationTracker.addAcceleration(this.getAcceleration(), deltaSeconds);
         if (this.accelerationTracker.isAccelerationSpike()) {
@@ -34,7 +45,7 @@ public class RobotControl {
 
         double deltaX = (this.getVelocity() * Math.sin(Math.toRadians(this.getDegrees()))) * deltaSeconds;
         double deltaY = (this.getVelocity() * Math.cos(Math.toRadians(this.getDegrees()))) * deltaSeconds;
-        this.updatePosition(deltaX, deltaY, this.getDegrees());
+        this.updateInternalPosition(deltaX, deltaY, this.getDegrees());
     }
 
     public void gotoLocation() {
@@ -61,7 +72,7 @@ public class RobotControl {
         this.communicator.turn(angle);
     }
 
-    private void updatePosition(double deltaX, double deltaY, double absoluteDeegrees) {
+    private void updateInternalPosition(double deltaX, double deltaY, double absoluteDeegrees) {
         Rectangle2D.Double rect = new Rectangle2D.Double();
         rect.setRect(this.boundingBox.getBounds().getX() + deltaX, this.boundingBox.getBounds().getY() + deltaY, this.WIDTH, this.HEIGHT);
 
