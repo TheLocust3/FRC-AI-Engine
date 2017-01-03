@@ -51,10 +51,10 @@ public class SocketCommunicator implements Communicator {
     }
 
     @Override
-    public void move(double speed) {
-        assert(speed < -1.0 && speed > 1.0);
+    public void move(double percentSpeed) {
+        assert(percentSpeed < -1.0 && percentSpeed > 1.0);
 
-        new MoveCommand(this.socket, speed).sendCommand();
+        new MoveCommand(this.socket, percentSpeed).sendCommand();
     }
 
     @Override

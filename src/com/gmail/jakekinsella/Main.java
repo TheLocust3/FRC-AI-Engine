@@ -11,7 +11,7 @@ import com.gmail.jakekinsella.robot.RobotControl;
  */
 public class Main {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException {
         Map map = new Map();
 
         Communicator communicator = new SocketCommunicator();
@@ -28,6 +28,8 @@ public class Main {
             robot.tick(deltaSeconds, map);
 
             lastTick = System.currentTimeMillis();
+
+            Thread.sleep(100);
         }
     }
 }

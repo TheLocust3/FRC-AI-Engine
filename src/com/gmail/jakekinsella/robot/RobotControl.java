@@ -3,17 +3,25 @@ package com.gmail.jakekinsella.robot;
 import com.gmail.jakekinsella.communicator.Communicator;
 import com.gmail.jakekinsella.map.Map;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+
 /**
  * Created by jakekinsella on 12/20/16.
  */
 public class RobotControl {
 
+    private final int WIDTH = 50, HEIGHT = 50;
+
     private Communicator communicator;
     private AccelerationTracker accelerationTracker;
+    private Shape boundingBox;
 
     public RobotControl(Communicator communicator) {
         this.communicator = communicator;
         this.accelerationTracker = new AccelerationTracker();
+        this.boundingBox = new Rectangle2D.Double();
     }
 
     public void tick(double deltaSeconds, Map map) {
@@ -24,7 +32,9 @@ public class RobotControl {
             // TODO: Place obstacle behind the robot
         }
 
-        // TODO: Update position
+        double deltaX = (this.getVelocity() * Math.sin(Math.toRadians(this.getDegrees()))) * deltaSeconds;
+        double deltaY = (this.getVelocity() * Math.cos(Math.toRadians(this.getDegrees()))) * deltaSeconds;
+        this.updatePosition(deltaX, deltaY, this.getDegrees());
     }
 
     public void gotoLocation() {
@@ -43,11 +53,19 @@ public class RobotControl {
         return communicator.getVelocity();
     }
 
-    private void drive(double speed) {
-        this.communicator.move(speed);
+    private void drive(double percentSpeed) {
+        this.communicator.move(percentSpeed);
     }
 
     private void turn(double angle) {
         this.communicator.turn(angle);
+    }
+
+    private void updatePosition(double deltaX, double deltaY, double absoluteDeegrees) {
+        Rectangle2D.Double rect = new Rectangle2D.Double();
+        rect.setRect(this.boundingBox.getBounds().getX() + deltaX, this.boundingBox.getBounds().getY() + deltaY, this.WIDTH, this.HEIGHT);
+
+        AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(absoluteDeegrees), rect.getCenterX(), rect.getCenterY());
+        this.boundingBox = at.createTransformedShape(rect);
     }
 }

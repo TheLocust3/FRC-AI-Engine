@@ -7,11 +7,7 @@ import java.util.ArrayList;
  */
 public class Map {
 
-    private ArrayList<SolidObject> map = this.createDefaultField(); // Map is upright, 0,0 is the corner to the left of the blue tower
-
-    public Map() {
-
-    }
+    private ArrayList<SolidObject> map = this.createDefaultField(); // Map is on its side, 0,0 is the corner to the right of the blue tower
 
     public void addObstacle(FuzzyObject obstacle) {
         map.add(obstacle);
@@ -37,6 +33,7 @@ public class Map {
             switch (visionObject[2]) {
                 case 0:
                     newMap.add(new Robot(visionObject[0], visionObject[1]));
+                    // TODO: Check if the robot is close to the real robot and if it is then set position in-between the two values
                 case 1:
                     newMap.add(new Ball(visionObject[0], visionObject[1]));
             }
