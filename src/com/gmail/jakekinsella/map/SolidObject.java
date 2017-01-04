@@ -23,6 +23,10 @@ public class SolidObject {
         this(x, y, width, height, chanceObjectIsReal, false);
     }
 
+    public void setChanceObjectIsReal(double chanceObjectIsReal) {
+        this.chanceObjectIsReal = chanceObjectIsReal;
+    }
+
     public int getX() {
         return x;
     }

@@ -5,7 +5,6 @@ An AI engine designed to run a robot completely autonomously for an entire FRC m
   
 ### To-Do  
  - Finish bindings for the simulator
- - Combine vision data and sensor data to guess the true robot position
  - Write algorithms to determine whether to trust vision data or not
  - Write a pathfinding algorithm to move the robot around obstacles
  - Write loads of bindings that bind these operations to the real robot

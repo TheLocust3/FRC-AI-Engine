@@ -78,6 +78,14 @@ public class Map {
         if (robots.size() > this.ROBOTS_ON_FIELD) {
             ArrayList<Robot> condensedRobots = condenseRobotsCloseTogether(robots);
 
+            if (condensedRobots.size() > this.ROBOTS_ON_FIELD) {
+                for (int i = 0; i < condensedRobots.size(); i++) {
+                    Robot tmp = condensedRobots.get(i);
+                    tmp.setChanceObjectIsReal(0.2);
+                    condensedRobots.set(i, tmp);
+                }
+            }
+
             for (int i = 0; i < map.size(); i++) {
                 if (map.get(i) instanceof Robot) {
                     map.remove(i);
