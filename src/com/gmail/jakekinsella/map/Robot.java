@@ -18,6 +18,10 @@ public class Robot extends SolidObject{
         this.degrees = degrees;
     }
 
+    public Robot(Robot robot1, Robot robot2) {
+        this((robot1.getX() + robot2.getX()) / 2, (robot1.getY() + robot2.getY()) / 2);
+    }
+
     public String getAlliance() {
         return alliance;
     }

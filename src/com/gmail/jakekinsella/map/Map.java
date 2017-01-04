@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Map {
 
     private final int ROBOTS_ON_FIELD = 6;
+    private final int CLOSE_ENOUGH = 50;
 
     private ArrayList<SolidObject> map = this.createDefaultField(); // Map is on its side, 0,0 is the corner to the right of the blue tower
 
@@ -71,11 +72,19 @@ public class Map {
         return newMap;
     }
 
-    private ArrayList<SolidObject> tuneRobotsFromVision(ArrayList<SolidObject> newMap, RobotControl robotControl) {
-        ArrayList<Robot> robots = robotsInMap(newMap);
+    private ArrayList<SolidObject> tuneRobotsFromVision(ArrayList<SolidObject> map, RobotControl robotControl) {
+        ArrayList<Robot> robots = robotsInMap(map);
 
         if (robots.size() > this.ROBOTS_ON_FIELD) {
-            // TODO: Combine extra robots together
+            ArrayList<Robot> condensedRobots = condenseRobotsCloseTogether(robots);
+
+            for (int i = 0; i < map.size(); i++) {
+                if (map.get(i) instanceof Robot) {
+                    map.remove(i);
+                }
+            }
+
+            map.addAll(condensedRobots);
         }
 
         for (Robot robot : robots) {
@@ -84,7 +93,7 @@ public class Map {
             }
         }
 
-        return newMap;
+        return map;
     }
 
     private ArrayList<Robot> robotsInMap(ArrayList<SolidObject> newMap) {
@@ -97,6 +106,53 @@ public class Map {
         }
 
         return robots;
+    }
+
+    private ArrayList<Robot> condenseRobotsCloseTogether(ArrayList<Robot> robots) {
+        ArrayList<Robot> sortedRobots = this.sortRobotsByX(robots);
+        // For every two x values check if their y values are close
+        int index = 0;
+        while (index != -1) {
+            Robot robot1 = sortedRobots.get(index);
+            Robot robot2 = sortedRobots.get(index + 1);
+            sortedRobots.remove(index + 1);
+            sortedRobots.set(index, new Robot(robot1, robot2));
+
+            index = this.getIndexOfCloseTogetherRobot(sortedRobots);
+        }
+
+        return sortedRobots;
+    }
+
+    private ArrayList<Robot> sortRobotsByX(ArrayList<Robot> robots) {
+        for (int i = 0; i < robots.size() - 1; i++) {
+            int position = i;
+            for (int j = i + 1; j < robots.size(); j++) {
+                if (robots.get(j).getX() < robots.get(position).getX()) {
+                    position = j;
+                }
+            }
+
+            if (position != i) {
+                Robot tmp = robots.get(position);
+                robots.set(i, robots.get(position));
+                robots.set(position, tmp);
+            }
+        }
+
+        return robots;
+    }
+
+    private int getIndexOfCloseTogetherRobot(ArrayList<Robot> robots) {
+        for (int i = 0; i < robots.size() - 1; i++) {
+            if (Math.abs(robots.get(i).getX() - robots.get(i + 1).getX()) < this.CLOSE_ENOUGH) {
+                if (Math.abs(robots.get(i).getY() - robots.get(i + 1).getY()) < this.CLOSE_ENOUGH) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     }
 
     private boolean isObjectNearRobotBounds(int x, int y, Rectangle robotBounds) {

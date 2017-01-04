@@ -16,7 +16,7 @@ public class Main {
 
         Communicator communicator = new SocketCommunicator();
         RobotControl robot = new RobotControl(communicator);
-        VisionCollector visionCollector = new VisionCollector(map, communicator);
+        VisionCollector visionCollector = new VisionCollector(map, communicator, robot);
 
         new Thread(visionCollector).start();
 
