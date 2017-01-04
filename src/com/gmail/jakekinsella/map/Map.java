@@ -10,6 +10,8 @@ import java.util.ArrayList;
  */
 public class Map {
 
+    private final int ROBOTS_ON_FIELD = 6;
+
     private ArrayList<SolidObject> map = this.createDefaultField(); // Map is on its side, 0,0 is the corner to the right of the blue tower
 
     public void addObstacle(FuzzyObject obstacle) {
@@ -36,14 +38,14 @@ public class Map {
             switch (visionObject[2]) {
                 case 0:
                     newMap.add(new Robot(visionObject[0], visionObject[1]));
-
-                    if (this.isObjectNearRobotBounds(visionObject[0], visionObject[1], robotControl.getRobotBounds())) {
-                        robotControl.updateInternalPositionFromVision(visionObject[0], visionObject[1]);
-                    }
                 case 1:
                     newMap.add(new Ball(visionObject[0], visionObject[1]));
             }
         }
+
+        newMap = this.tuneRobotsFromVision(newMap, robotControl);
+
+        this.map = newMap;
     }
 
     private ArrayList<SolidObject> createDefaultField() {
@@ -67,6 +69,34 @@ public class Map {
         newMap.add(new Tower(500, 1000));
 
         return newMap;
+    }
+
+    private ArrayList<SolidObject> tuneRobotsFromVision(ArrayList<SolidObject> newMap, RobotControl robotControl) {
+        ArrayList<Robot> robots = robotsInMap(newMap);
+
+        if (robots.size() > this.ROBOTS_ON_FIELD) {
+            // TODO: Combine extra robots together
+        }
+
+        for (Robot robot : robots) {
+            if (this.isObjectNearRobotBounds(robot.getX(), robot.getY(), robotControl.getRobotBounds())) {
+                robotControl.updateInternalPositionFromVision(robot.getX(), robot.getY());
+            }
+        }
+
+        return newMap;
+    }
+
+    private ArrayList<Robot> robotsInMap(ArrayList<SolidObject> newMap) {
+        ArrayList<Robot> robots = new ArrayList<>();
+
+        for (int i = 0; i < newMap.size(); i++) {
+            if (newMap.get(i) instanceof Robot) {
+                robots.add((Robot) newMap.get(i));
+            }
+        }
+
+        return robots;
     }
 
     private boolean isObjectNearRobotBounds(int x, int y, Rectangle robotBounds) {
