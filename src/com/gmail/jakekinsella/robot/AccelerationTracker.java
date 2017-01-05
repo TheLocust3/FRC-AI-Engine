@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 public class AccelerationTracker {
 
-    public final double MAX_TIME = 1.0;
-    public final double ACCEPTABLE_TIME = MAX_TIME - 0.25;
+    public final double MAX_TIME = 0.5;
+    public final double ACCEPTABLE_TIME = MAX_TIME - 0.3;
     public final double MAX_PERCENT_CHANGE = 55;
 
     private ArrayList<Double> accelerationList = new ArrayList<>();
@@ -41,6 +41,15 @@ public class AccelerationTracker {
         return percentDifference > this.MAX_PERCENT_CHANGE;
     }
 
+    public double getAvgAcceleration() {
+        double sum = 0;
+        for (double acceleration : this.accelerationList) {
+            sum += acceleration;
+        }
+
+        return sum / accelerationList.size();
+    }
+
     private double sumDeltaTimes() {
         double sum = 0;
         for (double deltaTime : this.deltaTimes) {
@@ -48,14 +57,5 @@ public class AccelerationTracker {
         }
 
         return sum;
-    }
-
-    private double getAvgAcceleration() {
-        double sum = 0;
-        for (double acceleration : this.accelerationList) {
-            sum += acceleration;
-        }
-
-        return sum / accelerationList.size();
     }
 }
