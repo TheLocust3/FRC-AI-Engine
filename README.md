@@ -7,5 +7,5 @@ An AI engine designed to run a robot completely autonomously for an entire FRC m
  - Finish bindings for the simulator
  - Write algorithms to determine whether to trust vision data or not
  - Write a pathfinding algorithm to move the robot around obstacles
- - Write loads of bindings that bind these operations to the real robot
- - Write a neural network to control overall game strategyg
+ - Write loads of bindings so that operations can work on the real robot
+ - Write a neural network to control overall game strategy

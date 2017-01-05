@@ -39,14 +39,7 @@ public class RobotControl {
     public void tick(double deltaSeconds, Map map) {
         this.accelerationTracker.addAcceleration(this.getAcceleration(), deltaSeconds);
         if (this.accelerationTracker.isAccelerationSpike()) {
-            int placeObjectBehind = this.accelerationTracker.getAvgAcceleration() > 0 ? 0 : 360;
-            double deltaX = this.WIDTH * Math.cos(Math.toRadians(this.getDegrees() + placeObjectBehind));
-            double deltaY = this.HEIGHT * Math.sin(Math.toRadians(this.getDegrees() + placeObjectBehind));
-
-            FuzzyObject fuzzyObject = new FuzzyObject((int) (this.getRobotBounds().getX() + deltaX), (int) (this.getRobotBounds().getY() + deltaY), (int) (this.WIDTH * 1.5), (int) (this.HEIGHT * 1.5));
-            map.addObstacle(fuzzyObject);
-
-            this.accelerationTracker.clearAcceleration();
+            this.handleVisionSpike(map);
         }
 
         double deltaX = (this.getVelocity() * Math.sin(Math.toRadians(this.getDegrees()))) * deltaSeconds;
@@ -84,5 +77,16 @@ public class RobotControl {
 
         AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(absoluteDeegrees), rect.getCenterX(), rect.getCenterY());
         this.boundingBox = at.createTransformedShape(rect);
+    }
+
+    private void handleVisionSpike(Map map) {
+        int placeObjectBehind = this.accelerationTracker.getAvgAcceleration() > 0 ? 0 : 360;
+        double deltaX = this.WIDTH * Math.cos(Math.toRadians(this.getDegrees() + placeObjectBehind));
+        double deltaY = this.HEIGHT * Math.sin(Math.toRadians(this.getDegrees() + placeObjectBehind));
+
+        FuzzyObject fuzzyObject = new FuzzyObject((int) (this.getRobotBounds().getX() + deltaX), (int) (this.getRobotBounds().getY() + deltaY), (int) (this.WIDTH * 1.5), (int) (this.HEIGHT * 1.5));
+        map.addObstacle(fuzzyObject);
+
+        this.accelerationTracker.clearAcceleration();
     }
 }
