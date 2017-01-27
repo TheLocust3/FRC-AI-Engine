@@ -27,7 +27,7 @@ public class LinePath {
         ArrayList<Line2D.Double> paths = new ArrayList<>();
 
         Line2D.Double path = new Line2D.Double(startX, startY, endX, endY);
-        SolidObject intersection = this.map.getIntersection(path);
+        SolidObject intersection = this.map.getIntersection(path); // TODO: Ray-cast? so that the robot doesn't think that there is no intersection even though the robot is too wide
         while (intersection != null) {
             Line2D.Double avoidancePath = this.getShortestSnappedPath(path);
             Angle avoidanceAngle = new Angle(avoidancePath);
@@ -41,6 +41,8 @@ public class LinePath {
             path = new Line2D.Double(avoidancePath.getX2(), avoidancePath.getY2(), endX, endY);
             intersection = this.map.getIntersection(path);
         }
+
+        paths.add(path);
 
         return paths;
     }
