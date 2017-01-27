@@ -33,7 +33,7 @@ public class RobotControl {
         double deltaX = (this.boundingBox.getBounds().getCenterX() + x) / 2.0; // Average them together
         double deltaY = (this.boundingBox.getBounds().getCenterY() + y) / 2.0;
 
-        this.updateInternalPosition(deltaX, deltaY, this.getDegrees());
+        this.updateInternalPosition(deltaX, deltaY, this.getAngle().getNormalizedDegrees());
     }
 
     public void tick(double deltaSeconds, Map map) {
@@ -42,17 +42,18 @@ public class RobotControl {
             this.handleVisionSpike(map);
         }
 
-        double deltaX = (this.getVelocity() * Math.sin(Math.toRadians(this.getDegrees()))) * deltaSeconds;
-        double deltaY = (this.getVelocity() * Math.cos(Math.toRadians(this.getDegrees()))) * deltaSeconds;
-        this.updateInternalPosition(deltaX, deltaY, this.getDegrees());
+        double deltaX = (this.getVelocity() * Math.sin(this.getAngle().getRadians())) * deltaSeconds;
+        double deltaY = (this.getVelocity() * Math.cos(this.getAngle().getRadians())) * deltaSeconds;
+        this.updateInternalPosition(deltaX, deltaY, this.getAngle().getNormalizedDegrees());
     }
 
-    public void gotoLocation() {
-        // TODO: Implement pathfinding
+    public void gotoLocation(double newX, double newY, Map map) {
+        LinePath linePath = new LinePath(map);
+        linePath.generatePath(this.getRobotBounds().getX(), this.getRobotBounds().getY(), newX, newY);
     }
 
-    private double getDegrees() {
-        return communicator.getDegrees();
+    private Angle getAngle() {
+        return new Angle(communicator.getDegrees());
     }
 
     private double getAcceleration() {
@@ -79,10 +80,14 @@ public class RobotControl {
         this.boundingBox = at.createTransformedShape(rect);
     }
 
+    private void followLinePath() {
+        // TODO: Implement code to follow a line
+    }
+
     private void handleVisionSpike(Map map) {
         int placeObjectBehind = this.accelerationTracker.getAvgAcceleration() > 0 ? 0 : 360;
-        double deltaX = this.WIDTH * Math.cos(Math.toRadians(this.getDegrees() + placeObjectBehind));
-        double deltaY = this.HEIGHT * Math.sin(Math.toRadians(this.getDegrees() + placeObjectBehind));
+        double deltaX = this.WIDTH * Math.cos(Math.toRadians(this.getAngle().getDegrees() + placeObjectBehind));
+        double deltaY = this.HEIGHT * Math.sin(Math.toRadians(this.getAngle().getDegrees() + placeObjectBehind));
 
         FuzzyObject fuzzyObject = new FuzzyObject((int) (this.getRobotBounds().getX() + deltaX), (int) (this.getRobotBounds().getY() + deltaY), (int) (this.WIDTH * 1.5), (int) (this.HEIGHT * 1.5));
         map.addObstacle(fuzzyObject);

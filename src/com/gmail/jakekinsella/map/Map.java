@@ -25,6 +25,16 @@ public class Map {
         }
     }
 
+    public SolidObject getIntersection(Shape shape) {
+        for (int i = 0; i < this.map.size(); i++) {
+            if (this.map.get(i).doesIntersect(shape) && !(this.map.get(i) instanceof Defense) && !(this.map.get(i) instanceof Tower)) { // TODO: Handle special case for defense crossing
+                return this.map.get(i);
+            }
+        }
+
+        return null;
+    }
+
     // visionObjects = 0 -> x, 1 -> y, 2 -> type
     public void inputVisionData(ArrayList<int[]> visionObjects, RobotControl robotControl) {
         ArrayList<SolidObject> newMap = this.createDefaultField();

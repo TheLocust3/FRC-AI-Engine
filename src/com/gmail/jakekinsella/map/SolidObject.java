@@ -1,5 +1,8 @@
 package com.gmail.jakekinsella.map;
 
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+
 /**
  * Created by jakekinsella on 12/19/16.
  */
@@ -7,6 +10,7 @@ public class SolidObject {
     private final double DECAY_PER_SECONDS = 0.1;
 
     private int x, y, width, height;
+    private Shape bounds;
     private double chanceObjectIsReal; // Decays over time
     private boolean notDeletable;
 
@@ -15,6 +19,7 @@ public class SolidObject {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.bounds = new Rectangle2D.Double(x, y, width, height);
         this.chanceObjectIsReal = chanceObjectIsReal;
         this.notDeletable = notDeletable;
     }
@@ -49,6 +54,10 @@ public class SolidObject {
 
     public boolean isObjectReal() {
         return this.chanceObjectIsReal > 0;
+    }
+
+    public boolean doesIntersect(Shape shape) {
+        return this.bounds.intersects(shape.getBounds().getX(), shape.getBounds().getY(), shape.getBounds().getWidth(), shape.getBounds().getHeight());
     }
 
     public void decayChanceObjectIsReal(double deltaSeconds) {
