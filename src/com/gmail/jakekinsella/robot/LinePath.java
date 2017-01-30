@@ -1,9 +1,11 @@
 package com.gmail.jakekinsella.robot;
 
 import com.gmail.jakekinsella.map.Map;
+import com.gmail.jakekinsella.map.Robot;
 import com.gmail.jakekinsella.map.SolidObject;
 
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
@@ -12,10 +14,12 @@ import java.util.ArrayList;
 public class LinePath {
 
     private Map map;
-    private ArrayList<Line2D.Double> lines;
+    private Robot robot;
+    private ArrayList<RotatedRectangle> lines;
 
-    public LinePath(Map map) {
+    public LinePath(Map map, Robot robot) {
         this.map = map;
+        this.robot = robot;
         this.lines = new ArrayList<>();
     }
 
@@ -23,23 +27,22 @@ public class LinePath {
         lines.addAll(evaluatePath(startX, startY, endX, endY));
     }
 
-    public ArrayList<Line2D.Double> evaluatePath(double startX, double startY, double endX, double endY) {
-        ArrayList<Line2D.Double> paths = new ArrayList<>();
+    public ArrayList<RotatedRectangle> evaluatePath(double startX, double startY, double endX, double endY) {
+        ArrayList<RotatedRectangle> paths = new ArrayList<>();
 
-        Line2D.Double path = new Line2D.Double(startX, startY, endX, endY);
-        SolidObject intersection = this.map.getIntersection(path); // TODO: Ray-cast? so that the robot doesn't think that there is no intersection even though the robot is too wide
+        RotatedRectangle path = this.createPaddedPath(startX, startY, endX, endY);
+        SolidObject intersection = this.map.getIntersection(path.getShape());
         while (intersection != null) {
-            Line2D.Double avoidancePath = this.getShortestSnappedPath(path);
-            Angle avoidanceAngle = new Angle(avoidancePath);
+            RotatedRectangle avoidancePath = this.getShortestSnappedPath(path);
 
-            double avoidanceDistance = getLineDistance(avoidancePath) + intersection.getWidth(); // TODO: Change from just using width
-            double avoidX = avoidanceDistance * Math.cos(avoidanceAngle.getDegrees());
-            double avoidY = avoidanceDistance * Math.sin(avoidanceAngle.getDegrees());
+            double avoidanceDistance = avoidancePath.getLineDistance() + intersection.getWidth(); // TODO: Change from just using width
+            double avoidX = avoidanceDistance * Math.cos(avoidancePath.getAngle().getRadians());
+            double avoidY = avoidanceDistance * Math.sin(avoidancePath.getAngle().getRadians());
 
             paths.addAll(evaluatePath(avoidancePath.getX1(), avoidancePath.getY1(), avoidX, avoidY)); // TODO: Really need to do some testing with this recursion
 
-            path = new Line2D.Double(avoidancePath.getX2(), avoidancePath.getY2(), endX, endY);
-            intersection = this.map.getIntersection(path);
+            path = this.createPaddedPath(avoidancePath.getX2(), avoidancePath.getY2(), endX, endY);
+            intersection = this.map.getIntersection(path.getShape());
         }
 
         paths.add(path);
@@ -47,24 +50,23 @@ public class LinePath {
         return paths;
     }
 
-    // Get the shortest path around the object. The returned line is snapped to a 90 degree
-    private Line2D.Double getShortestSnappedPath(Line2D.Double hypotenuse) {
-        Angle angle = new Angle(hypotenuse);
-        Angle possibleAngle1 = new Angle(angle.getDegrees() + 90);
-        Angle possibleAngle2 = new Angle(angle.getDegrees() - 90);
-
-        double possibleEndX1 = this.getLineDistance(hypotenuse) * Math.cos(possibleAngle1.getDegrees());
-        double possibleEndY1 = this.getLineDistance(hypotenuse) * Math.cos(possibleAngle1.getDegrees());
-        Line2D.Double possibleLine1 = new Line2D.Double(hypotenuse.getX1(), hypotenuse.getX1(), possibleEndX1, possibleEndY1); // TODO: I feel iffy about this
-
-        double possibleEndX2 = this.getLineDistance(hypotenuse) * Math.cos(possibleAngle2.getDegrees());
-        double possibleEndY2 = this.getLineDistance(hypotenuse) * Math.cos(possibleAngle2.getDegrees());
-        Line2D.Double possibleLine2 = new Line2D.Double(hypotenuse.getX1(), hypotenuse.getX1(), possibleEndX2, possibleEndY2);
-
-        return getLineDistance(possibleLine1) < getLineDistance(possibleLine2) ? possibleLine1 : possibleLine2;
+    private RotatedRectangle createPaddedPath(double startX, double startY, double endX, double endY) {
+        return new RotatedRectangle(startX, startY, endX + this.robot.getWidth(), endY + this.robot.getHeight());
     }
 
-    private double getLineDistance(Line2D.Double line) {
-        return Math.sqrt(Math.pow(line.getY2() - line.getY1(), 2) + Math.pow(line.getX2() - line.getX1(), 2));
+    // Get the shortest path around the object. The returned line is snapped to a 90 degree
+    private RotatedRectangle getShortestSnappedPath(RotatedRectangle hypotenuse) {
+        Angle possibleAngle1 = new Angle(hypotenuse.getAngle().getDegrees() + 90);
+        Angle possibleAngle2 = new Angle(hypotenuse.getAngle().getDegrees() - 90);
+
+        double possibleEndX1 = hypotenuse.getLineDistance() * Math.cos(possibleAngle1.getRadians());
+        double possibleEndY1 = hypotenuse.getLineDistance() * Math.cos(possibleAngle1.getRadians());
+        RotatedRectangle possibleLine1 = this.createPaddedPath(hypotenuse.getX1(), hypotenuse.getY1(), possibleEndX1, possibleEndY1); // TODO: I feel iffy about this
+
+        double possibleEndX2 = hypotenuse.getLineDistance() * Math.cos(possibleAngle2.getRadians());
+        double possibleEndY2 = hypotenuse.getLineDistance() * Math.cos(possibleAngle2.getRadians());
+        RotatedRectangle possibleLine2 = this.createPaddedPath(hypotenuse.getX1(), hypotenuse.getY1(), possibleEndX2, possibleEndY2);
+
+        return possibleLine1.getLineDistance() < possibleLine2.getLineDistance() ? possibleLine1 : possibleLine2;
     }
 }

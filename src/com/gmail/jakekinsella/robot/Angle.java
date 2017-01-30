@@ -20,10 +20,6 @@ public class Angle {
         this.degrees = Math.toDegrees(Math.atan((y2 - y1) / (x1 - x2)));
     }
 
-    public Angle(Line2D.Double line) {
-        this(line.getX1(), line.getY1(), line.getX2(), line.getY2());
-    }
-
     public double getDegrees() {
         return this.degrees;
     }
