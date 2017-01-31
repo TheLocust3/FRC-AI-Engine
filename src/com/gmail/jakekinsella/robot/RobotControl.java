@@ -18,6 +18,7 @@ public class RobotControl {
     private Communicator communicator;
     private AccelerationTracker accelerationTracker;
     private Shape boundingBox;
+    private LinePath currentPath;
 
     public RobotControl(Communicator communicator) {
         this.communicator = communicator;
@@ -45,33 +46,36 @@ public class RobotControl {
         double deltaX = (this.getVelocity() * Math.sin(this.getAngle().getRadians())) * deltaSeconds;
         double deltaY = (this.getVelocity() * Math.cos(this.getAngle().getRadians())) * deltaSeconds;
         this.updateInternalPosition(deltaX, deltaY, this.getAngle().getNormalizedDegrees());
+
+        PathPart currentPart = this.currentPath.getCurrentPath();
+        if (currentPart != null) {
+            currentPart.execute();
+        }
     }
 
     public void gotoLocation(double newX, double newY, Map map) {
-        LinePath linePath = new LinePath(map, (Rectangle2D.Double) this.getRobotBounds()); // Always want to be updating the path with new map data
-        linePath.generatePath(this.getRobotBounds().getX(), this.getRobotBounds().getY(), newX, newY);
-
-        linePath.getCurrentPath().execute();
+        this.currentPath = new LinePath(map, this); // Always want to be updating the path with new map data
+        this.currentPath.generatePath(this.getRobotBounds().getX(), this.getRobotBounds().getY(), newX, newY);
     }
 
-    private Angle getAngle() {
+    public Angle getAngle() {
         return new Angle(communicator.getDegrees());
     }
 
-    private double getAcceleration() {
+    public double getAcceleration() {
         return communicator.getAcceleration();
     }
 
-    private double getVelocity() {
+    public double getVelocity() {
         return communicator.getVelocity();
     }
 
-    private void drive(double percentSpeed) {
+    public void drive(double percentSpeed) {
         this.communicator.move(percentSpeed);
     }
 
-    private void turn(double angle) {
-        this.communicator.turn(angle);
+    public void turn(Angle angle) {
+        this.communicator.turn(angle.getDegrees());
     }
 
     private void updateInternalPosition(double deltaX, double deltaY, double absoluteDeegrees) {

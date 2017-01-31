@@ -12,13 +12,13 @@ import java.util.ArrayList;
 public class LinePath {
 
     private Map map;
-    private Rectangle2D.Double robotBounds;
+    private RobotControl robotControl;
     private ArrayList<PathPart> pathParts;
     private int atPath;
 
-    public LinePath(Map map, Rectangle2D.Double robotBounds) {
+    public LinePath(Map map, RobotControl robotControl) {
         this.map = map;
-        this.robotBounds = robotBounds;
+        this.robotControl = robotControl;
         this.pathParts = new ArrayList<>();
         this.atPath = 0;
     }
@@ -28,6 +28,11 @@ public class LinePath {
 
         if (pathPart.isFinished()) {
             atPath++;
+
+            if (atPath >= pathParts.size()) {
+                return null;
+            }
+
             pathPart = pathParts.get(atPath);
         }
 
@@ -56,13 +61,13 @@ public class LinePath {
             intersection = this.map.getIntersection(path.getShape());
         }
 
-        paths.add(new PathPart(path));
+        paths.add(new PathPart(path, this.map, this.robotControl));
 
         return paths;
     }
 
     private RotatedRectangle createPaddedPath(double startX, double startY, double endX, double endY) {
-        return new RotatedRectangle(startX, startY, endX + this.robotBounds.getWidth(), endY + this.robotBounds.getWidth());
+        return new RotatedRectangle(startX, startY, endX + this.robotControl.getRobotBounds().getWidth(), endY + this.robotControl.getRobotBounds().getWidth());
     }
 
     // Get the shortest path around the object. The returned line is snapped to a 90 degree

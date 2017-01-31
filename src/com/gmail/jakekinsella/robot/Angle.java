@@ -36,17 +36,4 @@ public class Angle {
             return 360 - (this.getDegrees() % 360);
         }
     }
-
-    public Angle getNearest90() {
-        double normalizedDegrees = this.getNormalizedDegrees();
-        if (normalizedDegrees > 45 && normalizedDegrees <= 135) {
-            return new Angle(90);
-        } else if (normalizedDegrees > 135 && normalizedDegrees <= 225) {
-            return new Angle(180);
-        } else if (normalizedDegrees > 225 && normalizedDegrees <= 315) {
-            return new Angle(270);
-        } else {
-            return new Angle(0);
-        }
-    }
 }
