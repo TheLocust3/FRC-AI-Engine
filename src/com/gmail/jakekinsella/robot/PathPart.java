@@ -1,21 +1,19 @@
 package com.gmail.jakekinsella.robot;
 
-import com.gmail.jakekinsella.map.Map;
-
 /**
  * Created by jakekinsella on 1/31/17.
  */
 public class PathPart {
 
+    private final int PIXEL_TOLERANCE = 50;
+
     private boolean finished;
 
     private RotatedRectangle line;
-    private Map map;
     private RobotControl robotControl;
 
-    public PathPart(RotatedRectangle line, Map map, RobotControl robotControl) {
+    public PathPart(RotatedRectangle line, RobotControl robotControl) {
         this.line = line;
-        this.map = map;
         this.robotControl = robotControl;
         this.finished = false;
     }
@@ -26,8 +24,14 @@ public class PathPart {
 
     public void execute() {
         this.robotControl.turn(line.getAngle());
-        this.robotControl.drive(0.5);
+        this.robotControl.drive(0.5); // TODO: Change the robot speed
+        this.finished = isRobotAtEnd();
+    }
 
-        //this.finished = true; // TODO: Figure out how to tell where the robot is
+    private boolean isRobotAtEnd() { // TODO: Check if the robot overshot
+        boolean atEnd = Math.abs(this.robotControl.getRobotBounds().getCenterX() - this.line.getX2()) < PIXEL_TOLERANCE;
+        atEnd = atEnd && Math.abs(this.robotControl.getRobotBounds().getCenterY() - this.line.getY2()) < PIXEL_TOLERANCE;
+
+        return atEnd;
     }
 }

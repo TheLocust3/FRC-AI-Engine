@@ -47,10 +47,7 @@ public class RobotControl {
         double deltaY = (this.getVelocity() * Math.cos(this.getAngle().getRadians())) * deltaSeconds;
         this.updateInternalPosition(deltaX, deltaY, this.getAngle().getNormalizedDegrees());
 
-        PathPart currentPart = this.currentPath.getCurrentPath();
-        if (currentPart != null) {
-            currentPart.execute();
-        }
+        this.followLinePath();
     }
 
     public void gotoLocation(double newX, double newY, Map map) {
@@ -78,16 +75,19 @@ public class RobotControl {
         this.communicator.turn(angle.getDegrees());
     }
 
-    private void updateInternalPosition(double deltaX, double deltaY, double absoluteDeegrees) {
+    private void updateInternalPosition(double deltaX, double deltaY, double absoluteDegrees) {
         Rectangle2D.Double rect = new Rectangle2D.Double();
         rect.setRect(this.boundingBox.getBounds().getX() + deltaX, this.boundingBox.getBounds().getY() + deltaY, this.WIDTH, this.HEIGHT);
 
-        AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(absoluteDeegrees), rect.getCenterX(), rect.getCenterY());
+        AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(absoluteDegrees), rect.getCenterX(), rect.getCenterY());
         this.boundingBox = at.createTransformedShape(rect);
     }
 
     private void followLinePath() {
-        // TODO: Implement code to follow a line
+        PathPart currentPart = this.currentPath.getCurrentPath();
+        if (currentPart != null) {
+            currentPart.execute();
+        }
     }
 
     private void handleVisionSpike(Map map) {

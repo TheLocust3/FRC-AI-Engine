@@ -61,7 +61,7 @@ public class LinePath {
             intersection = this.map.getIntersection(path.getShape());
         }
 
-        paths.add(new PathPart(path, this.map, this.robotControl));
+        paths.add(new PathPart(path, this.robotControl));
 
         return paths;
     }
