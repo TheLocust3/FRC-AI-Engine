@@ -1,4 +1,4 @@
-package com.gmail.jakekinsella.map;
+package com.gmail.jakekinsella.map.SolidObjects;
 
 /**
  * Created by jakekinsella on 12/19/16.

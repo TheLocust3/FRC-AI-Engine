@@ -1,5 +1,6 @@
 package com.gmail.jakekinsella.map;
 
+import com.gmail.jakekinsella.map.SolidObjects.*;
 import com.gmail.jakekinsella.robot.RobotControl;
 
 import java.awt.*;
@@ -27,9 +28,7 @@ public class Map {
 
     public SolidObject getIntersection(Shape shape) {
         for (int i = 0; i < this.map.size(); i++) {
-            if (this.map.get(i).doesIntersect(shape) && !(this.map.get(i) instanceof Defense) && !(this.map.get(i) instanceof Tower)) { // TODO: Handle special case for defense crossing
-                return this.map.get(i);
-            }
+            return this.map.get(i);
         }
 
         return null;
@@ -48,7 +47,7 @@ public class Map {
         for (int[] visionObject : visionObjects) {
             switch (visionObject[2]) {
                 case 0:
-                    newMap.add(new Robot(visionObject[0], visionObject[1]));
+                    newMap.add(new com.gmail.jakekinsella.map.SolidObjects.Robot(visionObject[0], visionObject[1]));
                 case 1:
                     newMap.add(new Ball(visionObject[0], visionObject[1]));
             }
@@ -62,42 +61,48 @@ public class Map {
     private ArrayList<SolidObject> createDefaultField() {
         ArrayList<SolidObject> newMap = new ArrayList<>();
 
-        // Create blue defenses
-        newMap.add(new Defense(0, 400));
-        newMap.add(new Defense(50, 400));
-        newMap.add(new Defense(100, 400));
-        newMap.add(new Defense(150, 400));
-        newMap.add(new Defense(200, 400));
+        // Create blue loading stations
+        newMap.add(new LoadingStation(0, 0));
+        newMap.add(new LoadingStation(50, 0));
 
-        // Create red defenses
-        newMap.add(new Defense(50, 600));
-        newMap.add(new Defense(100, 600));
-        newMap.add(new Defense(150, 600));
-        newMap.add(new Defense(200, 600));
-        newMap.add(new Defense(250, 600));
+        newMap.add(new LoadingStation(1000, 500));
 
-        newMap.add(new Tower(500, 0));
-        newMap.add(new Tower(500, 1000));
+        // Create red loading stations
+        newMap.add(new LoadingStation(950, 0));
+        newMap.add(new LoadingStation(1000, 0));
+
+        newMap.add(new LoadingStation(250, 600));
+
+        // Create hopper triggers
+        newMap.add(new HopperTrigger(100, 0));
+        newMap.add(new HopperTrigger(400, 0));
+        newMap.add(new HopperTrigger(700, 0));
+
+        newMap.add(new HopperTrigger(200, 1000));
+        newMap.add(new HopperTrigger(800, 1000));
+
+        newMap.add(new Boiler(0, 1000));
+        newMap.add(new Boiler(1000, 1000));
 
         return newMap;
     }
 
     private ArrayList<SolidObject> tuneRobotsFromVision(ArrayList<SolidObject> map, RobotControl robotControl) {
-        ArrayList<Robot> robots = robotsInMap(map);
+        ArrayList<com.gmail.jakekinsella.map.SolidObjects.Robot> robots = robotsInMap(map);
 
         if (robots.size() > this.ROBOTS_ON_FIELD) {
-            ArrayList<Robot> condensedRobots = condenseRobotsCloseTogether(robots);
+            ArrayList<com.gmail.jakekinsella.map.SolidObjects.Robot> condensedRobots = condenseRobotsCloseTogether(robots);
 
             if (condensedRobots.size() > this.ROBOTS_ON_FIELD) {
                 for (int i = 0; i < condensedRobots.size(); i++) {
-                    Robot tmp = condensedRobots.get(i);
+                    com.gmail.jakekinsella.map.SolidObjects.Robot tmp = condensedRobots.get(i);
                     tmp.setChanceObjectIsReal(0.2);
                     condensedRobots.set(i, tmp);
                 }
             }
 
             for (int i = 0; i < map.size(); i++) {
-                if (map.get(i) instanceof Robot) {
+                if (map.get(i) instanceof com.gmail.jakekinsella.map.SolidObjects.Robot) {
                     map.remove(i);
                 }
             }
@@ -105,7 +110,7 @@ public class Map {
             map.addAll(condensedRobots);
         }
 
-        for (Robot robot : robots) {
+        for (com.gmail.jakekinsella.map.SolidObjects.Robot robot : robots) {
             if (this.isObjectNearRobotBounds(robot.getX(), robot.getY(), robotControl.getRobotBounds().getBounds())) {
                 robotControl.updateInternalPositionFromVision(robot.getX(), robot.getY());
             }
@@ -114,27 +119,27 @@ public class Map {
         return map;
     }
 
-    private ArrayList<Robot> robotsInMap(ArrayList<SolidObject> newMap) {
-        ArrayList<Robot> robots = new ArrayList<>();
+    private ArrayList<com.gmail.jakekinsella.map.SolidObjects.Robot> robotsInMap(ArrayList<SolidObject> newMap) {
+        ArrayList<com.gmail.jakekinsella.map.SolidObjects.Robot> robots = new ArrayList<>();
 
         for (int i = 0; i < newMap.size(); i++) {
-            if (newMap.get(i) instanceof Robot) {
-                robots.add((Robot) newMap.get(i));
+            if (newMap.get(i) instanceof com.gmail.jakekinsella.map.SolidObjects.Robot) {
+                robots.add((com.gmail.jakekinsella.map.SolidObjects.Robot) newMap.get(i));
             }
         }
 
         return robots;
     }
 
-    private ArrayList<Robot> condenseRobotsCloseTogether(ArrayList<Robot> robots) {
-        ArrayList<Robot> sortedRobots = this.sortRobotsByX(robots);
+    private ArrayList<com.gmail.jakekinsella.map.SolidObjects.Robot> condenseRobotsCloseTogether(ArrayList<com.gmail.jakekinsella.map.SolidObjects.Robot> robots) {
+        ArrayList<com.gmail.jakekinsella.map.SolidObjects.Robot> sortedRobots = this.sortRobotsByX(robots);
         // For every two x values check if their y values are close
         int index = 0;
         while (index != -1) {
-            Robot robot1 = sortedRobots.get(index);
-            Robot robot2 = sortedRobots.get(index + 1);
+            com.gmail.jakekinsella.map.SolidObjects.Robot robot1 = sortedRobots.get(index);
+            com.gmail.jakekinsella.map.SolidObjects.Robot robot2 = sortedRobots.get(index + 1);
             sortedRobots.remove(index + 1);
-            sortedRobots.set(index, new Robot(robot1, robot2));
+            sortedRobots.set(index, new com.gmail.jakekinsella.map.SolidObjects.Robot(robot1, robot2));
 
             index = this.getIndexOfCloseTogetherRobot(sortedRobots);
         }
@@ -142,7 +147,7 @@ public class Map {
         return sortedRobots;
     }
 
-    private ArrayList<Robot> sortRobotsByX(ArrayList<Robot> robots) {
+    private ArrayList<com.gmail.jakekinsella.map.SolidObjects.Robot> sortRobotsByX(ArrayList<com.gmail.jakekinsella.map.SolidObjects.Robot> robots) {
         for (int i = 0; i < robots.size() - 1; i++) {
             int position = i;
             for (int j = i + 1; j < robots.size(); j++) {
@@ -152,7 +157,7 @@ public class Map {
             }
 
             if (position != i) {
-                Robot tmp = robots.get(position);
+                com.gmail.jakekinsella.map.SolidObjects.Robot tmp = robots.get(position);
                 robots.set(i, robots.get(position));
                 robots.set(position, tmp);
             }
@@ -161,7 +166,7 @@ public class Map {
         return robots;
     }
 
-    private int getIndexOfCloseTogetherRobot(ArrayList<Robot> robots) {
+    private int getIndexOfCloseTogetherRobot(ArrayList<com.gmail.jakekinsella.map.SolidObjects.Robot> robots) {
         for (int i = 0; i < robots.size() - 1; i++) {
             if (Math.abs(robots.get(i).getX() - robots.get(i + 1).getX()) < this.CLOSE_ENOUGH) {
                 if (Math.abs(robots.get(i).getY() - robots.get(i + 1).getY()) < this.CLOSE_ENOUGH) {

@@ -1,4 +1,4 @@
-package com.gmail.jakekinsella.map;
+package com.gmail.jakekinsella.map.SolidObjects;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;

@@ -1,9 +1,8 @@
 package com.gmail.jakekinsella.robot;
 
 import com.gmail.jakekinsella.map.Map;
-import com.gmail.jakekinsella.map.SolidObject;
+import com.gmail.jakekinsella.map.SolidObjects.SolidObject;
 
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**

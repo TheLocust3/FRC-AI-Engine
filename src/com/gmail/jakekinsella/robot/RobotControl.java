@@ -1,7 +1,7 @@
 package com.gmail.jakekinsella.robot;
 
 import com.gmail.jakekinsella.communicator.Communicator;
-import com.gmail.jakekinsella.map.FuzzyObject;
+import com.gmail.jakekinsella.map.SolidObjects.FuzzyObject;
 import com.gmail.jakekinsella.map.Map;
 
 import java.awt.*;
