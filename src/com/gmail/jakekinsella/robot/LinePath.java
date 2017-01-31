@@ -4,8 +4,6 @@ import com.gmail.jakekinsella.map.Map;
 import com.gmail.jakekinsella.map.Robot;
 import com.gmail.jakekinsella.map.SolidObject;
 
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
@@ -14,10 +12,10 @@ import java.util.ArrayList;
 public class LinePath {
 
     private Map map;
-    private Robot robot;
+    private RobotControl robot;
     private ArrayList<RotatedRectangle> lines;
 
-    public LinePath(Map map, Robot robot) {
+    public LinePath(Map map, RobotControl robot) {
         this.map = map;
         this.robot = robot;
         this.lines = new ArrayList<>();
@@ -51,7 +49,7 @@ public class LinePath {
     }
 
     private RotatedRectangle createPaddedPath(double startX, double startY, double endX, double endY) {
-        return new RotatedRectangle(startX, startY, endX + this.robot.getWidth(), endY + this.robot.getHeight());
+        return new RotatedRectangle(startX, startY, endX + this.robot.getRobotBounds().getWidth(), endY + this.robot.getRobotBounds().getWidth());
     }
 
     // Get the shortest path around the object. The returned line is snapped to a 90 degree

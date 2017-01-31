@@ -48,7 +48,7 @@ public class RobotControl {
     }
 
     public void gotoLocation(double newX, double newY, Map map) {
-        LinePath linePath = new LinePath(map);
+        LinePath linePath = new LinePath(map, this);
         linePath.generatePath(this.getRobotBounds().getX(), this.getRobotBounds().getY(), newX, newY);
     }
 
