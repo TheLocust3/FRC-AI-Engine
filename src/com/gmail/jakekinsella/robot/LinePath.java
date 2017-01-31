@@ -1,9 +1,9 @@
 package com.gmail.jakekinsella.robot;
 
 import com.gmail.jakekinsella.map.Map;
-import com.gmail.jakekinsella.map.Robot;
 import com.gmail.jakekinsella.map.SolidObject;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
@@ -12,21 +12,34 @@ import java.util.ArrayList;
 public class LinePath {
 
     private Map map;
-    private RobotControl robot;
-    private ArrayList<RotatedRectangle> lines;
+    private Rectangle2D.Double robotBounds;
+    private ArrayList<PathPart> pathParts;
+    private int atPath;
 
-    public LinePath(Map map, RobotControl robot) {
+    public LinePath(Map map, Rectangle2D.Double robotBounds) {
         this.map = map;
-        this.robot = robot;
-        this.lines = new ArrayList<>();
+        this.robotBounds = robotBounds;
+        this.pathParts = new ArrayList<>();
+        this.atPath = 0;
+    }
+
+    public PathPart getCurrentPath() {
+        PathPart pathPart = pathParts.get(atPath);
+
+        if (pathPart.isFinished()) {
+            atPath++;
+            pathPart = pathParts.get(atPath);
+        }
+
+        return pathPart;
     }
 
     public void generatePath(double startX, double startY, double endX, double endY) {
-        lines.addAll(evaluatePath(startX, startY, endX, endY));
+        pathParts.addAll(evaluatePath(startX, startY, endX, endY));
     }
 
-    public ArrayList<RotatedRectangle> evaluatePath(double startX, double startY, double endX, double endY) {
-        ArrayList<RotatedRectangle> paths = new ArrayList<>();
+    public ArrayList<PathPart> evaluatePath(double startX, double startY, double endX, double endY) {
+        ArrayList<PathPart> paths = new ArrayList<>();
 
         RotatedRectangle path = this.createPaddedPath(startX, startY, endX, endY);
         SolidObject intersection = this.map.getIntersection(path.getShape());
@@ -43,13 +56,13 @@ public class LinePath {
             intersection = this.map.getIntersection(path.getShape());
         }
 
-        paths.add(path);
+        paths.add(new PathPart(path));
 
         return paths;
     }
 
     private RotatedRectangle createPaddedPath(double startX, double startY, double endX, double endY) {
-        return new RotatedRectangle(startX, startY, endX + this.robot.getRobotBounds().getWidth(), endY + this.robot.getRobotBounds().getWidth());
+        return new RotatedRectangle(startX, startY, endX + this.robotBounds.getWidth(), endY + this.robotBounds.getWidth());
     }
 
     // Get the shortest path around the object. The returned line is snapped to a 90 degree

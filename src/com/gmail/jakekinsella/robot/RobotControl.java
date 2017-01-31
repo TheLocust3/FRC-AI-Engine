@@ -25,8 +25,8 @@ public class RobotControl {
         this.boundingBox = new Rectangle2D.Double();
     }
 
-    public Rectangle getRobotBounds() {
-        return this.boundingBox.getBounds();
+    public Rectangle2D getRobotBounds() {
+        return this.boundingBox.getBounds2D();
     }
 
     public void updateInternalPositionFromVision(int x, int y) {
@@ -48,8 +48,10 @@ public class RobotControl {
     }
 
     public void gotoLocation(double newX, double newY, Map map) {
-        LinePath linePath = new LinePath(map, this);
+        LinePath linePath = new LinePath(map, (Rectangle2D.Double) this.getRobotBounds()); // Always want to be updating the path with new map data
         linePath.generatePath(this.getRobotBounds().getX(), this.getRobotBounds().getY(), newX, newY);
+
+        linePath.getCurrentPath().execute();
     }
 
     private Angle getAngle() {
