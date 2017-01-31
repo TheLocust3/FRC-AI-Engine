@@ -26,6 +26,10 @@ public class LinePath {
     public PathPart getCurrentPath() {
         PathPart pathPart = pathParts.get(atPath);
 
+        if (pathPart == null) {
+            return null;
+        }
+
         if (pathPart.isFinished()) {
             atPath++;
 

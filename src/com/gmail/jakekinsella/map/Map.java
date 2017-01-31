@@ -106,7 +106,7 @@ public class Map {
         }
 
         for (Robot robot : robots) {
-            if (this.isObjectNearRobotBounds(robot.getX(), robot.getY(), robotControl.getRobotBounds())) {
+            if (this.isObjectNearRobotBounds(robot.getX(), robot.getY(), robotControl.getRobotBounds().getBounds())) {
                 robotControl.updateInternalPositionFromVision(robot.getX(), robot.getY());
             }
         }

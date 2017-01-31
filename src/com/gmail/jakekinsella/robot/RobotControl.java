@@ -84,9 +84,11 @@ public class RobotControl {
     }
 
     private void followLinePath() {
-        PathPart currentPart = this.currentPath.getCurrentPath();
-        if (currentPart != null) {
-            currentPart.execute();
+        if (this.currentPath != null) {
+            PathPart currentPart = this.currentPath.getCurrentPath();
+            if (currentPart != null) {
+                currentPart.execute();
+            }
         }
     }
 
