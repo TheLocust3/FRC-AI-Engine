@@ -9,63 +9,70 @@ import java.awt.geom.Rectangle2D;
  */
 public class RotatedRectangle {
 
+    private double startX, startY, endX, endY;
+    private double width;
     private Angle angle;
-    private Rectangle2D.Double rectangle;
-    private Shape shape;
 
-    // x1,y1 = bottom left
-    // x2,y2 = top right
-    public RotatedRectangle(double x1, double y1, double x2, double y2) {
-        this.angle = new Angle(x1, y1, x2, y2); // TODO: I feel a bit iffy about this
-        this.rectangle = new Rectangle2D.Double();
-        this.rectangle.setRect(x1, y1, x1 + Math.abs(x2 - x1), y1 + Math.abs(y2 - y1));
-        this.updateShape();
+    public RotatedRectangle(double startX, double startY, double endX, double endY, double width) {
+        this.startX = startX;
+        this.startY = startY;
+        this.endX = endX;
+        this.endY = endY;
+        this.width = width;
+
+        this.angle = new Angle(startX, startY, endX, endY); // TODO: I feel a bit iffy about this
+        this.update();
     }
 
     // TODO: Currently no way of getting the top right and bottom left points so max and min are very close
-    public double getMinX() {
-        return this.shape.getBounds().getMinX();
+    // THIS TOTALLY DOESN'T WORK
+    public double getStartX() {
+        return this.startX;
     }
 
-    public double getMinY() {
-        return this.shape.getBounds().getMinY();
+    public double getStartY() {
+        return this.startY;
     }
 
-    public double getMaxX() {
-        return this.shape.getBounds().getMaxX();
+    public double getEndX() {
+        return this.endX;
     }
 
-    public double getMaxY() {
-        return this.shape.getBounds().getMaxY();
+    public double getEndY() {
+        return this.endY;
     }
 
     public double getWidth() {
-        return this.getShape().getBounds2D().getWidth();
+        return this.width;
     }
 
     public double getHeight() {
-        return this.getShape().getBounds2D().getHeight();
+        return this.getLineDistance() * Math.sin(this.getAngle().getRadians());
     }
 
     public Angle getAngle() {
         return this.angle;
     }
 
-    public Shape getShape() {
-        return this.shape;
+    public double getLineDistance() {
+        return Math.sqrt(Math.pow(this.getEndX() - this.getStartX(), 2) + Math.pow(this.getEndY() - this.getStartY(), 2));
     }
 
-    public double getLineDistance() {
-        return this.getHeight();
+    public Shape getShape() {
+        Rectangle2D.Double rect = new Rectangle2D.Double(this.getStartX(), this.getStartY(), this.getWidth(), this.getHeight());
+        AffineTransform at = AffineTransform.getRotateInstance(this.getAngle().getRadians());
+
+        return at.createTransformedShape(rect);
     }
 
     public void rotate(Angle angle) {
         this.angle = angle;
-        this.updateShape();
+        this.update();
     }
 
-    private void updateShape() {
-        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getRadians());
-        this.shape = at.createTransformedShape(this.rectangle);
+    private void update() {
+        double distance = this.getLineDistance();
+        this.endX = (distance * Math.cos(this.angle.getRadians())) + this.startX;
+        this.endY = (distance * Math.sin(this.angle.getRadians())) + this.startY;
     }
 }

@@ -60,7 +60,7 @@ public class LinePath {
             paths.addAll(this.evaluatePath(pathToIntersection));
 
             RotatedRectangle lastPath = paths.get(paths.size() - 1).getLine();
-            path = this.createPaddedPath(lastPath.getMaxX(), lastPath.getMaxY(), endX, endY);
+            path = this.createPaddedPath(lastPath.getEndX(), lastPath.getEndY(), endX, endY);
             intersection = this.map.getIntersection(path.getShape());
         }
 
@@ -70,10 +70,10 @@ public class LinePath {
     }
 
     private ArrayList<PathPart> evaluatePath(RotatedRectangle path) {
-        return this.evaluatePath(path.getMinX(), path.getMinY(), path.getMaxX(), path.getMaxY());
+        return this.evaluatePath(path.getStartX(), path.getStartY(), path.getEndX(), path.getEndY());
     }
 
     private RotatedRectangle createPaddedPath(double startX, double startY, double endX, double endY) {
-        return new RotatedRectangle(startX, startY, endX + this.robotControl.getRobotBounds().getWidth(), endY + this.robotControl.getRobotBounds().getWidth());
+        return new RotatedRectangle(startX, startY, endX, endY, this.robotControl.getRobotBounds().getWidth());
     }
 }

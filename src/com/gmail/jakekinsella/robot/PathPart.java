@@ -33,8 +33,8 @@ public class PathPart {
     }
 
     private boolean isRobotAtEnd() { // TODO: Check if the robot overshot
-        boolean atEnd = Math.abs(this.robotControl.getRobotBounds().getCenterX() - this.line.getMaxX()) < PIXEL_TOLERANCE;
-        atEnd = atEnd && Math.abs(this.robotControl.getRobotBounds().getCenterY() - this.line.getMaxY()) < PIXEL_TOLERANCE;
+        boolean atEnd = Math.abs(this.robotControl.getRobotBounds().getCenterX() - this.line.getEndX()) < PIXEL_TOLERANCE;
+        atEnd = atEnd && Math.abs(this.robotControl.getRobotBounds().getCenterY() - this.line.getEndY()) < PIXEL_TOLERANCE;
 
         return atEnd;
     }
