@@ -13,8 +13,9 @@ public class SolidObject {
     private Shape bounds;
     private double chanceObjectIsReal; // Decays over time
     private boolean notDeletable;
+    private String type;
 
-    public SolidObject(int x, int y, int width, int height, double chanceObjectIsReal, boolean notDeletable) {
+    public SolidObject(int x, int y, int width, int height, double chanceObjectIsReal, boolean notDeletable, String type) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -22,10 +23,11 @@ public class SolidObject {
         this.bounds = new Rectangle2D.Double(x, y, width, height);
         this.chanceObjectIsReal = chanceObjectIsReal;
         this.notDeletable = notDeletable;
+        this.type = type;
     }
 
-    public SolidObject(int x, int y, int width, int height, double chanceObjectIsReal) {
-        this(x, y, width, height, chanceObjectIsReal, false);
+    public SolidObject(int x, int y, int width, int height, double chanceObjectIsReal, String type) {
+        this(x, y, width, height, chanceObjectIsReal, false, type);
     }
 
     public void setChanceObjectIsReal(double chanceObjectIsReal) {
@@ -46,6 +48,10 @@ public class SolidObject {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public String getType() {
+        return this.type;
     }
 
     public boolean isNotDeletable() {

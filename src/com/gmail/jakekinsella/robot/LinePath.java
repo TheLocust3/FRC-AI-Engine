@@ -52,15 +52,15 @@ public class LinePath {
         RotatedRectangle path = this.createPaddedPath(startX, startY, endX, endY);
         SolidObject intersection = this.map.getIntersection(path.getShape());
         while (intersection != null) {
-            RotatedRectangle avoidancePath = this.getShortestSnappedPath(path);
+            RotatedRectangle pathToIntersection = this.createPaddedPath(startX, startY, intersection.getX(), intersection.getY());
+            Angle newAngle = new Angle(pathToIntersection.getAngle().getDegrees() + 10);
+            pathToIntersection.rotate(newAngle);
+            // TODO: Lower distance so it can drive to a wall
 
-            double avoidanceDistance = avoidancePath.getLineDistance() + intersection.getWidth(); // TODO: Change from just using width
-            double avoidX = avoidanceDistance * Math.cos(avoidancePath.getAngle().getRadians());
-            double avoidY = avoidanceDistance * Math.sin(avoidancePath.getAngle().getRadians());
+            paths.addAll(this.evaluatePath(pathToIntersection));
 
-            paths.addAll(evaluatePath(avoidancePath.getX1(), avoidancePath.getY1(), avoidX, avoidY)); // TODO: Really need to do some testing with this recursion
-
-            path = this.createPaddedPath(avoidancePath.getX2(), avoidancePath.getY2(), endX, endY);
+            RotatedRectangle lastPath = paths.get(paths.size() - 1).getLine();
+            path = this.createPaddedPath(lastPath.getMaxX(), lastPath.getMaxY(), endX, endY);
             intersection = this.map.getIntersection(path.getShape());
         }
 
@@ -69,23 +69,11 @@ public class LinePath {
         return paths;
     }
 
-    private RotatedRectangle createPaddedPath(double startX, double startY, double endX, double endY) {
-        return new RotatedRectangle(startX, startY, endX + this.robotControl.getRobotBounds().getWidth(), endY + this.robotControl.getRobotBounds().getWidth());
+    private ArrayList<PathPart> evaluatePath(RotatedRectangle path) {
+        return this.evaluatePath(path.getMinX(), path.getMinY(), path.getMaxX(), path.getMaxY());
     }
 
-    // Get the shortest path around the object. The returned line is snapped to a 90 degree
-    private RotatedRectangle getShortestSnappedPath(RotatedRectangle hypotenuse) {
-        Angle possibleAngle1 = new Angle(hypotenuse.getAngle().getDegrees() + 90);
-        Angle possibleAngle2 = new Angle(hypotenuse.getAngle().getDegrees() - 90);
-
-        double possibleEndX1 = hypotenuse.getLineDistance() * Math.cos(possibleAngle1.getRadians());
-        double possibleEndY1 = hypotenuse.getLineDistance() * Math.cos(possibleAngle1.getRadians());
-        RotatedRectangle possibleLine1 = this.createPaddedPath(hypotenuse.getX1(), hypotenuse.getY1(), possibleEndX1, possibleEndY1); // TODO: I feel iffy about this
-
-        double possibleEndX2 = hypotenuse.getLineDistance() * Math.cos(possibleAngle2.getRadians());
-        double possibleEndY2 = hypotenuse.getLineDistance() * Math.cos(possibleAngle2.getRadians());
-        RotatedRectangle possibleLine2 = this.createPaddedPath(hypotenuse.getX1(), hypotenuse.getY1(), possibleEndX2, possibleEndY2);
-
-        return possibleLine1.getLineDistance() < possibleLine2.getLineDistance() ? possibleLine1 : possibleLine2;
+    private RotatedRectangle createPaddedPath(double startX, double startY, double endX, double endY) {
+        return new RotatedRectangle(startX, startY, endX + this.robotControl.getRobotBounds().getWidth(), endY + this.robotControl.getRobotBounds().getWidth());
     }
 }

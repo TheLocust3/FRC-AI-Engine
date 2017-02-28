@@ -6,7 +6,7 @@ package com.gmail.jakekinsella.map.SolidObjects;
 public class Ball extends SolidObject {
 
     public Ball(int x, int y, boolean notDeletable) {
-        super(x, y, 10, 10, 1, notDeletable);
+        super(x, y, 10, 10, 1, notDeletable, "BALL");
     }
 
     public Ball(int x, int y) {

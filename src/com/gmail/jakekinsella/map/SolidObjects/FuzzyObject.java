@@ -7,6 +7,6 @@ package com.gmail.jakekinsella.map.SolidObjects;
 public class FuzzyObject extends SolidObject {
 
     public FuzzyObject(int x, int y, int width, int height) {
-        super(x, y, width, height, 0.5);
+        super(x, y, width, height, 0.5, "FUZZY_OBJECT");
     }
 }

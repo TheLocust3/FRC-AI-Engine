@@ -6,6 +6,6 @@ package com.gmail.jakekinsella.map.SolidObjects;
 public class HopperTrigger extends SolidObject {
 
     public HopperTrigger(int x, int y) {
-            super(x, y, 50, 50, 1);
+            super(x, y, 50, 50, 1, "HOPPER_TRIGGER");
         }
 }

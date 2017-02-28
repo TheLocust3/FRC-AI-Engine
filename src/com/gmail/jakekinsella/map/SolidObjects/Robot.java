@@ -9,7 +9,7 @@ public class Robot extends SolidObject {
     private double degrees;
 
     public Robot(int x, int y) {
-        super(x, y, 50, 50, 0.5);
+        super(x, y, 50, 50, 0.5, "ROBOT");
         this.alliance = alliance;
     }
 

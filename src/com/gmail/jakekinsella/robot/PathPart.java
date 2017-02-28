@@ -18,6 +18,10 @@ public class PathPart {
         this.finished = false;
     }
 
+    public RotatedRectangle getLine() {
+        return this.line;
+    }
+
     public boolean isFinished() {
         return this.finished;
     }
@@ -29,8 +33,8 @@ public class PathPart {
     }
 
     private boolean isRobotAtEnd() { // TODO: Check if the robot overshot
-        boolean atEnd = Math.abs(this.robotControl.getRobotBounds().getCenterX() - this.line.getX2()) < PIXEL_TOLERANCE;
-        atEnd = atEnd && Math.abs(this.robotControl.getRobotBounds().getCenterY() - this.line.getY2()) < PIXEL_TOLERANCE;
+        boolean atEnd = Math.abs(this.robotControl.getRobotBounds().getCenterX() - this.line.getMaxX()) < PIXEL_TOLERANCE;
+        atEnd = atEnd && Math.abs(this.robotControl.getRobotBounds().getCenterY() - this.line.getMaxY()) < PIXEL_TOLERANCE;
 
         return atEnd;
     }
