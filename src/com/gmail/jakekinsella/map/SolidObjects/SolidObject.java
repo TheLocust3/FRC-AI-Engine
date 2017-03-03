@@ -10,17 +10,18 @@ public class SolidObject {
     private final double DECAY_PER_SECONDS = 0.1;
 
     private int x, y, width, height;
-    private Shape bounds;
     private double chanceObjectIsReal; // Decays over time
     private boolean notDeletable;
     private String type;
+
+    Rectangle bounds;
 
     public SolidObject(int x, int y, int width, int height, double chanceObjectIsReal, boolean notDeletable, String type) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.bounds = new Rectangle2D.Double(x, y, width, height);
+        this.bounds = new Rectangle(x, y, width, height);
         this.chanceObjectIsReal = chanceObjectIsReal;
         this.notDeletable = notDeletable;
         this.type = type;

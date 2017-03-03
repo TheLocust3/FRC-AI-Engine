@@ -24,8 +24,6 @@ public class RotatedRectangle {
         this.update();
     }
 
-    // TODO: Currently no way of getting the top right and bottom left points so max and min are very close
-    // THIS TOTALLY DOESN'T WORK
     public double getStartX() {
         return this.startX;
     }
@@ -58,11 +56,16 @@ public class RotatedRectangle {
         return Math.sqrt(Math.pow(this.getEndX() - this.getStartX(), 2) + Math.pow(this.getEndY() - this.getStartY(), 2));
     }
 
-    public Shape getShape() {
+    public Rectangle getShape() {
         Rectangle2D.Double rect = new Rectangle2D.Double(this.getStartX(), this.getStartY(), this.getWidth(), this.getHeight());
         AffineTransform at = AffineTransform.getRotateInstance(this.getAngle().getRadians());
+        Shape shape = at.createTransformedShape(rect);
 
-        return at.createTransformedShape(rect);
+        return new Rectangle((int) shape.getBounds2D().getMinX(), (int) shape.getBounds2D().getMinY(), (int) shape.getBounds2D().getMaxX(), (int) shape.getBounds2D().getMaxY()); // TODO: use an actual rotated shape
+    }
+
+    public void setDistance(double distance) {
+        this.update(distance);
     }
 
     public void rotate(Angle angle) {
@@ -70,9 +73,12 @@ public class RotatedRectangle {
         this.update();
     }
 
-    private void update() {
-        double distance = this.getLineDistance();
+    private void update(double distance) {
         this.endX = (distance * Math.cos(this.angle.getRadians())) + this.startX;
         this.endY = (distance * Math.sin(this.angle.getRadians())) + this.startY;
+    }
+
+    private void update() {
+        this.update(this.getLineDistance());
     }
 }

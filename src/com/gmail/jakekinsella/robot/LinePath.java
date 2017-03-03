@@ -2,6 +2,7 @@ package com.gmail.jakekinsella.robot;
 
 import com.gmail.jakekinsella.map.Map;
 import com.gmail.jakekinsella.map.SolidObjects.SolidObject;
+import com.gmail.jakekinsella.map.SolidObjects.Wall;
 
 import java.util.ArrayList;
 
@@ -55,7 +56,7 @@ public class LinePath {
             RotatedRectangle pathToIntersection = this.createPaddedPath(startX, startY, intersection.getX(), intersection.getY());
             Angle newAngle = new Angle(pathToIntersection.getAngle().getDegrees() + 10);
             pathToIntersection.rotate(newAngle);
-            // TODO: Lower distance so it can drive to a wall
+            pathToIntersection = this.handleIntersectionWithWall(pathToIntersection, this.map);
 
             paths.addAll(this.evaluatePath(pathToIntersection));
 
@@ -64,6 +65,7 @@ public class LinePath {
             intersection = this.map.getIntersection(path.getShape());
         }
 
+        path = this.handleIntersectionWithWall(path, this.map);
         paths.add(new PathPart(path, this.robotControl));
 
         return paths;
@@ -75,5 +77,34 @@ public class LinePath {
 
     private RotatedRectangle createPaddedPath(double startX, double startY, double endX, double endY) {
         return new RotatedRectangle(startX, startY, endX, endY, this.robotControl.getRobotBounds().getWidth());
+    }
+
+    private RotatedRectangle handleIntersectionWithWall(RotatedRectangle rotatedRectangle, Map map) {
+        Wall wallIntersection = map.getIntersectionWithWall(rotatedRectangle.getShape());
+
+        rotatedRectangle.setDistance(this.getDistanceToWall(wallIntersection, rotatedRectangle));
+        return rotatedRectangle;
+    }
+
+    private double getDistanceToWall(Wall wall, RotatedRectangle rotatedRectangle) {
+        double endX = wall.getX() + wall.getWidth() * Math.cos(wall.getAngle().getRadians());
+        double endY = wall.getY() + wall.getHeight() * Math.sin(wall.getAngle().getRadians());
+
+        // Create line equations
+        double wallSlope = (endY - wall.getY()) / (endX - wall.getX());
+        double wallBValue = wall.getY() - wallSlope * wall.getX(); // y = ax + b
+
+        double pointSlope = -1 / wallSlope;
+        double pointBValue = rotatedRectangle.getStartY() - pointSlope * rotatedRectangle.getStartX();
+
+        // Solve for intersection
+        double xIntersection = (pointBValue - wallBValue) / (wallSlope - pointSlope); // Solve the two equations set equal to eachother
+        double yIntersection = wallSlope * xIntersection + wallBValue;
+
+        return calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), xIntersection, yIntersection);
+    }
+
+    private double calculateDistanceBetweenPoints(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 }

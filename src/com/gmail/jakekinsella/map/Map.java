@@ -16,6 +16,18 @@ public class Map {
     private final int CLOSE_ENOUGH = 50;
 
     private ArrayList<SolidObject> map = this.createDefaultField(); // Map is on its side, 0,0 is the corner to the right of the blue tower
+    private Wall wallLeft, wallRight, wallTop, wallBottom, wallTopLeftCorner, wallTopRightCorner, wallBottomRightCorner, wallBottomLeftCorner;
+
+    // Field is 1000 by 1000
+    public Map() {
+        this.wallLeft = new Wall(0, 0, 1, 1000, 0);
+        this.wallRight = new Wall(1000, 0, 1, 1000, 0);
+
+        this.wallTop = new Wall(0, 0, 1000, 1, 0);
+        this.wallBottom = new Wall(0, 1000, 1000, 1, 0);
+
+
+    }
 
     public void addObstacle(FuzzyObject obstacle) {
         map.add(obstacle);
@@ -34,6 +46,28 @@ public class Map {
                     return this.map.get(i);
                 }
             }
+        }
+
+        return null;
+    }
+
+    public Wall getIntersectionWithWall(Rectangle shape) {
+        if (wallTopLeftCorner.doesIntersect(shape)) {
+            return wallTopLeftCorner;
+        } else if (wallTopRightCorner.doesIntersect(shape)) {
+            return wallTopRightCorner;
+        } else if (wallBottomRightCorner.doesIntersect(shape)) {
+            return wallBottomRightCorner;
+        } else if (wallBottomLeftCorner.doesIntersect(shape)) {
+            return wallBottomLeftCorner;
+        } else if (wallLeft.doesIntersect(shape)) {
+            return wallLeft;
+        } else if (wallRight.doesIntersect(shape)) {
+            return wallRight;
+        } else if (wallBottom.doesIntersect(shape)) {
+            return wallBottom;
+        } else if (wallTop.doesIntersect(shape)) {
+            return wallTop;
         }
 
         return null;
