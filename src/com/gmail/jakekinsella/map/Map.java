@@ -13,19 +13,24 @@ import java.util.ArrayList;
  */
 public class Map implements Paintable {
 
+    // 54ft 4in by 27ft
+    // 1ft = 15px
+    public final int FRAME_HEIGHT = 405, FRAME_WIDTH = 815;
+
     private final int ROBOTS_ON_FIELD = 6;
     private final int CLOSE_ENOUGH = 50;
+    private final int WALL_WIDTH = 3;
 
     private ArrayList<SolidObject> map = this.createDefaultField(); // Map is on its side, 0,0 is the corner to the right of the blue tower
     private Wall wallLeft, wallRight, wallTop, wallBottom, wallTopLeftCorner, wallTopRightCorner, wallBottomRightCorner, wallBottomLeftCorner;
 
     // Field is 1000 by 1000
     public Map() {
-        this.wallLeft = new Wall(0, 0, 1, 1000, 0);
-        this.wallRight = new Wall(1000, 0, 1, 1000, 0);
+        this.wallLeft = new Wall(0, 0, this.WALL_WIDTH, this.FRAME_HEIGHT, 0);
+        this.wallRight = new Wall(this.FRAME_WIDTH - this.WALL_WIDTH, 0, this.WALL_WIDTH, this.FRAME_HEIGHT, 0);
 
-        this.wallTop = new Wall(0, 0, 1000, 1, 0);
-        this.wallBottom = new Wall(0, 1000, 1000, 1, 0);
+        this.wallTop = new Wall(0, 0, this.FRAME_WIDTH, this.WALL_WIDTH, 0);
+        this.wallBottom = new Wall(0, this.FRAME_HEIGHT - 25, this.FRAME_WIDTH, this.WALL_WIDTH, 0); // I have no clue why this is minus 25 but it works
 
         // TODO: Create angled walls
     }

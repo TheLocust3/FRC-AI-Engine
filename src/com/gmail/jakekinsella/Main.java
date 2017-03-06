@@ -19,7 +19,7 @@ public class Main {
         RobotControl robot = new RobotControl(communicator);
         VisionCollector visionCollector = new VisionCollector(map, communicator, robot);
 
-        DebugFrame debugFrame = new DebugFrame(map);
+        DebugFrame debugFrame = new DebugFrame(map, robot);
         if (args[0].toLowerCase().equals("debug")) {
             debugFrame.setVisible(true);
         }

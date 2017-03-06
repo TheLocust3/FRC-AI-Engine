@@ -1,13 +1,16 @@
 package com.gmail.jakekinsella.robot;
 
+import com.gmail.jakekinsella.Paintable;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 /**
  * Created by jakekinsella on 1/30/17.
  */
-public class RotatedRectangle {
+public class RotatedRectangle implements Paintable {
 
     private double startX, startY, endX, endY;
     private double width;
@@ -71,6 +74,14 @@ public class RotatedRectangle {
     public void rotate(Angle angle) {
         this.angle = angle;
         this.update();
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D) {
+        graphics2D.setColor(Color.CYAN);
+        graphics2D.setStroke(new BasicStroke(4));
+
+        graphics2D.drawLine((int) this.getStartX(), (int) this.getStartY(), (int) this.getEndX(), (int) this.getEndY());
     }
 
     private void update(double distance) {

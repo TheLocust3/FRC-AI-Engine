@@ -1,6 +1,7 @@
 package com.gmail.jakekinsella.debug;
 
 import com.gmail.jakekinsella.map.Map;
+import com.gmail.jakekinsella.robot.RobotControl;
 
 import javax.swing.*;
 
@@ -9,13 +10,11 @@ import javax.swing.*;
  */
 public class DebugFrame extends JFrame {
 
-    public int FRAME_WIDTH = 1000, FRAME_HEIGHT = 1000;
-
-    public DebugFrame(Map map) {
+    public DebugFrame(Map map, RobotControl robotControl) {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        this.setSize(map.FRAME_WIDTH, map.FRAME_HEIGHT);
 
-        DebugCanvas debugCanvas = new DebugCanvas(map);
+        DebugCanvas debugCanvas = new DebugCanvas(map, robotControl);
 
         this.add(debugCanvas);
     }

@@ -1,5 +1,6 @@
 package com.gmail.jakekinsella.robot;
 
+import com.gmail.jakekinsella.Paintable;
 import com.gmail.jakekinsella.communicator.Communicator;
 import com.gmail.jakekinsella.map.SolidObjects.FuzzyObject;
 import com.gmail.jakekinsella.map.Map;
@@ -7,11 +8,12 @@ import com.gmail.jakekinsella.map.Map;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 /**
  * Created by jakekinsella on 12/20/16.
  */
-public class RobotControl {
+public class RobotControl implements Paintable {
 
     private final int WIDTH = 50, HEIGHT = 50;
 
@@ -28,6 +30,10 @@ public class RobotControl {
 
     public Rectangle2D getRobotBounds() {
         return this.boundingBox.getBounds2D();
+    }
+
+    public LinePath getCurrentPath() {
+        return this.currentPath;
     }
 
     public void updateInternalPositionFromVision(int x, int y) {
@@ -73,6 +79,12 @@ public class RobotControl {
 
     public void turn(Angle angle) {
         this.communicator.turn(angle.getDegrees());
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D) {
+        graphics2D.setColor(Color.CYAN);
+        graphics2D.fill(this.boundingBox);
     }
 
     private void updateInternalPosition(double deltaX, double deltaY, double absoluteDegrees) {

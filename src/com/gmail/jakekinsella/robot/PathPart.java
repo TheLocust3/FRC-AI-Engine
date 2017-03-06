@@ -1,9 +1,13 @@
 package com.gmail.jakekinsella.robot;
 
+import com.gmail.jakekinsella.Paintable;
+
+import java.awt.*;
+
 /**
  * Created by jakekinsella on 1/31/17.
  */
-public class PathPart {
+public class PathPart implements Paintable {
 
     private final int PIXEL_TOLERANCE = 50;
 
@@ -30,6 +34,11 @@ public class PathPart {
         this.robotControl.turn(line.getAngle());
         this.robotControl.drive(0.5); // TODO: Change the robot speed
         this.finished = isRobotAtEnd();
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D) {
+        this.line.paint(graphics2D);
     }
 
     private boolean isRobotAtEnd() { // TODO: Check if the robot overshot

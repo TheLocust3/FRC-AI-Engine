@@ -1,15 +1,17 @@
 package com.gmail.jakekinsella.robot;
 
+import com.gmail.jakekinsella.Paintable;
 import com.gmail.jakekinsella.map.Map;
 import com.gmail.jakekinsella.map.SolidObjects.SolidObject;
 import com.gmail.jakekinsella.map.SolidObjects.Wall;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
  * Created by jakekinsella on 1/5/17.
  */
-public class LinePath {
+public class LinePath implements Paintable {
 
     private Map map;
     private RobotControl robotControl;
@@ -41,6 +43,13 @@ public class LinePath {
         }
 
         return pathPart;
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D) {
+        for (PathPart pathPart : this.pathParts) {
+            pathPart.paint(graphics2D);
+        }
     }
 
     public void generatePath(double startX, double startY, double endX, double endY) {
