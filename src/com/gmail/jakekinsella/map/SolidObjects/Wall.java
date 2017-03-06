@@ -29,4 +29,10 @@ public class Wall extends SolidObject {
     public boolean doesIntersect(Shape shape) {
         return this.shape.intersects(shape.getBounds().getX(), shape.getBounds().getY(), shape.getBounds().getWidth(), shape.getBounds().getHeight());
     }
+
+    @Override
+    public void paint(Graphics2D graphics2D) {
+        graphics2D.setColor(Color.GRAY);
+        graphics2D.fill(this.shape);
+    }
 }

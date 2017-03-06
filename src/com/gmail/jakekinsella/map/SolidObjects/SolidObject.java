@@ -1,12 +1,14 @@
 package com.gmail.jakekinsella.map.SolidObjects;
 
+import com.gmail.jakekinsella.Paintable;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 /**
  * Created by jakekinsella on 12/19/16.
  */
-public class SolidObject {
+public class SolidObject implements Paintable {
     private final double DECAY_PER_SECONDS = 0.1;
 
     private int x, y, width, height;
@@ -75,5 +77,11 @@ public class SolidObject {
 
     public void tick(double deltaSeconds) {
         this.decayChanceObjectIsReal(deltaSeconds);
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D) {
+        graphics2D.setColor(Color.BLACK);
+        graphics2D.fill(this.bounds);
     }
 }

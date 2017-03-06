@@ -1,5 +1,6 @@
 package com.gmail.jakekinsella.map;
 
+import com.gmail.jakekinsella.Paintable;
 import com.gmail.jakekinsella.map.SolidObjects.*;
 import com.gmail.jakekinsella.map.SolidObjects.Robot;
 import com.gmail.jakekinsella.robot.RobotControl;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by jakekinsella on 12/19/16.
  */
-public class Map {
+public class Map implements Paintable {
 
     private final int ROBOTS_ON_FIELD = 6;
     private final int CLOSE_ENOUGH = 50;
@@ -26,7 +27,7 @@ public class Map {
         this.wallTop = new Wall(0, 0, 1000, 1, 0);
         this.wallBottom = new Wall(0, 1000, 1000, 1, 0);
 
-
+        // TODO: Create angled walls
     }
 
     public void addObstacle(FuzzyObject obstacle) {
@@ -95,6 +96,23 @@ public class Map {
         newMap = this.tuneRobotsFromVision(newMap, robotControl);
 
         this.map = newMap;
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D) {
+        for (SolidObject solidObject : this.map) {
+            solidObject.paint(graphics2D);
+        }
+
+        this.wallTop.paint(graphics2D);
+        this.wallBottom.paint(graphics2D);
+        this.wallLeft.paint(graphics2D);
+        this.wallRight.paint(graphics2D);
+
+        /*this.wallTopRightCorner.paint(graphics2D);
+        this.wallBottomRightCorner.paint(graphics2D);
+        this.wallTopLeftCorner.paint(graphics2D);
+        this.wallBottomLeftCorner.paint(graphics2D);*/
     }
 
     private ArrayList<SolidObject> createDefaultField() {

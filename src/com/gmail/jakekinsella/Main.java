@@ -3,6 +3,7 @@ package com.gmail.jakekinsella;
 import com.gmail.jakekinsella.communicator.Communicator;
 import com.gmail.jakekinsella.background.VisionCollector;
 import com.gmail.jakekinsella.communicator.SocketCommunicator;
+import com.gmail.jakekinsella.debug.DebugFrame;
 import com.gmail.jakekinsella.map.Map;
 import com.gmail.jakekinsella.robot.RobotControl;
 
@@ -18,6 +19,11 @@ public class Main {
         RobotControl robot = new RobotControl(communicator);
         VisionCollector visionCollector = new VisionCollector(map, communicator, robot);
 
+        DebugFrame debugFrame = new DebugFrame(map);
+        if (args[0].toLowerCase().equals("debug")) {
+            debugFrame.setVisible(true);
+        }
+
         new Thread(visionCollector).start();
 
         long lastTick = System.currentTimeMillis();
@@ -26,6 +32,10 @@ public class Main {
 
             map.tick(deltaSeconds);
             robot.tick(deltaSeconds, map);
+
+            if (args[0].toLowerCase().equals("debug")) {
+                debugFrame.repaint();
+            }
 
             lastTick = System.currentTimeMillis();
 

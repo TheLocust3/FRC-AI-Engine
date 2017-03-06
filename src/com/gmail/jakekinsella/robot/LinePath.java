@@ -83,7 +83,7 @@ public class LinePath {
         Wall wallIntersection = map.getIntersectionWithWall(rotatedRectangle.getShape());
 
         rotatedRectangle.setDistance(this.getDistanceToWall(wallIntersection, rotatedRectangle));
-        return rotatedRectangle;
+        return rotatedRectangle; // TODO: Add a bit of padding so that there is some room between the bot and the wall
     }
 
     private double getDistanceToWall(Wall wall, RotatedRectangle rotatedRectangle) {
@@ -98,7 +98,7 @@ public class LinePath {
         double pointBValue = rotatedRectangle.getStartY() - pointSlope * rotatedRectangle.getStartX();
 
         // Solve for intersection
-        double xIntersection = (pointBValue - wallBValue) / (wallSlope - pointSlope); // Solve the two equations set equal to eachother
+        double xIntersection = (pointBValue - wallBValue) / (wallSlope - pointSlope); // Solve the two equations set equal to each other
         double yIntersection = wallSlope * xIntersection + wallBValue;
 
         return calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), xIntersection, yIntersection);
