@@ -1,7 +1,5 @@
 package com.gmail.jakekinsella.robot;
 
-import java.awt.geom.Line2D;
-
 /**
  * Created by jakekinsella on 1/6/17.
  */

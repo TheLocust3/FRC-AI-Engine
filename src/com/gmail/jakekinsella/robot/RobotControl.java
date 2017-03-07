@@ -8,7 +8,6 @@ import com.gmail.jakekinsella.map.Map;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 
 /**
  * Created by jakekinsella on 12/20/16.
@@ -26,6 +25,7 @@ public class RobotControl implements Paintable {
         this.communicator = communicator;
         this.accelerationTracker = new AccelerationTracker();
         this.boundingBox = new Rectangle2D.Double();
+        this.updateInternalPositionFromVision(500, 300);
     }
 
     public Rectangle2D getRobotBounds() {
@@ -53,12 +53,12 @@ public class RobotControl implements Paintable {
         double deltaY = (this.getVelocity() * Math.cos(this.getAngle().getRadians())) * deltaSeconds;
         this.updateInternalPosition(deltaX, deltaY, this.getAngle().getNormalizedDegrees());
 
-        this.followLinePath();
+        //this.followLinePath();
     }
 
     public void gotoLocation(double newX, double newY, Map map) {
         this.currentPath = new LinePath(map, this); // Always want to be updating the path with new map data
-        this.currentPath.generatePath(this.getRobotBounds().getX(), this.getRobotBounds().getY(), newX, newY);
+        this.currentPath.generatePath(this.getRobotBounds().getCenterX(), this.getRobotBounds().getCenterY(), newX, newY);
     }
 
     public Angle getAngle() {
@@ -83,7 +83,7 @@ public class RobotControl implements Paintable {
 
     @Override
     public void paint(Graphics2D graphics2D) {
-        graphics2D.setColor(Color.CYAN);
+        graphics2D.setColor(Color.BLUE);
         graphics2D.fill(this.boundingBox);
     }
 

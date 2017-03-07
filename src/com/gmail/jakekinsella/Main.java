@@ -26,6 +26,8 @@ public class Main {
 
         new Thread(visionCollector).start();
 
+        robot.gotoLocation(100, 100, map);
+
         long lastTick = System.currentTimeMillis();
         while (true) {
             double deltaSeconds = (System.currentTimeMillis() - lastTick) / 1000.0;

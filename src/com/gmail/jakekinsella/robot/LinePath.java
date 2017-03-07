@@ -13,10 +13,12 @@ import java.util.ArrayList;
  */
 public class LinePath implements Paintable {
 
+    private int atPath;
+    private int endX, endY;
+
     private Map map;
     private RobotControl robotControl;
     private ArrayList<PathPart> pathParts;
-    private int atPath;
 
     public LinePath(Map map, RobotControl robotControl) {
         this.map = map;
@@ -50,9 +52,15 @@ public class LinePath implements Paintable {
         for (PathPart pathPart : this.pathParts) {
             pathPart.paint(graphics2D);
         }
+
+        graphics2D.setColor(Color.GREEN);
+        graphics2D.fillOval(endX, endY, 10, 10);
     }
 
     public void generatePath(double startX, double startY, double endX, double endY) {
+        this.endX = (int) endX;
+        this.endY = (int) endY;
+
         pathParts.addAll(evaluatePath(startX, startY, endX, endY));
     }
 
@@ -91,8 +99,12 @@ public class LinePath implements Paintable {
     private RotatedRectangle handleIntersectionWithWall(RotatedRectangle rotatedRectangle, Map map) {
         Wall wallIntersection = map.getIntersectionWithWall(rotatedRectangle.getShape());
 
-        rotatedRectangle.setDistance(this.getDistanceToWall(wallIntersection, rotatedRectangle));
-        return rotatedRectangle; // TODO: Add a bit of padding so that there is some room between the bot and the wall
+        if (wallIntersection != null) {
+            rotatedRectangle.setDistance(this.getDistanceToWall(wallIntersection, rotatedRectangle));
+            // TODO: Add a bit of padding so that there is some room between the bot and the wall
+        }
+
+        return rotatedRectangle;
     }
 
     private double getDistanceToWall(Wall wall, RotatedRectangle rotatedRectangle) {

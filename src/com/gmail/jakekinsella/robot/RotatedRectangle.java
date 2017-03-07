@@ -4,7 +4,6 @@ import com.gmail.jakekinsella.Paintable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -78,15 +77,15 @@ public class RotatedRectangle implements Paintable {
 
     @Override
     public void paint(Graphics2D graphics2D) {
-        graphics2D.setColor(Color.CYAN);
-        graphics2D.setStroke(new BasicStroke(4));
+        graphics2D.setColor(Color.GREEN);
+        graphics2D.setStroke(new BasicStroke(5));
 
         graphics2D.drawLine((int) this.getStartX(), (int) this.getStartY(), (int) this.getEndX(), (int) this.getEndY());
     }
 
     private void update(double distance) {
-        this.endX = (distance * Math.cos(this.angle.getRadians())) + this.startX;
-        this.endY = (distance * Math.sin(this.angle.getRadians())) + this.startY;
+        this.endX = this.startX - (distance * Math.cos(this.angle.getRadians())); // TODO: There must be a reason that this is minus and not plus
+        this.endY = this.startY + (distance * Math.sin(this.angle.getRadians()));
     }
 
     private void update() {
