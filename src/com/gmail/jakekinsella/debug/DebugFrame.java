@@ -12,10 +12,10 @@ public class DebugFrame extends JFrame {
 
     public DebugFrame(Map map, RobotControl robotControl) {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setSize(map.FRAME_WIDTH, map.FRAME_HEIGHT);
 
         DebugCanvas debugCanvas = new DebugCanvas(map, robotControl);
 
         this.add(debugCanvas);
+        this.pack();
     }
 }

@@ -17,7 +17,7 @@ public class Wall extends SolidObject {
         super(x, y, width, height, 1, true, "WALL");
         this.angle = new Angle(degrees);
 
-        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getRadians());
+        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getRadians(), this.bounds.getX(), this.bounds.getY());
         this.shape = at.createTransformedShape(this.bounds);
     }
 

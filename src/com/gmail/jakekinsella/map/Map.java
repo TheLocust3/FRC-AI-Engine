@@ -19,20 +19,24 @@ public class Map implements Paintable {
 
     private final int ROBOTS_ON_FIELD = 6;
     private final int CLOSE_ENOUGH = 50;
-    private final int WALL_WIDTH = 3;
+    private final int WALL_THICKNESS = 3;
 
     private ArrayList<SolidObject> map = this.createDefaultField(); // Map is on its side, 0,0 is the corner to the right of the blue tower
     private Wall wallLeft, wallRight, wallTop, wallBottom, wallTopLeftCorner, wallTopRightCorner, wallBottomRightCorner, wallBottomLeftCorner;
 
-    // Field is 1000 by 1000
     public Map() {
-        this.wallLeft = new Wall(0, 0, this.WALL_WIDTH, this.FRAME_HEIGHT, 0);
-        this.wallRight = new Wall(this.FRAME_WIDTH - this.WALL_WIDTH, 0, this.WALL_WIDTH, this.FRAME_HEIGHT, 0);
+        this.wallLeft = new Wall(0, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0);
+        this.wallRight = new Wall(this.FRAME_WIDTH - this.WALL_THICKNESS, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0);
 
-        this.wallTop = new Wall(0, 0, this.FRAME_WIDTH, this.WALL_WIDTH, 0);
-        this.wallBottom = new Wall(0, this.FRAME_HEIGHT - 25, this.FRAME_WIDTH, this.WALL_WIDTH, 0); // I have no clue why this is minus 25 but it works
+        this.wallTop = new Wall(0, 0, this.FRAME_WIDTH, this.WALL_THICKNESS, 0);
+        this.wallBottom = new Wall(0, this.FRAME_HEIGHT - this.WALL_THICKNESS, this.FRAME_WIDTH, this.WALL_THICKNESS, 0);
 
-        // TODO: Create angled walls
+        // TODO: Work out the proper dimensions of the walls
+        this.wallTopLeftCorner = new Wall(0, 70, (int) (70 * Math.sqrt(2)), this.WALL_THICKNESS, -45);
+        this.wallTopRightCorner = new Wall(this.FRAME_WIDTH - 70, 0, (int) (70 * Math.sqrt(2)), this.WALL_THICKNESS, 45);
+
+        this.wallBottomLeftCorner = new Wall(0, this.FRAME_HEIGHT - 70, (int) (70 * Math.sqrt(2)), this.WALL_THICKNESS, 45);
+        this.wallBottomRightCorner = new Wall(this.FRAME_WIDTH - 70, this.FRAME_HEIGHT, (int) (70 * Math.sqrt(2)), this.WALL_THICKNESS, -45);
     }
 
     public void addObstacle(FuzzyObject obstacle) {
@@ -114,10 +118,11 @@ public class Map implements Paintable {
         this.wallLeft.paint(graphics2D);
         this.wallRight.paint(graphics2D);
 
-        /*this.wallTopRightCorner.paint(graphics2D);
+        this.wallTopLeftCorner.paint(graphics2D);
         this.wallBottomRightCorner.paint(graphics2D);
         this.wallTopLeftCorner.paint(graphics2D);
-        this.wallBottomLeftCorner.paint(graphics2D);*/
+        this.wallTopRightCorner.paint(graphics2D);
+        this.wallBottomLeftCorner.paint(graphics2D);
     }
 
     private ArrayList<SolidObject> createDefaultField() {

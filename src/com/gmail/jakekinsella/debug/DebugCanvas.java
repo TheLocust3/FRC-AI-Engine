@@ -17,13 +17,15 @@ public class DebugCanvas extends JPanel {
     public DebugCanvas(Map map, RobotControl robotControl) {
         this.map = map;
         this.robotControl = robotControl;
+
+        this.setPreferredSize(new Dimension(map.FRAME_WIDTH, map.FRAME_HEIGHT));
     }
 
     @Override
     public void paintComponent(Graphics graphics) {
         Graphics2D graphics2D = (Graphics2D) graphics;
-        map.paint(graphics2D);
         robotControl.paint(graphics2D);
+        map.paint(graphics2D);
 
         if (robotControl.getCurrentPath() != null) {
             robotControl.getCurrentPath().paint(graphics2D);
