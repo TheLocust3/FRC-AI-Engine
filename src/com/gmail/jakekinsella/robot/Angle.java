@@ -15,7 +15,7 @@ public class Angle {
     }
 
     public Angle(double x1, double y1, double x2, double y2) {
-        this.degrees = Math.toDegrees(Math.atan((y2 - y1) / (x1 - x2)));
+        this.degrees = Math.toDegrees(Math.atan2(y2 - y1, x2 - x1));
     }
 
     public double getDegrees() {

@@ -84,7 +84,7 @@ public class RotatedRectangle implements Paintable {
     }
 
     private void update(double distance) {
-        this.endX = this.startX - (distance * Math.cos(this.angle.getRadians())); // TODO: There must be a reason that this is minus and not plus
+        this.endX = this.startX + (distance * Math.cos(this.angle.getRadians()));
         this.endY = this.startY + (distance * Math.sin(this.angle.getRadians()));
     }
 
