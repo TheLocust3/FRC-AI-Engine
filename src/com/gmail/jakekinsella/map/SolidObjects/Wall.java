@@ -26,8 +26,8 @@ public class Wall extends SolidObject {
     }
 
     @Override
-    public boolean doesIntersect(Shape shape) {
-        return this.shape.intersects(shape.getBounds().getX(), shape.getBounds().getY(), shape.getBounds().getWidth(), shape.getBounds().getHeight());
+    public boolean doesIntersect(Shape rectangle) {
+        return this.shape.intersects(rectangle.getBounds().getX(), rectangle.getBounds().getY(), rectangle.getBounds().getWidth(), rectangle.getBounds().getHeight());
     }
 
     @Override

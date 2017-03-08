@@ -58,12 +58,11 @@ public class RotatedRectangle implements Paintable {
         return Math.sqrt(Math.pow(this.getEndX() - this.getStartX(), 2) + Math.pow(this.getEndY() - this.getStartY(), 2));
     }
 
-    public Rectangle getShape() {
+    public Shape getShape() {
         Rectangle2D.Double rect = new Rectangle2D.Double(this.getStartX(), this.getStartY(), this.getWidth(), this.getHeight());
-        AffineTransform at = AffineTransform.getRotateInstance(this.getAngle().getRadians());
-        Shape shape = at.createTransformedShape(rect);
+        AffineTransform at = AffineTransform.getRotateInstance(this.getAngle().getRadians(), rect.getCenterX(), rect.getCenterY());
 
-        return new Rectangle((int) shape.getBounds2D().getMinX(), (int) shape.getBounds2D().getMinY(), (int) shape.getBounds2D().getMaxX(), (int) shape.getBounds2D().getMaxY()); // TODO: use an actual rotated shape
+        return at.createTransformedShape(rect);
     }
 
     public void setDistance(double distance) {
@@ -81,6 +80,9 @@ public class RotatedRectangle implements Paintable {
         graphics2D.setStroke(new BasicStroke(5));
 
         graphics2D.drawLine((int) this.getStartX(), (int) this.getStartY(), (int) this.getEndX(), (int) this.getEndY());
+
+        graphics2D.setColor(Color.RED);
+        graphics2D.fill(this.getShape());
     }
 
     private void update(double distance) {

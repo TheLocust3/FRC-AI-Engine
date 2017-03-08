@@ -19,24 +19,18 @@ public class Map implements Paintable {
 
     private final int ROBOTS_ON_FIELD = 6;
     private final int CLOSE_ENOUGH = 50;
+
     private final int WALL_THICKNESS = 3;
+    private final int TOP_CORNER_LENGTH = 100; // Approximately the proper length
+    private final int BOTTOM_CORNER_LENGTH = 62;
+    private final int TOP_CORNER_ANGLE = 90 - 115;
+    private final int BOTTOM_CORNER_ANGLE = 180 + 135;
 
     private ArrayList<SolidObject> map = this.createDefaultField(); // Map is on its side, 0,0 is the corner to the right of the blue tower
     private Wall wallLeft, wallRight, wallTop, wallBottom, wallTopLeftCorner, wallTopRightCorner, wallBottomRightCorner, wallBottomLeftCorner;
 
     public Map() {
-        this.wallLeft = new Wall(0, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0);
-        this.wallRight = new Wall(this.FRAME_WIDTH - this.WALL_THICKNESS, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0);
-
-        this.wallTop = new Wall(0, 0, this.FRAME_WIDTH, this.WALL_THICKNESS, 0);
-        this.wallBottom = new Wall(0, this.FRAME_HEIGHT - this.WALL_THICKNESS, this.FRAME_WIDTH, this.WALL_THICKNESS, 0);
-
-        // TODO: Work out the proper dimensions of the walls
-        this.wallTopLeftCorner = new Wall(0, 70, (int) (70 * Math.sqrt(2)), this.WALL_THICKNESS, -45);
-        this.wallTopRightCorner = new Wall(this.FRAME_WIDTH - 70, 0, (int) (70 * Math.sqrt(2)), this.WALL_THICKNESS, 45);
-
-        this.wallBottomLeftCorner = new Wall(0, this.FRAME_HEIGHT - 70, (int) (70 * Math.sqrt(2)), this.WALL_THICKNESS, 45);
-        this.wallBottomRightCorner = new Wall(this.FRAME_WIDTH - 70, this.FRAME_HEIGHT, (int) (70 * Math.sqrt(2)), this.WALL_THICKNESS, -45);
+        this.createWalls();
     }
 
     public void addObstacle(FuzzyObject obstacle) {
@@ -61,7 +55,7 @@ public class Map implements Paintable {
         return null;
     }
 
-    public Wall getIntersectionWithWall(Rectangle shape) {
+    public Wall getIntersectionWithWall(Shape shape) {
         if (wallTopLeftCorner.doesIntersect(shape)) {
             return wallTopLeftCorner;
         } else if (wallTopRightCorner.doesIntersect(shape)) {
@@ -123,6 +117,20 @@ public class Map implements Paintable {
         this.wallTopLeftCorner.paint(graphics2D);
         this.wallTopRightCorner.paint(graphics2D);
         this.wallBottomLeftCorner.paint(graphics2D);
+    }
+
+    private void createWalls() {
+        this.wallLeft = new Wall(0, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0);
+        this.wallRight = new Wall(this.FRAME_WIDTH - this.WALL_THICKNESS, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0);
+
+        this.wallTop = new Wall(0, 0, this.FRAME_WIDTH, this.WALL_THICKNESS, 0);
+        this.wallBottom = new Wall(0, this.FRAME_HEIGHT - this.WALL_THICKNESS, this.FRAME_WIDTH, this.WALL_THICKNESS, 0);
+
+        this.wallTopLeftCorner = new Wall(0, 42, this.TOP_CORNER_LENGTH, this.WALL_THICKNESS, this.TOP_CORNER_ANGLE);
+        this.wallTopRightCorner = new Wall(this.FRAME_WIDTH - 92, 0, this.TOP_CORNER_LENGTH, this.WALL_THICKNESS, -this.TOP_CORNER_ANGLE);
+
+        this.wallBottomLeftCorner = new Wall(0, this.FRAME_HEIGHT - 47, this.BOTTOM_CORNER_LENGTH, this.WALL_THICKNESS, -this.BOTTOM_CORNER_ANGLE);
+        this.wallBottomRightCorner = new Wall(this.FRAME_WIDTH - 47, this.FRAME_HEIGHT, this.BOTTOM_CORNER_LENGTH, this.WALL_THICKNESS, this.BOTTOM_CORNER_ANGLE);
     }
 
     private ArrayList<SolidObject> createDefaultField() {
