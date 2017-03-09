@@ -25,7 +25,7 @@ public class RobotControl implements Paintable {
         this.communicator = communicator;
         this.accelerationTracker = new AccelerationTracker();
         this.boundingBox = new Rectangle2D.Double();
-        this.updateInternalPositionFromVision(500, 300);
+        this.updateInternalPositionFromVision(500, 300); // For testing only
     }
 
     public Rectangle2D getRobotBounds() {

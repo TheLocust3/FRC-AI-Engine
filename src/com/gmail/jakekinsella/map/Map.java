@@ -136,6 +136,7 @@ public class Map implements Paintable {
     private ArrayList<SolidObject> createDefaultField() {
         ArrayList<SolidObject> newMap = new ArrayList<>();
 
+        /* No objects just to test the pathfinder
         // TODO: Properly place all of this crap
         // Create blue loading stations
         newMap.add(new LoadingStation(0, 0));
@@ -158,7 +159,7 @@ public class Map implements Paintable {
         newMap.add(new HopperTrigger(800, 1000));
 
         newMap.add(new Boiler(0, 1000));
-        newMap.add(new Boiler(1000, 1000));
+        newMap.add(new Boiler(1000, 1000));*/
 
         return newMap;
     }

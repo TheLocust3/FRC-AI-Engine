@@ -3,8 +3,6 @@ package com.gmail.jakekinsella.robot;
 import com.gmail.jakekinsella.Paintable;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 
 /**
  * Created by jakekinsella on 1/30/17.
@@ -22,7 +20,7 @@ public class RotatedRectangle implements Paintable {
         this.endY = endY;
         this.width = width;
 
-        this.angle = new Angle(startX, startY, endX, endY); // TODO: I feel a bit iffy about this
+        this.angle = new Angle(startX, startY, endX, endY);
         this.update();
     }
 
@@ -46,10 +44,6 @@ public class RotatedRectangle implements Paintable {
         return this.width;
     }
 
-    public double getHeight() {
-        return this.getLineDistance() * Math.sin(this.getAngle().getRadians());
-    }
-
     public Angle getAngle() {
         return this.angle;
     }
@@ -59,10 +53,10 @@ public class RotatedRectangle implements Paintable {
     }
 
     public Shape getShape() {
-        Rectangle2D.Double rect = new Rectangle2D.Double(this.getStartX(), this.getStartY(), this.getWidth(), this.getHeight());
-        AffineTransform at = AffineTransform.getRotateInstance(this.getAngle().getRadians(), rect.getCenterX(), rect.getCenterY());
+        int xValues[] = {(int) (this.getStartX() - (this.getWidth() / 2)), (int) (this.getStartX() + (this.getWidth() / 2)), (int) (this.getEndX() + (this.getWidth() / 2)), (int) (this.getEndX() - (this.getWidth() / 2))};
+        int yValues[] = {(int) this.getStartY(), (int) this.getStartY(),  (int) this.getEndY(), (int) this.getEndY()};
 
-        return at.createTransformedShape(rect);
+        return new Polygon(xValues, yValues, 4);
     }
 
     public void setDistance(double distance) {
@@ -76,13 +70,13 @@ public class RotatedRectangle implements Paintable {
 
     @Override
     public void paint(Graphics2D graphics2D) {
+        graphics2D.setColor(Color.RED);
+        graphics2D.fill(this.getShape());
+
         graphics2D.setColor(Color.GREEN);
         graphics2D.setStroke(new BasicStroke(5));
 
         graphics2D.drawLine((int) this.getStartX(), (int) this.getStartY(), (int) this.getEndX(), (int) this.getEndY());
-
-        graphics2D.setColor(Color.RED);
-        graphics2D.fill(this.getShape());
     }
 
     private void update(double distance) {

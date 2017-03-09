@@ -108,19 +108,18 @@ public class LinePath implements Paintable {
     }
 
     private double getDistanceToWall(Wall wall, RotatedRectangle rotatedRectangle) {
-        double endX = wall.getX() + wall.getWidth() * Math.cos(wall.getAngle().getRadians());
-        double endY = wall.getY() + wall.getHeight() * Math.sin(wall.getAngle().getRadians());
+        // Get the intersection between the two lines
 
         // Create line equations
-        double wallSlope = (endY - wall.getY()) / (endX - wall.getX());
-        double wallBValue = wall.getY() - wallSlope * wall.getX(); // y = ax + b
+        double wallSlope = ((double) wall.getY() - wall.getEndY()) / ((double) wall.getX() - wall.getEndX());
+        double wallBValue = (double) wall.getY() - (wallSlope * (double) wall.getX()); // y = ax + b
 
-        double pointSlope = -1 / wallSlope;
-        double pointBValue = rotatedRectangle.getStartY() - pointSlope * rotatedRectangle.getStartX();
+        double pointSlope = (rotatedRectangle.getStartY() - rotatedRectangle.getEndY()) / (rotatedRectangle.getStartX() - rotatedRectangle.getEndX());
+        double pointBValue = rotatedRectangle.getStartY() - (pointSlope * rotatedRectangle.getStartX());
 
         // Solve for intersection
         double xIntersection = (pointBValue - wallBValue) / (wallSlope - pointSlope); // Solve the two equations set equal to each other
-        double yIntersection = wallSlope * xIntersection + wallBValue;
+        double yIntersection = (wallSlope * xIntersection) + wallBValue;
 
         return calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), xIntersection, yIntersection);
     }

@@ -25,6 +25,14 @@ public class Wall extends SolidObject {
         return this.angle;
     }
 
+    public double getEndX() {
+        return this.getX() + (this.getDistance() * Math.cos(this.getAngle().getRadians()));
+    }
+
+    public double getEndY() {
+        return this.getY() + (this.getDistance() * Math.sin(this.getAngle().getRadians()));
+    }
+
     @Override
     public boolean doesIntersect(Shape rectangle) {
         return this.shape.intersects(rectangle.getBounds().getX(), rectangle.getBounds().getY(), rectangle.getBounds().getWidth(), rectangle.getBounds().getHeight());
@@ -34,5 +42,9 @@ public class Wall extends SolidObject {
     public void paint(Graphics2D graphics2D) {
         graphics2D.setColor(Color.GRAY);
         graphics2D.fill(this.shape);
+    }
+
+    private double getDistance() {
+        return Math.sqrt(Math.pow(this.getWidth(), 2) + Math.pow(this.getHeight(), 2));
     }
 }
