@@ -3,6 +3,7 @@ package com.gmail.jakekinsella.robot;
 import com.gmail.jakekinsella.Paintable;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 /**
  * Created by jakekinsella on 1/30/17.
@@ -12,6 +13,7 @@ public class RotatedRectangle implements Paintable {
     private double startX, startY, endX, endY;
     private double width;
     private Angle angle;
+    private Shape shape;
 
     public RotatedRectangle(double startX, double startY, double endX, double endY, double width) {
         this.startX = startX;
@@ -21,7 +23,7 @@ public class RotatedRectangle implements Paintable {
         this.width = width;
 
         this.angle = new Angle(startX, startY, endX, endY);
-        this.update();
+        this.setup();
     }
 
     public double getStartX() {
@@ -53,10 +55,7 @@ public class RotatedRectangle implements Paintable {
     }
 
     public Shape getShape() {
-        int xValues[] = {(int) (this.getStartX() - (this.getWidth() / 2)), (int) (this.getStartX() + (this.getWidth() / 2)), (int) (this.getEndX() + (this.getWidth() / 2)), (int) (this.getEndX() - (this.getWidth() / 2))};
-        int yValues[] = {(int) this.getStartY(), (int) this.getStartY(),  (int) this.getEndY(), (int) this.getEndY()};
-
-        return new Polygon(xValues, yValues, 4);
+        return shape;
     }
 
     public void setDistance(double distance) {
@@ -71,10 +70,10 @@ public class RotatedRectangle implements Paintable {
     @Override
     public void paint(Graphics2D graphics2D) {
         graphics2D.setColor(Color.RED);
-        graphics2D.fill(this.getShape());
+        graphics2D.fill(this.shape);
 
         graphics2D.setColor(Color.GREEN);
-        graphics2D.setStroke(new BasicStroke(5));
+        graphics2D.setStroke(new BasicStroke(4));
 
         graphics2D.drawLine((int) this.getStartX(), (int) this.getStartY(), (int) this.getEndX(), (int) this.getEndY());
     }
@@ -82,9 +81,21 @@ public class RotatedRectangle implements Paintable {
     private void update(double distance) {
         this.endX = this.startX + (distance * Math.cos(this.angle.getRadians()));
         this.endY = this.startY + (distance * Math.sin(this.angle.getRadians()));
+
+        this.setup();
     }
 
     private void update() {
         this.update(this.getLineDistance());
+    }
+
+    private void setup() {
+        int xValues[] = {(int) (this.getStartX() - (this.getWidth() / 2)), (int) (this.getStartX() + (this.getWidth() / 2)), (int) (this.getStartX() + (this.getWidth() / 2)), (int) (this.getStartX() - (this.getWidth() / 2))};
+        int yValues[] = {(int) this.getStartY(), (int) this.getStartY(), (int) (this.getStartY() + this.getLineDistance()), (int) (this.getStartY() + this.getLineDistance())};
+        Polygon polygon = new Polygon(xValues, yValues, 4);
+
+        // TODO: WTF
+        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getCorrectedRadians(), polygon.getBounds2D().getCenterX(), polygon.getBounds2D().getY());
+        this.shape = at.createTransformedShape(polygon);
     }
 }

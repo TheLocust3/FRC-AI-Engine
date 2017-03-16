@@ -148,36 +148,6 @@ public class Map implements Paintable {
         return closestDistance;
     }
 
-    public Wall getIntersectionWithWall(Shape shape) {
-        if (wallLeft.doesIntersect(shape)) {
-            System.out.println("Left");
-            return wallLeft;
-        } else if (wallRight.doesIntersect(shape)) {
-            System.out.println("Right");
-            return wallRight;
-        } else if (wallBottom.doesIntersect(shape)) {
-            System.out.println("Bottom");
-            return wallBottom;
-        } else if (wallTop.doesIntersect(shape)) {
-            System.out.println("Top");
-            return wallTop;
-        } else if (wallTopLeftCorner.doesIntersect(shape)) {
-            System.out.println("Top Left Corner");
-            return wallTopLeftCorner;
-        } else if (wallTopRightCorner.doesIntersect(shape)) {
-            System.out.println("Top Right Corner");
-            return wallTopRightCorner;
-        } else if (wallBottomRightCorner.doesIntersect(shape)) {
-            System.out.println("Bottom Right Corner");
-            return wallBottomRightCorner;
-        } else if (wallBottomLeftCorner.doesIntersect(shape)) {
-            System.out.println("Bottom Left Corner");
-            return wallBottomLeftCorner;
-        }
-
-        return null;
-    }
-
     // visionObjects = 0 -> x, 1 -> y, 2 -> type
     public void inputVisionData(ArrayList<int[]> visionObjects, RobotControl robotControl) {
         ArrayList<SolidObject> newMap = this.createDefaultField();

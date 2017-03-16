@@ -5,9 +5,6 @@ package com.gmail.jakekinsella.robot;
  */
 public class Angle {
 
-    //      90
-    //  180 -|- 0
-    //      270
     private double degrees;
 
     public Angle(double degrees) {
@@ -33,5 +30,12 @@ public class Angle {
         } else {
             return 360 - (this.getDegrees() % 360);
         }
+    }
+
+    //      90
+    //  180 -|- 0
+    //      270
+    public double getCorrectedRadians() {
+        return this.getRadians() - 0.5 * Math.PI;
     }
 }
