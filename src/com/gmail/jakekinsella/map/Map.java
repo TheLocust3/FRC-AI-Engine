@@ -28,7 +28,7 @@ public class Map implements Paintable {
     private final int BOTTOM_CORNER_ANGLE = 180 + 135;
 
     private ArrayList<SolidObject> map = this.createDefaultField(); // Map is on its side, 0,0 is the corner to the right of the blue tower
-    private Wall wallLeft, wallRight, wallTop, wallBottom, wallTopLeftCorner, wallTopRightCorner, wallBottomRightCorner, wallBottomLeftCorner;
+    private ArrayList<Wall> walls;
 
     public Map() {
         this.createWalls();
@@ -57,87 +57,16 @@ public class Map implements Paintable {
     }
 
     public double getDistanceToClosestIntersectionWithWall(RotatedRectangle rotatedRectangle) {
-        // TODO: Make this DRY
-
         double[] point;
         double closestDistance = Double.MAX_VALUE;
-        if (wallLeft.doesIntersect(rotatedRectangle.getShape())) {
-            System.out.println("Left");
 
-            point = wallLeft.getIntersection(rotatedRectangle);
-            double distance = calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), point[0], point[1]);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-            }
-        }
-
-        if (wallRight.doesIntersect(rotatedRectangle.getShape())) {
-            System.out.println("Right");
-
-            point = wallRight.getIntersection(rotatedRectangle);
-            double distance = calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), point[0], point[1]);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-            }
-        }
-
-        if (wallBottom.doesIntersect(rotatedRectangle.getShape())) {
-            System.out.println("Bottom");
-
-            point = wallBottom.getIntersection(rotatedRectangle);
-            double distance = calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), point[0], point[1]);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-            }
-        }
-
-        if (wallTop.doesIntersect(rotatedRectangle.getShape())) {
-            System.out.println("Top");
-
-            point = wallTop.getIntersection(rotatedRectangle);
-            double distance = calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), point[0], point[1]);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-            }
-        }
-
-        if (wallTopLeftCorner.doesIntersect(rotatedRectangle.getShape())) {
-            System.out.println("Top Left Corner");
-
-            point = wallTopLeftCorner.getIntersection(rotatedRectangle);
-            double distance = calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), point[0], point[1]);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-            }
-        }
-
-        if (wallTopRightCorner.doesIntersect(rotatedRectangle.getShape())) {
-            System.out.println("Top Right Corner");
-
-            point = wallTopRightCorner.getIntersection(rotatedRectangle);
-            double distance = calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), point[0], point[1]);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-            }
-        }
-
-        if (wallBottomRightCorner.doesIntersect(rotatedRectangle.getShape())) {
-            System.out.println("Bottom Right Corner");
-
-            point = wallBottomRightCorner.getIntersection(rotatedRectangle);
-            double distance = calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), point[0], point[1]);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-            }
-        }
-
-        if (wallBottomLeftCorner.doesIntersect(rotatedRectangle.getShape())) {
-            System.out.println("Bottom Left Corner");
-
-            point = wallBottomRightCorner.getIntersection(rotatedRectangle);
-            double distance = calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), point[0], point[1]);
-            if (distance < closestDistance) {
-                closestDistance = distance;
+        for (Wall wall : this.walls) {
+            if (wall.doesIntersect(rotatedRectangle.getShape())) {
+                point = wall.getIntersection(rotatedRectangle);
+                double distance = calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), point[0], point[1]);
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                }
             }
         }
 
@@ -178,16 +107,9 @@ public class Map implements Paintable {
             solidObject.paint(graphics2D);
         }
 
-        this.wallTop.paint(graphics2D);
-        this.wallBottom.paint(graphics2D);
-        this.wallLeft.paint(graphics2D);
-        this.wallRight.paint(graphics2D);
-
-        this.wallTopLeftCorner.paint(graphics2D);
-        this.wallBottomRightCorner.paint(graphics2D);
-        this.wallTopLeftCorner.paint(graphics2D);
-        this.wallTopRightCorner.paint(graphics2D);
-        this.wallBottomLeftCorner.paint(graphics2D);
+        for (Wall wall : this.walls) {
+            wall.paint(graphics2D);
+        }
     }
 
     private double calculateDistanceBetweenPoints(double x1, double y1, double x2, double y2) {
@@ -195,17 +117,19 @@ public class Map implements Paintable {
     }
 
     private void createWalls() {
-        this.wallLeft = new Wall(0, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0);
-        this.wallRight = new Wall(this.FRAME_WIDTH - this.WALL_THICKNESS, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0);
+        this.walls = new ArrayList<>();
 
-        this.wallTop = new Wall(0, 0, this.FRAME_WIDTH, this.WALL_THICKNESS, 0);
-        this.wallBottom = new Wall(0, this.FRAME_HEIGHT - this.WALL_THICKNESS, this.FRAME_WIDTH, this.WALL_THICKNESS, 0);
+        this.walls.add(new Wall(0, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0)); // left
+        this.walls.add(new Wall(this.FRAME_WIDTH - this.WALL_THICKNESS, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0)); // right
 
-        this.wallTopLeftCorner = new Wall(0, 42, this.TOP_CORNER_LENGTH, this.WALL_THICKNESS, this.TOP_CORNER_ANGLE);
-        this.wallTopRightCorner = new Wall(this.FRAME_WIDTH - 92, 0, this.TOP_CORNER_LENGTH, this.WALL_THICKNESS, -this.TOP_CORNER_ANGLE);
+        this.walls.add(new Wall(0, 0, this.FRAME_WIDTH, this.WALL_THICKNESS, 0)); // top
+        this.walls.add(new Wall(0, this.FRAME_HEIGHT - this.WALL_THICKNESS, this.FRAME_WIDTH, this.WALL_THICKNESS, 0)); // bottom
 
-        this.wallBottomLeftCorner = new Wall(0, this.FRAME_HEIGHT - 47, this.BOTTOM_CORNER_LENGTH, this.WALL_THICKNESS, -this.BOTTOM_CORNER_ANGLE);
-        this.wallBottomRightCorner = new Wall(this.FRAME_WIDTH - 47, this.FRAME_HEIGHT - 2, this.BOTTOM_CORNER_LENGTH, this.WALL_THICKNESS, this.BOTTOM_CORNER_ANGLE);
+        this.walls.add(new Wall(0, 42, this.TOP_CORNER_LENGTH, this.WALL_THICKNESS, this.TOP_CORNER_ANGLE)); // top left corner
+        this.walls.add(new Wall(this.FRAME_WIDTH - 92, 0, this.TOP_CORNER_LENGTH, this.WALL_THICKNESS, -this.TOP_CORNER_ANGLE)); // top right corner
+
+        this.walls.add(new Wall(0, this.FRAME_HEIGHT - 47, this.BOTTOM_CORNER_LENGTH, this.WALL_THICKNESS, -this.BOTTOM_CORNER_ANGLE)); // bottom left corner
+        this.walls.add(new Wall(this.FRAME_WIDTH - 47, this.FRAME_HEIGHT - 2, this.BOTTOM_CORNER_LENGTH, this.WALL_THICKNESS, this.BOTTOM_CORNER_ANGLE)); // bottom right corner
     }
 
     private ArrayList<SolidObject> createDefaultField() {

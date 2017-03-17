@@ -48,8 +48,13 @@ public class Wall extends SolidObject {
         double pointSlope = (rotatedRectangle.getStartY() - rotatedRectangle.getEndY()) / (rotatedRectangle.getStartX() - rotatedRectangle.getEndX());
         double pointBValue = rotatedRectangle.getStartY() - (pointSlope * rotatedRectangle.getStartX());
 
-        xIntersection = (pointBValue - this.bValue) / (this.slope - pointSlope); // Solve the two equations set equal to each other
-        yIntersection = (this.slope * xIntersection) + this.bValue;
+        if (this.slope != 0) {
+            xIntersection = (pointBValue - this.bValue) / (this.slope - pointSlope); // Solve the two equations set equal to each other
+            yIntersection = (this.slope * xIntersection) + this.bValue;
+        } else {
+            yIntersection = pointSlope * this.getX() + pointBValue;
+            xIntersection = (yIntersection - pointBValue) / pointSlope;
+        }
 
         return new double[] {xIntersection, yIntersection};
     }
