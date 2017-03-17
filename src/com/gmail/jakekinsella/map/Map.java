@@ -122,8 +122,8 @@ public class Map implements Paintable {
         this.walls.add(new Wall(0, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0)); // left
         this.walls.add(new Wall(this.FRAME_WIDTH - this.WALL_THICKNESS, 0, this.WALL_THICKNESS, this.FRAME_HEIGHT, 0)); // right
 
-        this.walls.add(new Wall(0, 0, this.FRAME_WIDTH, this.WALL_THICKNESS, 0)); // top
-        this.walls.add(new Wall(0, this.FRAME_HEIGHT - this.WALL_THICKNESS, this.FRAME_WIDTH, this.WALL_THICKNESS, 0)); // bottom
+        this.walls.add(new Wall(0, this.WALL_THICKNESS, this.WALL_THICKNESS, this.FRAME_WIDTH, -90)); // top
+        this.walls.add(new Wall(0, this.FRAME_HEIGHT, this.WALL_THICKNESS, this.FRAME_WIDTH, -90)); // bottom
 
         this.walls.add(new Wall(0, 42, this.TOP_CORNER_LENGTH, this.WALL_THICKNESS, this.TOP_CORNER_ANGLE)); // top left corner
         this.walls.add(new Wall(this.FRAME_WIDTH - 92, 0, this.TOP_CORNER_LENGTH, this.WALL_THICKNESS, -this.TOP_CORNER_ANGLE)); // top right corner

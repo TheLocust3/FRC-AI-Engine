@@ -30,12 +30,12 @@ public class Wall extends SolidObject {
         return this.angle;
     }
 
-    public double getEndX() {
-        return this.getX() + (this.getDistance() * Math.cos(this.getAngle().getRadians()));
+    public int getEndX() {
+        return (int) (this.getX() + (this.getDistance() * Math.cos(this.getAngle().getRadians())));
     }
 
-    public double getEndY() {
-        return this.getY() + (this.getDistance() * Math.sin(this.getAngle().getRadians()));
+    public int getEndY() {
+        return (int) (this.getY() + (this.getDistance() * Math.sin(this.getAngle().getRadians())));
     }
 
     @Override
@@ -48,12 +48,12 @@ public class Wall extends SolidObject {
         double pointSlope = (rotatedRectangle.getStartY() - rotatedRectangle.getEndY()) / (rotatedRectangle.getStartX() - rotatedRectangle.getEndX());
         double pointBValue = rotatedRectangle.getStartY() - (pointSlope * rotatedRectangle.getStartX());
 
-        if (this.slope != 0) {
-            xIntersection = (pointBValue - this.bValue) / (this.slope - pointSlope); // Solve the two equations set equal to each other
-            yIntersection = (this.slope * xIntersection) + this.bValue;
-        } else {
+        if (this.isVertical()) {
             yIntersection = pointSlope * this.getX() + pointBValue;
             xIntersection = (yIntersection - pointBValue) / pointSlope;
+        } else {
+            xIntersection = (pointBValue - this.bValue) / (this.slope - pointSlope); // Solve the two equations set equal to each other
+            yIntersection = (this.slope * xIntersection) + this.bValue;
         }
 
         return new double[] {xIntersection, yIntersection};
@@ -75,5 +75,9 @@ public class Wall extends SolidObject {
 
     private double getDistance() {
         return Math.sqrt(Math.pow(this.getWidth(), 2) + Math.pow(this.getHeight(), 2));
+    }
+
+    private boolean isVertical() {
+        return this.getAngle().getDegrees() % 180 == 0;
     }
 }
