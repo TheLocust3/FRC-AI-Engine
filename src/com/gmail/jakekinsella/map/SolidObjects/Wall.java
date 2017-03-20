@@ -43,11 +43,11 @@ public class Wall extends SolidObject {
         return this.shape.intersects(rectangle.getBounds().getX(), rectangle.getBounds().getY(), rectangle.getBounds().getWidth(), rectangle.getBounds().getHeight());
     }
 
-    double xIntersection, yIntersection;
     public double[] getIntersection(RotatedRectangle rotatedRectangle) {
         double pointSlope = (rotatedRectangle.getStartY() - rotatedRectangle.getEndY()) / (rotatedRectangle.getStartX() - rotatedRectangle.getEndX());
         double pointBValue = rotatedRectangle.getStartY() - (pointSlope * rotatedRectangle.getStartX());
 
+        double xIntersection, yIntersection;
         if (this.isVertical()) {
             yIntersection = pointSlope * this.getX() + pointBValue;
             xIntersection = (yIntersection - pointBValue) / pointSlope;
@@ -63,9 +63,6 @@ public class Wall extends SolidObject {
     public void paint(Graphics2D graphics2D) {
         graphics2D.setColor(Color.GRAY);
         graphics2D.fill(this.shape);
-
-        graphics2D.setColor(Color.RED);
-        graphics2D.fillOval((int) xIntersection, (int) yIntersection, 10, 10);
     }
 
     private void setupIntersectionDetection() {

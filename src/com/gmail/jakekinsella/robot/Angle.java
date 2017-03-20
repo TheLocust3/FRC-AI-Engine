@@ -35,7 +35,7 @@ public class Angle {
     //      90
     //  180 -|- 0
     //      270
-    public double getCorrectedRadians() {
+    public double getAffineTransformRadians() {
         return this.getRadians() - 0.5 * Math.PI;
     }
 }

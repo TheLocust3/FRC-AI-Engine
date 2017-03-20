@@ -13,6 +13,8 @@ import java.util.ArrayList;
  */
 public class LinePath implements Paintable {
 
+    private final int PADDING = 10; //px
+
     private int atPath;
     private int endX, endY;
 
@@ -68,18 +70,18 @@ public class LinePath implements Paintable {
         ArrayList<PathPart> paths = new ArrayList<>();
 
         RotatedRectangle path = this.createPaddedPath(startX, startY, endX, endY);
-        SolidObject intersection = this.map.getIntersection(path.getShape());
+        SolidObject intersection = this.map.getIntersection(path);
         while (intersection != null) {
             RotatedRectangle pathToIntersection = this.createPaddedPath(startX, startY, intersection.getX(), intersection.getY());
             Angle newAngle = new Angle(pathToIntersection.getAngle().getDegrees() + 10);
             pathToIntersection.rotate(newAngle);
             pathToIntersection = this.handleIntersectionWithWall(pathToIntersection, this.map);
 
-            paths.addAll(this.evaluatePath(pathToIntersection));
+            paths.addAll(this.handleIntersection(pathToIntersection));
 
             RotatedRectangle lastPath = paths.get(paths.size() - 1).getLine();
             path = this.createPaddedPath(lastPath.getEndX(), lastPath.getEndY(), endX, endY);
-            intersection = this.map.getIntersection(path.getShape());
+            intersection = this.map.getIntersection(path);
         }
 
         path = this.handleIntersectionWithWall(path, this.map);
@@ -88,8 +90,27 @@ public class LinePath implements Paintable {
         return paths;
     }
 
-    private ArrayList<PathPart> evaluatePath(RotatedRectangle path) {
-        return this.evaluatePath(path.getStartX(), path.getStartY(), path.getEndX(), path.getEndY());
+    private ArrayList<PathPart> handleIntersection(RotatedRectangle path) {
+        ArrayList<PathPart> paths = new ArrayList<>();
+
+        SolidObject intersection = this.map.getIntersection(path);
+        while (intersection != null) {
+            Angle newAngle = new Angle(path.getAngle().getDegrees() + 10);
+            path.rotate(newAngle);
+            path = this.handleIntersectionWithWall(path, this.map);
+
+            paths.addAll(this.handleIntersection(path));
+
+            RotatedRectangle lastPath = paths.get(paths.size() - 1).getLine();
+            path = this.createPaddedPath(lastPath.getEndX(), lastPath.getEndY(), endX, endY);
+            intersection = this.map.getIntersection(path);
+
+        }
+
+        path = this.handleIntersectionWithWall(path, this.map);
+        paths.add(new PathPart(path, this.robotControl));
+
+        return paths;
     }
 
     private RotatedRectangle createPaddedPath(double startX, double startY, double endX, double endY) {

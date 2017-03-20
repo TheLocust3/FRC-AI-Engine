@@ -1,6 +1,7 @@
 package com.gmail.jakekinsella.map.SolidObjects;
 
 import com.gmail.jakekinsella.Paintable;
+import com.gmail.jakekinsella.robot.RotatedRectangle;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -67,6 +68,26 @@ public class SolidObject implements Paintable {
 
     public boolean doesIntersect(Shape shape) {
         return this.bounds.intersects(shape.getBounds().getX(), shape.getBounds().getY(), shape.getBounds().getWidth(), shape.getBounds().getHeight());
+    }
+
+    public boolean doesIntersectWithRotatedRectangle(RotatedRectangle rotatedRectangle) {
+        if (rotatedRectangle.getShape().contains(this.getX(), this.getY())) {
+            return true;
+        }
+
+        if (rotatedRectangle.getShape().contains(this.getX() + this.getWidth(), this.getY())) {
+            return true;
+        }
+
+        if (rotatedRectangle.getShape().contains(this.getX(), this.getY() + this.getHeight())) {
+            return true;
+        }
+
+        if (rotatedRectangle.getShape().contains(this.getX() + this.getWidth(), this.getY() + this.getHeight())) {
+            return true;
+        }
+
+        return false;
     }
 
     public void decayChanceObjectIsReal(double deltaSeconds) {

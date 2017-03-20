@@ -44,10 +44,10 @@ public class Map implements Paintable {
         }
     }
 
-    public SolidObject getIntersection(Shape shape) {
+    public SolidObject getIntersection(RotatedRectangle rotatedRectangle) {
         for (int i = 0; i < this.map.size(); i++) {
             if (!(this.map.get(i) instanceof Ball)) {
-                if (this.map.get(i).doesIntersect(shape)) {
+                if (this.map.get(i).doesIntersectWithRotatedRectangle(rotatedRectangle)) {
                     return this.map.get(i);
                 }
             }
@@ -135,10 +135,11 @@ public class Map implements Paintable {
     private ArrayList<SolidObject> createDefaultField() {
         ArrayList<SolidObject> newMap = new ArrayList<>();
 
+        // Create blue loading stations
+        newMap.add(new LoadingStation(400, 150));
         /* No objects just to test the pathfinder
         // TODO: Properly place all of this crap
-        // Create blue loading stations
-        newMap.add(new LoadingStation(0, 0));
+
         newMap.add(new LoadingStation(50, 0));
 
         newMap.add(new LoadingStation(1000, 500));

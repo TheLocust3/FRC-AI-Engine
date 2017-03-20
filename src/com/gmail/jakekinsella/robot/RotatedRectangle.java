@@ -94,8 +94,7 @@ public class RotatedRectangle implements Paintable {
         int yValues[] = {(int) this.getStartY(), (int) this.getStartY(), (int) (this.getStartY() + this.getLineDistance()), (int) (this.getStartY() + this.getLineDistance())};
         Polygon polygon = new Polygon(xValues, yValues, 4);
 
-        // TODO: WTF
-        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getCorrectedRadians(), polygon.getBounds2D().getCenterX(), polygon.getBounds2D().getY());
+        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getAffineTransformRadians(), polygon.getBounds2D().getCenterX(), polygon.getBounds2D().getY());
         this.shape = at.createTransformedShape(polygon);
     }
 }
