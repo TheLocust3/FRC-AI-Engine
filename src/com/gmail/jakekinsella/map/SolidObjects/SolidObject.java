@@ -46,6 +46,14 @@ public class SolidObject implements Paintable {
         return y;
     }
 
+    public int getCenterX() {
+        return x + (this.getWidth() / 2);
+    }
+
+    public int getCenterY() {
+        return y + (this.getHeight() / 2);
+    }
+
     public int getWidth() {
         return this.width;
     }

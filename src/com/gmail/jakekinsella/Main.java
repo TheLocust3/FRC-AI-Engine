@@ -26,7 +26,7 @@ public class Main {
 
         new Thread(visionCollector).start();
 
-        robot.gotoLocation(600, 150, map);
+        robot.gotoLocation(600, 100, map);
 
         long lastTick = System.currentTimeMillis();
         while (true) {
