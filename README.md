@@ -5,7 +5,6 @@ An AI engine designed to run a robot completely autonomously for an entire FRC m
   
 ### To-Do  
  - Update for FIRST Steamworks
- - Create walls
  - Finish bindings for the simulator
  - Write algorithms to determine whether to trust vision data or not
  - Write a ton of tests

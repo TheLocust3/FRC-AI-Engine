@@ -69,9 +69,6 @@ public class RotatedRectangle implements Paintable {
 
     @Override
     public void paint(Graphics2D graphics2D) {
-        //graphics2D.setColor(Color.RED);
-        //graphics2D.fill(this.shape);
-
         graphics2D.setColor(Color.GREEN);
         graphics2D.setStroke(new BasicStroke(4));
 

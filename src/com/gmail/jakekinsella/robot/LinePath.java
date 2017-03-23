@@ -68,6 +68,9 @@ public class LinePath implements Paintable {
 
     public ArrayList<PathPart> evaluatePath(double startX, double startY, double endX, double endY) {
         ArrayList<PathPart> paths = new ArrayList<>();
+        if (this.map.getIntersection(new RotatedRectangle(endX - 2, endY - 2, endX + 2, endY + 2, 4)) != null) {
+            return paths;
+        }
 
         RotatedRectangle path = this.createPaddedPath(startX, startY, endX, endY);
         SolidObject intersection = this.map.getIntersection(path);
@@ -88,7 +91,6 @@ public class LinePath implements Paintable {
     }
 
     // TODO: Could get stuck if there is no easy way to rotate out of an intersection
-    // TODO: Fail if there is no way to actually get to the point
     private ArrayList<PathPart> handleIntersection(RotatedRectangle path) {
         ArrayList<PathPart> paths = new ArrayList<>();
         SolidObject intersection = this.map.getIntersection(path);
