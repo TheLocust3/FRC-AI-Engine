@@ -14,14 +14,13 @@ public class Wall extends SolidObject {
     private double slope, bValue;
 
     private Angle angle;
-    private Shape shape;
 
     public Wall(int x, int y, int width, int height, double degrees) {
         super(x, y, width, height, 1, true, "WALL");
         this.angle = new Angle(degrees);
 
-        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getRadians(), this.bounds.getX(), this.bounds.getY());
-        this.shape = at.createTransformedShape(this.bounds);
+        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getRadians(), this.bounds.getBounds().getX(), this.bounds.getBounds().getY());
+        this.bounds = at.createTransformedShape(this.bounds);
 
         this.setupIntersectionDetection();
     }
@@ -40,7 +39,7 @@ public class Wall extends SolidObject {
 
     @Override
     public boolean doesIntersect(Shape rectangle) {
-        return this.shape.intersects(rectangle.getBounds().getX(), rectangle.getBounds().getY(), rectangle.getBounds().getWidth(), rectangle.getBounds().getHeight());
+        return this.bounds.intersects(rectangle.getBounds().getX(), rectangle.getBounds().getY(), rectangle.getBounds().getWidth(), rectangle.getBounds().getHeight());
     }
 
     public double[] getIntersection(RotatedRectangle rotatedRectangle) {
@@ -62,7 +61,7 @@ public class Wall extends SolidObject {
     @Override
     public void paint(Graphics2D graphics2D) {
         graphics2D.setColor(Color.GRAY);
-        graphics2D.fill(this.shape);
+        graphics2D.fill(this.bounds);
     }
 
     private void setupIntersectionDetection() {

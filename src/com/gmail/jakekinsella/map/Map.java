@@ -136,7 +136,7 @@ public class Map implements Paintable {
         ArrayList<SolidObject> newMap = new ArrayList<>();
 
         // Create blue loading stations
-        newMap.add(new LoadingStation(400, 150));
+        newMap.add(new LoadingStation(10, 10, -this.TOP_CORNER_ANGLE));
         /* No objects just to test the pathfinder
         // TODO: Properly place all of this crap
 

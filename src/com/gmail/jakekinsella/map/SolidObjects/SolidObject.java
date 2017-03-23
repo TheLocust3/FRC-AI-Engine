@@ -17,7 +17,7 @@ public class SolidObject implements Paintable {
     private boolean notDeletable;
     private String type;
 
-    Rectangle bounds;
+    Shape bounds;
 
     public SolidObject(int x, int y, int width, int height, double chanceObjectIsReal, boolean notDeletable, String type) {
         this.x = x;
@@ -47,11 +47,11 @@ public class SolidObject implements Paintable {
     }
 
     public int getCenterX() {
-        return x + (this.getWidth() / 2);
+        return (int) this.bounds.getBounds().getCenterX();
     }
 
     public int getCenterY() {
-        return y + (this.getHeight() / 2);
+        return (int) this.bounds.getBounds().getCenterY();
     }
 
     public int getWidth() {
@@ -78,6 +78,7 @@ public class SolidObject implements Paintable {
         return this.bounds.intersects(shape.getBounds().getX(), shape.getBounds().getY(), shape.getBounds().getWidth(), shape.getBounds().getHeight());
     }
 
+    // TODO: This doesn't work with rotated shapes yet
     public boolean doesIntersectWithRotatedRectangle(RotatedRectangle rotatedRectangle) {
         if (rotatedRectangle.getShape().contains(this.getX(), this.getY())) {
             return true;
