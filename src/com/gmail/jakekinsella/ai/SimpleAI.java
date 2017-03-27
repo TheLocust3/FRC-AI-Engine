@@ -27,6 +27,6 @@ public class SimpleAI extends GenericAI {
 
     private Sequence decideNextSequence(Map map) {
         // Check if robot has gear
-        return new GetGearFromLoadingStationSequence();
+        return new GetGearFromLoadingStationSequence(robotControl);
     }
 }
