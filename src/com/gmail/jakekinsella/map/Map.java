@@ -26,6 +26,7 @@ public class Map implements Paintable {
     private final int BOTTOM_CORNER_LENGTH = 62;
     private final int TOP_CORNER_ANGLE = 90 - 115;
     private final int BOTTOM_CORNER_ANGLE = 180 + 135;
+    private final int LOADING_STATION_ANGLE = 66;
 
     private ArrayList<SolidObject> map = this.createDefaultField(); // Map is on its side, 0,0 is the corner to the right of the blue tower
     private ArrayList<Wall> walls;
@@ -136,17 +137,19 @@ public class Map implements Paintable {
         ArrayList<SolidObject> newMap = new ArrayList<>();
 
         // Create blue loading stations
-        newMap.add(new LoadingStation(10, 10, -this.TOP_CORNER_ANGLE));
+        newMap.add(new LoadingStation(25, 0, this.LOADING_STATION_ANGLE));
+        newMap.add(new LoadingStation(60, -18, this.LOADING_STATION_ANGLE));
+
+        // Create red loading stations
+        newMap.add(new LoadingStation(this.FRAME_WIDTH - 25, 0, 90 - this.LOADING_STATION_ANGLE));
+        newMap.add(new LoadingStation(this.FRAME_WIDTH - 60, -18, 90 - this.LOADING_STATION_ANGLE));
+
         /* No objects just to test the pathfinder
         // TODO: Properly place all of this crap
 
         newMap.add(new LoadingStation(50, 0));
 
-        newMap.add(new LoadingStation(1000, 500));
-
         // Create red loading stations
-        newMap.add(new LoadingStation(950, 0));
-        newMap.add(new LoadingStation(1000, 0));
 
         newMap.add(new LoadingStation(250, 600));
 

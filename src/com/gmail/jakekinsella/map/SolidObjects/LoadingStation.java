@@ -23,7 +23,7 @@ public class LoadingStation extends SolidObject {
 
     @Override
     public void paint(Graphics2D graphics2D) {
-        graphics2D.setColor(Color.GRAY);
+        graphics2D.setColor(Color.PINK);
         graphics2D.fill(this.bounds);
     }
 }
