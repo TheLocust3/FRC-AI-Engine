@@ -38,4 +38,8 @@ public class Angle {
     public double getAffineTransformRadians() {
         return this.getRadians() - 0.5 * Math.PI;
     }
+
+    public boolean equals(Angle angle) {
+        return this.getDegrees() == angle.getDegrees();
+    }
 }

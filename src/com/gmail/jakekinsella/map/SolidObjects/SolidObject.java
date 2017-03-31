@@ -12,7 +12,6 @@ import java.awt.geom.Rectangle2D;
 public class SolidObject implements Paintable {
     private final double DECAY_PER_SECONDS = 0.1;
 
-    private int x, y, width, height;
     private double chanceObjectIsReal; // Decays over time
     private boolean notDeletable;
     private String type;
@@ -20,10 +19,6 @@ public class SolidObject implements Paintable {
     Shape bounds;
 
     public SolidObject(int x, int y, int width, int height, double chanceObjectIsReal, boolean notDeletable, String type) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
         this.bounds = new Rectangle(x, y, width, height);
         this.chanceObjectIsReal = chanceObjectIsReal;
         this.notDeletable = notDeletable;
@@ -39,27 +34,35 @@ public class SolidObject implements Paintable {
     }
 
     public int getX() {
-        return x;
+        return (int) this.bounds.getBounds().getX();
     }
 
     public int getY() {
-        return y;
+        return (int) this.bounds.getBounds().getY();
     }
 
     public int getCenterX() {
         return (int) this.bounds.getBounds().getCenterX();
     }
 
+    public void setCenterX(int x) {
+        this.bounds = new Rectangle(x - (this.getWidth() / 2), this.getY(), this.getWidth(), this.getHeight());
+    }
+
     public int getCenterY() {
         return (int) this.bounds.getBounds().getCenterY();
     }
 
+    public void setCenterY(int y) {
+        this.bounds = new Rectangle(this.getX(), y - (this.getHeight() / 2), this.getWidth(), this.getHeight());
+    }
+
     public int getWidth() {
-        return this.width;
+        return (int) this.bounds.getBounds().getWidth();
     }
 
     public int getHeight() {
-        return this.height;
+        return (int) this.bounds.getBounds().getHeight();
     }
 
     public String getType() {

@@ -16,7 +16,7 @@ public class Main {
         Map map = new Map();
 
         Communicator communicator = new SocketCommunicator();
-        RobotControl robot = new RobotControl(communicator);
+        RobotControl robot = new RobotControl(communicator, 668, 100);
         VisionCollector visionCollector = new VisionCollector(map, communicator, robot);
 
         DebugFrame debugFrame = new DebugFrame(map, robot);

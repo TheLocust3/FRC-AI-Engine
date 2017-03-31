@@ -77,10 +77,10 @@ public class SocketCommunicator implements Communicator {
         allRobots.addAll((Collection) mapUpdate.get("BLUE"));
 
         for (Object object : allRobots) {
-            JSONObject jsonObject = (JSONObject)object;
+            JSONObject jsonObject = (JSONObject) object;
             int x = ((Long) jsonObject.get("x")).intValue();
             int y = ((Long) jsonObject.get("y")).intValue();
-            rawMap.add(new int[]{x, y, 0});
+            rawMap.add(new int[] {x, y, 0});
         }
 
         return rawMap;

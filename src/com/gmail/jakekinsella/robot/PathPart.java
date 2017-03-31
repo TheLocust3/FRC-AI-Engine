@@ -31,8 +31,12 @@ public class PathPart implements Paintable {
     }
 
     public void execute() {
-        this.robotControl.turn(line.getAngle());
-        this.robotControl.drive(0.5); // TODO: Change the robot speed
+        if (!this.robotControl.getAngle().equals(line.getAngle())) {
+            this.robotControl.turn(line.getAngle());
+        } else {
+            this.robotControl.drive(0.5); // TODO: Change the robot speed
+        }
+
         this.finished = isRobotAtEnd();
     }
 

@@ -5,6 +5,8 @@ import com.gmail.jakekinsella.map.SolidObjects.*;
 import com.gmail.jakekinsella.map.SolidObjects.Robot;
 import com.gmail.jakekinsella.robot.RobotControl;
 import com.gmail.jakekinsella.robot.RotatedRectangle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class Map implements Paintable {
     private final int TOP_CORNER_ANGLE = 90 - 115;
     private final int BOTTOM_CORNER_ANGLE = 180 + 135;
     private final int LOADING_STATION_ANGLE = 66;
+
+    private static final Logger logger = LogManager.getLogger();
 
     private ArrayList<SolidObject> map = this.createDefaultField(); // Map is on its side, 0,0 is the corner to the right of the blue tower
     private ArrayList<Wall> walls;
@@ -89,11 +93,14 @@ public class Map implements Paintable {
         }
 
         for (int[] visionObject : visionObjects) {
-            switch (visionObject[2]) { // Gears are completely irrelevant because our robot doesn't pick up gears from the ground
-                case 0:
-                    newMap.add(new Robot(visionObject[0], visionObject[1]));
-                case 1:
-                    newMap.add(new Ball(visionObject[0], visionObject[1]));
+            if (visionObject[2] == 0) {
+                Robot robot = new Robot(visionObject[0], visionObject[1]);
+                robot.setCenterX(visionObject[0]);
+                robot.setCenterY(visionObject[1]);
+
+                newMap.add(robot);
+            } else { // Gears and balls are irrelevant to overall strategy
+                logger.error("Caught unknown object from vision: " + visionObject[2]);
             }
         }
 
@@ -168,7 +175,7 @@ public class Map implements Paintable {
     }
 
     private ArrayList<SolidObject> tuneRobotsFromVision(ArrayList<SolidObject> map, RobotControl robotControl) {
-        ArrayList<Robot> robots = robotsInMap(map);
+        ArrayList<Robot> robots = this.robotsInMap(map);
 
         if (robots.size() > this.ROBOTS_ON_FIELD) {
             ArrayList<Robot> condensedRobots = condenseRobotsCloseTogether(robots);
@@ -191,8 +198,10 @@ public class Map implements Paintable {
         }
 
         for (Robot robot : robots) {
-            if (this.isObjectNearRobotBounds(robot.getX(), robot.getY(), robotControl.getRobotBounds().getBounds())) {
-                robotControl.updateInternalPositionFromVision(robot.getX(), robot.getY());
+            if (this.isObjectNearRobotBounds(robot.getCenterX(), robot.getCenterY(), robotControl.getRobotBounds().getBounds())) {
+                robotControl.updateInternalPositionFromVision(robot.getCenterX(), robot.getCenterY());
+
+                map.remove(robot);
             }
         }
 
@@ -258,12 +267,12 @@ public class Map implements Paintable {
         return -1;
     }
 
-    private boolean isObjectNearRobotBounds(int x, int y, Rectangle robotBounds) {
-        if (Math.abs(robotBounds.getX() - x) > 20) {
+    private boolean isObjectNearRobotBounds(int centerX, int centerY, Rectangle robotBounds) {
+        if (Math.abs(robotBounds.getCenterX() - centerX) > 30) {
             return false;
         }
 
-        if (Math.abs(robotBounds.getY() - y) > 20) {
+        if (Math.abs(robotBounds.getCenterY() - centerY) > 30) {
             return false;
         }
 

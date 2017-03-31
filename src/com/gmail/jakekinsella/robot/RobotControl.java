@@ -14,18 +14,18 @@ import java.awt.geom.Rectangle2D;
  */
 public class RobotControl implements Paintable {
 
-    private final int WIDTH = 50, HEIGHT = 50;
+    private final int WIDTH = 40, HEIGHT = 50;
 
     private Communicator communicator;
     private AccelerationTracker accelerationTracker;
     private Shape boundingBox;
     private LinePath currentPath;
 
-    public RobotControl(Communicator communicator) {
+    public RobotControl(Communicator communicator, int startX, int startY) {
         this.communicator = communicator;
         this.accelerationTracker = new AccelerationTracker();
-        this.boundingBox = new Rectangle2D.Double();
-        this.updateInternalPositionFromVision(500, 300); // For testing only
+        this.boundingBox = new Rectangle2D.Double(0, 0, this.WIDTH, this.HEIGHT);
+        this.updateInternalPosition(startX, startY, 0);
     }
 
     public Rectangle2D getRobotBounds() {
@@ -36,9 +36,11 @@ public class RobotControl implements Paintable {
         return this.currentPath;
     }
 
-    public void updateInternalPositionFromVision(int x, int y) {
-        double deltaX = (this.boundingBox.getBounds().getCenterX() + x) / 2.0; // Average them together
-        double deltaY = (this.boundingBox.getBounds().getCenterY() + y) / 2.0;
+    public void updateInternalPositionFromVision(int centerX, int centerY) {
+        System.out.println("Y Center: " + this.boundingBox.getBounds().getCenterY());
+        System.out.println("Y: " + centerY);
+        double deltaX = (centerX - this.boundingBox.getBounds().getCenterX()) / 2.0;
+        double deltaY = (centerY - this.boundingBox.getBounds().getCenterY()) / 2.0;
 
         this.updateInternalPosition(deltaX, deltaY, this.getAngle().getNormalizedDegrees());
     }
@@ -53,7 +55,7 @@ public class RobotControl implements Paintable {
         double deltaY = (this.getVelocity() * Math.cos(this.getAngle().getRadians())) * deltaSeconds;
         this.updateInternalPosition(deltaX, deltaY, this.getAngle().getNormalizedDegrees());
 
-        //this.followLinePath();
+        this.followLinePath();
     }
 
     public void gotoLocation(double newX, double newY, Map map) {
