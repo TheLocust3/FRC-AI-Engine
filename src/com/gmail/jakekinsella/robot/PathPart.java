@@ -9,7 +9,8 @@ import java.awt.*;
  */
 public class PathPart implements Paintable {
 
-    private final int PIXEL_TOLERANCE = 50;
+    private static final int PIXEL_TOLERANCE = 50;
+    private static final double ANGLE_TOLERANCE = 5;
 
     private boolean finished;
 
@@ -31,8 +32,8 @@ public class PathPart implements Paintable {
     }
 
     public void execute() {
-        if (!this.robotControl.getAngle().equals(line.getAngle())) {
-            this.robotControl.turn(line.getAngle());
+        if (!this.checkIfAnglesAreClose(this.robotControl.getAngle(), this.line.getAngle())) {
+            this.robotControl.turn(this.line.getAngle());
         } else {
             this.robotControl.drive(0.5); // TODO: Change the robot speed
         }
@@ -48,8 +49,14 @@ public class PathPart implements Paintable {
     private boolean isRobotAtEnd() { // TODO: Check if the robot overshot
         boolean atEnd = Math.abs(this.robotControl.getRobotBounds().getCenterX() - this.line.getEndX()) < PIXEL_TOLERANCE;
         atEnd = atEnd && Math.abs(this.robotControl.getRobotBounds().getCenterY() - this.line.getEndY()) < PIXEL_TOLERANCE;
-        atEnd = atEnd && this.robotControl.getAngle().equals(line.getAngle());
+        atEnd = atEnd && this.checkIfAnglesAreClose(this.robotControl.getAngle(), this.line.getAngle());
 
         return atEnd;
+    }
+
+    private boolean checkIfAnglesAreClose(Angle angle1, Angle angle2) {
+        System.out.println("Angle 1: " + angle1.getNormalizedDegrees());
+        System.out.println("Angle 2: " + angle2.getNormalizedDegrees());
+        return Math.abs(angle1.getNormalizedDegrees() - angle2.getNormalizedDegrees()) < ANGLE_TOLERANCE;
     }
 }
