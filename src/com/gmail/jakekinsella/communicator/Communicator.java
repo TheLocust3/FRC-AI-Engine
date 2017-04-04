@@ -12,5 +12,5 @@ public interface Communicator {
     double getVelocity();
     void move(double speed);
     void turn(double angle);
-    ArrayList<int[]> getVisionUpdate();
+    ArrayList<double[]> getVisionUpdate();
 }

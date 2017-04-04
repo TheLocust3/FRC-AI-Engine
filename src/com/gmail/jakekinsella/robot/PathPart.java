@@ -48,6 +48,7 @@ public class PathPart implements Paintable {
     private boolean isRobotAtEnd() { // TODO: Check if the robot overshot
         boolean atEnd = Math.abs(this.robotControl.getRobotBounds().getCenterX() - this.line.getEndX()) < PIXEL_TOLERANCE;
         atEnd = atEnd && Math.abs(this.robotControl.getRobotBounds().getCenterY() - this.line.getEndY()) < PIXEL_TOLERANCE;
+        atEnd = atEnd && this.robotControl.getAngle().equals(line.getAngle());
 
         return atEnd;
     }

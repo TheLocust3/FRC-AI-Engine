@@ -39,6 +39,10 @@ public class Angle {
         return this.getRadians() - 0.5 * Math.PI;
     }
 
+    public String toString() {
+        return String.valueOf(this.getDegrees());
+    }
+
     public boolean equals(Angle angle) {
         return this.getDegrees() == angle.getDegrees();
     }

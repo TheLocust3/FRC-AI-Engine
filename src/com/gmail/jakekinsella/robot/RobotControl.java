@@ -16,16 +16,18 @@ public class RobotControl implements Paintable {
 
     private final int WIDTH = 40, HEIGHT = 50;
 
+    private Shape boundingBox;
+
     private Communicator communicator;
     private AccelerationTracker accelerationTracker;
-    private Shape boundingBox;
     private LinePath currentPath;
+    private Angle angle;
 
     public RobotControl(Communicator communicator, int startX, int startY) {
         this.communicator = communicator;
         this.accelerationTracker = new AccelerationTracker();
         this.boundingBox = new Rectangle2D.Double(0, 0, this.WIDTH, this.HEIGHT);
-        this.updateInternalPosition(startX, startY, 0);
+        this.updateInternalPosition(startX, startY, new Angle(0));
     }
 
     public Rectangle2D getRobotBounds() {
@@ -36,13 +38,11 @@ public class RobotControl implements Paintable {
         return this.currentPath;
     }
 
-    public void updateInternalPositionFromVision(int centerX, int centerY) {
-        System.out.println("Y Center: " + this.boundingBox.getBounds().getCenterY());
-        System.out.println("Y: " + centerY);
+    public void updateInternalPositionFromVision(int centerX, int centerY, Angle angle) {
         double deltaX = (centerX - this.boundingBox.getBounds().getCenterX()) / 2.0;
         double deltaY = (centerY - this.boundingBox.getBounds().getCenterY()) / 2.0;
 
-        this.updateInternalPosition(deltaX, deltaY, this.getAngle().getNormalizedDegrees());
+        this.updateInternalPosition(deltaX, deltaY, angle);
     }
 
     public void tick(double deltaSeconds, Map map) {
@@ -53,7 +53,7 @@ public class RobotControl implements Paintable {
 
         double deltaX = (this.getVelocity() * Math.sin(this.getAngle().getRadians())) * deltaSeconds;
         double deltaY = (this.getVelocity() * Math.cos(this.getAngle().getRadians())) * deltaSeconds;
-        this.updateInternalPosition(deltaX, deltaY, this.getAngle().getNormalizedDegrees());
+        this.updateInternalPosition(deltaX, deltaY, this.getAngle());
 
         this.followLinePath();
     }
@@ -64,7 +64,7 @@ public class RobotControl implements Paintable {
     }
 
     public Angle getAngle() {
-        return new Angle(communicator.getDegrees());
+        return this.angle;
     }
 
     public double getAcceleration() {
@@ -89,11 +89,13 @@ public class RobotControl implements Paintable {
         graphics2D.fill(this.boundingBox);
     }
 
-    private void updateInternalPosition(double deltaX, double deltaY, double absoluteDegrees) {
-        Rectangle2D.Double rect = new Rectangle2D.Double();
-        rect.setRect(this.boundingBox.getBounds().getX() + deltaX, this.boundingBox.getBounds().getY() + deltaY, this.WIDTH, this.HEIGHT);
+    private void updateInternalPosition(double deltaX, double deltaY, Angle angle) {
+        this.angle = angle;
 
-        AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(absoluteDegrees), rect.getCenterX(), rect.getCenterY());
+        Rectangle2D.Double rect = new Rectangle2D.Double();
+        rect.setRect(this.boundingBox.getBounds().getCenterX() - (this.WIDTH / 2) + deltaX, this.boundingBox.getBounds().getCenterY() - (this.HEIGHT / 2) + deltaY, this.WIDTH, this.HEIGHT);
+
+        AffineTransform at = AffineTransform.getRotateInstance(angle.getRadians(), rect.getCenterX(), rect.getCenterY());
         this.boundingBox = at.createTransformedShape(rect);
     }
 

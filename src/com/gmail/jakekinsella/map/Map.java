@@ -82,8 +82,8 @@ public class Map implements Paintable {
         return closestDistance;
     }
 
-    // visionObjects = 0 -> x, 1 -> y, 2 -> type
-    public void inputVisionData(ArrayList<int[]> visionObjects, RobotControl robotControl) {
+    // visionObjects = 0 -> type, 1 -> x, 2 -> y
+    public void inputVisionData(ArrayList<double[]> visionObjects, RobotControl robotControl) {
         ArrayList<SolidObject> newMap = this.createDefaultField();
 
         for (SolidObject solidObject : this.map) {
@@ -92,15 +92,15 @@ public class Map implements Paintable {
             }
         }
 
-        for (int[] visionObject : visionObjects) {
-            if (visionObject[2] == 0) {
-                Robot robot = new Robot(visionObject[0], visionObject[1]);
-                robot.setCenterX(visionObject[0]);
-                robot.setCenterY(visionObject[1]);
+        for (double[] visionObject : visionObjects) {
+            if (visionObject[0] == 0) {
+                Robot robot = new Robot((int) visionObject[1], (int) visionObject[2], visionObject[3]);
+                robot.setCenterX((int) visionObject[1]);
+                robot.setCenterY((int) visionObject[2]);
 
                 newMap.add(robot);
             } else { // Gears and balls are irrelevant to overall strategy
-                logger.error("Caught unknown object from vision: " + visionObject[2]);
+                logger.error("Caught unknown object from vision: " + visionObject[0]);
             }
         }
 
@@ -199,7 +199,7 @@ public class Map implements Paintable {
 
         for (Robot robot : robots) {
             if (this.isObjectNearRobotBounds(robot.getCenterX(), robot.getCenterY(), robotControl.getRobotBounds().getBounds())) {
-                robotControl.updateInternalPositionFromVision(robot.getCenterX(), robot.getCenterY());
+                robotControl.updateInternalPositionFromVision(robot.getCenterX(), robot.getCenterY(), robot.getAngle());
 
                 map.remove(robot);
             }

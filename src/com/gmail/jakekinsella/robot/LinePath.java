@@ -30,11 +30,11 @@ public class LinePath implements Paintable {
     }
 
     public PathPart getCurrentPath() {
-        PathPart pathPart = pathParts.get(atPath);
-
-        if (pathPart == null) {
+        if (atPath >= this.pathParts.size()) {
             return null;
         }
+
+        PathPart pathPart = this.pathParts.get(atPath);
 
         if (pathPart.isFinished()) {
             atPath++;

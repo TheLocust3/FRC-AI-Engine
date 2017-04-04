@@ -1,7 +1,7 @@
 package com.gmail.jakekinsella.communicator;
 
-import com.gmail.jakekinsella.communicator.Communicator;
 import com.gmail.jakekinsella.communicator.socket.*;
+import com.gmail.jakekinsella.robot.Angle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -23,6 +23,8 @@ public class SocketCommunicator implements Communicator {
 
     private Socket socket;
     private BufferedReader socketReader;
+
+    private Angle angle;
 
     public SocketCommunicator() {
         try {
@@ -63,13 +65,13 @@ public class SocketCommunicator implements Communicator {
     }
 
     @Override
-    public ArrayList<int[]> getVisionUpdate() {
+    public ArrayList<double[]> getVisionUpdate() {
         Command command = readCommand();
         while (!command.getCommandName().equals("MAP_UPDATE")) {
             command = readCommand();
         }
 
-        ArrayList<int[]> rawMap = new ArrayList<>();
+        ArrayList<double[]> rawMap = new ArrayList<>();
 
         JSONObject mapUpdate = (JSONObject) command.getArgAt(0);
         JSONArray allRobots = new JSONArray();
@@ -80,7 +82,9 @@ public class SocketCommunicator implements Communicator {
             JSONObject jsonObject = (JSONObject) object;
             int x = ((Long) jsonObject.get("x")).intValue();
             int y = ((Long) jsonObject.get("y")).intValue();
-            rawMap.add(new int[] {x, y, 0});
+            double angle = ((Double) jsonObject.get("angle"));
+
+            rawMap.add(new double[] {0, x, y, angle});
         }
 
         return rawMap;
