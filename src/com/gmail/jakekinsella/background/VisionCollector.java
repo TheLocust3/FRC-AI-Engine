@@ -25,7 +25,7 @@ public class VisionCollector implements Runnable {
             this.map.inputVisionData(this.communicator.getVisionUpdate(), robotControl);
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
