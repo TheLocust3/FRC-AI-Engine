@@ -30,20 +30,19 @@ public class LinePath implements Paintable {
     }
 
     public PathPart getCurrentPath() {
-        if (atPath >= this.pathParts.size()) {
+        if (this.atPath >= this.pathParts.size()) {
             return null;
         }
 
         PathPart pathPart = this.pathParts.get(atPath);
-
         if (pathPart.isFinished()) {
-            atPath++;
+            this.atPath++;
 
-            if (atPath >= pathParts.size()) {
+            if (this.atPath >= this.pathParts.size()) {
                 return null;
             }
 
-            pathPart = pathParts.get(atPath);
+            pathPart = this.pathParts.get(this.atPath);
         }
 
         return pathPart;
@@ -56,14 +55,14 @@ public class LinePath implements Paintable {
         }
 
         graphics2D.setColor(Color.GREEN);
-        graphics2D.fillOval(endX, endY, 10, 10);
+        graphics2D.fillOval(this.endX, this.endY, 10, 10);
     }
 
     public void generatePath(double startX, double startY, double endX, double endY) {
         this.endX = (int) endX;
         this.endY = (int) endY;
 
-        pathParts.addAll(evaluatePath(startX, startY, endX, endY));
+        this.pathParts.addAll(evaluatePath(startX, startY, endX, endY));
     }
 
     public ArrayList<PathPart> evaluatePath(double startX, double startY, double endX, double endY) {

@@ -14,7 +14,7 @@ import java.awt.geom.Rectangle2D;
  */
 public class RobotControl implements Paintable {
 
-    private final int WIDTH = 40, HEIGHT = 50;
+    private final int WIDTH = 50, HEIGHT = 40;
 
     private Shape boundingBox;
 
@@ -38,9 +38,9 @@ public class RobotControl implements Paintable {
         return this.currentPath;
     }
 
-    public void updateInternalPositionFromVision(int centerX, int centerY, Angle angle) {
-        double deltaX = (centerX - this.boundingBox.getBounds().getCenterX()) / 2.0;
-        double deltaY = (centerY - this.boundingBox.getBounds().getCenterY()) / 2.0;
+    public void updateInternalPositionFromVision(int centerX, int centerY, Angle angle, double confidenceModifier) {
+        double deltaX = (centerX - this.boundingBox.getBounds().getCenterX()) * confidenceModifier;
+        double deltaY = (centerY - this.boundingBox.getBounds().getCenterY()) * confidenceModifier;
 
         this.updateInternalPosition(deltaX, deltaY, angle);
     }

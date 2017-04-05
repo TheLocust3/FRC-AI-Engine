@@ -199,7 +199,8 @@ public class Map implements Paintable {
 
         for (Robot robot : robots) {
             if (this.isObjectNearRobotBounds(robot.getCenterX(), robot.getCenterY(), robotControl.getRobotBounds().getBounds())) {
-                robotControl.updateInternalPositionFromVision(robot.getCenterX(), robot.getCenterY(), robot.getAngle());
+                // TODO: Calculate confidenceModifier
+                robotControl.updateInternalPositionFromVision(robot.getCenterX(), robot.getCenterY(), robot.getAngle(), 1);
 
                 map.remove(robot);
             }

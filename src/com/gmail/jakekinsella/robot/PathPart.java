@@ -13,6 +13,7 @@ public class PathPart implements Paintable {
     private static final double ANGLE_TOLERANCE = 5;
 
     private boolean finished;
+    private boolean isStarted = false;
 
     private RotatedRectangle line;
     private RobotControl robotControl;
@@ -32,13 +33,16 @@ public class PathPart implements Paintable {
     }
 
     public void execute() {
-        if (!this.checkIfAnglesAreClose(this.robotControl.getAngle(), this.line.getAngle())) {
+        if (!this.isStarted) {
             this.robotControl.turn(this.line.getAngle());
-        } else {
+            this.isStarted = true;
+        }
+
+        if (this.checkIfAnglesAreClose(this.robotControl.getAngle(), this.line.getAngle())) {
             this.robotControl.drive(0.5); // TODO: Change the robot speed
         }
 
-        this.finished = isRobotAtEnd();
+        this.finished = this.isRobotAtEnd();
     }
 
     @Override
@@ -55,8 +59,6 @@ public class PathPart implements Paintable {
     }
 
     private boolean checkIfAnglesAreClose(Angle angle1, Angle angle2) {
-        System.out.println("Angle 1: " + angle1.getNormalizedDegrees());
-        System.out.println("Angle 2: " + angle2.getNormalizedDegrees());
         return Math.abs(angle1.getNormalizedDegrees() - angle2.getNormalizedDegrees()) < ANGLE_TOLERANCE;
     }
 }
