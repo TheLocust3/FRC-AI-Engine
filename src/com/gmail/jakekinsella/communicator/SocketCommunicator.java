@@ -54,8 +54,6 @@ public class SocketCommunicator implements Communicator {
 
     @Override
     public void move(double percentSpeed) {
-        assert(percentSpeed < -1.0 && percentSpeed > 1.0);
-
         new MoveCommand(this.socket, percentSpeed).sendCommand();
     }
 
@@ -80,8 +78,8 @@ public class SocketCommunicator implements Communicator {
 
         for (Object object : allRobots) {
             JSONObject jsonObject = (JSONObject) object;
-            int x = ((Long) jsonObject.get("x")).intValue();
-            int y = ((Long) jsonObject.get("y")).intValue();
+            double x = (double) jsonObject.get("x");
+            double y = (double) jsonObject.get("y");
             double angle = ((Double) jsonObject.get("angle"));
 
             rawMap.add(new double[] {0, x, y, angle});

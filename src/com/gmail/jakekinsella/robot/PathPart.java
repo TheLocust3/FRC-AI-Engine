@@ -10,10 +10,11 @@ import java.awt.*;
 public class PathPart implements Paintable {
 
     private static final int PIXEL_TOLERANCE = 50;
-    private static final double ANGLE_TOLERANCE = 5;
+    private static final double ANGLE_TOLERANCE = 1;
 
     private boolean finished;
-    private boolean isStarted = false;
+    private boolean shouldTurn = true;
+    private boolean shouldMove = false;
 
     private RotatedRectangle line;
     private RobotControl robotControl;
@@ -33,16 +34,22 @@ public class PathPart implements Paintable {
     }
 
     public void execute() {
-        if (!this.isStarted) {
+        if (this.shouldTurn) {
             this.robotControl.turn(this.line.getAngle());
-            this.isStarted = true;
+            this.shouldTurn = false;
+            this.shouldMove = true;
         }
 
-        if (this.checkIfAnglesAreClose(this.robotControl.getAngle(), this.line.getAngle())) {
+        if (this.shouldMove && this.checkIfAnglesAreClose(this.robotControl.getAngle(), this.line.getAngle())) {
             this.robotControl.drive(0.5); // TODO: Change the robot speed
+            this.shouldMove = false;
         }
 
         this.finished = this.isRobotAtEnd();
+
+        if (this.finished) {
+            this.robotControl.drive(0);
+        }
     }
 
     @Override

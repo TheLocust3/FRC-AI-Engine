@@ -51,8 +51,8 @@ public class RobotControl implements Paintable {
             this.handleVisionSpike(map);
         }
 
-        double deltaX = (this.getVelocity() * Math.sin(this.getAngle().getRadians())) * deltaSeconds;
-        double deltaY = (this.getVelocity() * Math.cos(this.getAngle().getRadians())) * deltaSeconds;
+        double deltaX = (this.getVelocity() * Math.cos(this.getAngle().getRadians())) * deltaSeconds;
+        double deltaY = (this.getVelocity() * Math.sin(this.getAngle().getRadians())) * deltaSeconds;
         this.updateInternalPosition(deltaX, deltaY, this.getAngle());
 
         this.followLinePath();

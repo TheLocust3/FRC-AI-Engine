@@ -72,7 +72,6 @@ public class Command {
     public void sendCommand() {
         JSONObject obj = new JSONObject();
         obj.put("command", this.commandName);
-
         obj.put("args", this.args);
 
         this.socketOutput.println(obj.toJSONString());
