@@ -2,8 +2,11 @@ package com.gmail.jakekinsella.robot;
 
 import com.gmail.jakekinsella.Paintable;
 import com.gmail.jakekinsella.communicator.Communicator;
+import com.gmail.jakekinsella.communicator.SocketCommunicator;
 import com.gmail.jakekinsella.map.SolidObjects.FuzzyObject;
 import com.gmail.jakekinsella.map.Map;
+import com.gmail.jakekinsella.robot.pathing.LinePath;
+import com.gmail.jakekinsella.robot.pathing.PathPart;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -68,11 +71,15 @@ public class RobotControl implements Paintable {
     }
 
     public double getAcceleration() {
-        return communicator.getAcceleration();
+        return this.communicator.getAcceleration();
     }
 
     public double getVelocity() {
-        return communicator.getVelocity();
+        return this.communicator.getVelocity();
+    }
+
+    public boolean isOverSocket() {
+        return this.communicator instanceof SocketCommunicator;
     }
 
     public void drive(double percentSpeed) {

@@ -1,6 +1,7 @@
-package com.gmail.jakekinsella.robot;
+package com.gmail.jakekinsella.robot.pathing;
 
 import com.gmail.jakekinsella.Paintable;
+import com.gmail.jakekinsella.robot.Angle;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

@@ -1,9 +1,10 @@
-package com.gmail.jakekinsella.robot;
+package com.gmail.jakekinsella.robot.pathing;
 
 import com.gmail.jakekinsella.Paintable;
 import com.gmail.jakekinsella.map.Map;
 import com.gmail.jakekinsella.map.SolidObjects.SolidObject;
-import com.gmail.jakekinsella.map.SolidObjects.Wall;
+import com.gmail.jakekinsella.robot.Angle;
+import com.gmail.jakekinsella.robot.RobotControl;
 
 import java.awt.*;
 import java.util.ArrayList;

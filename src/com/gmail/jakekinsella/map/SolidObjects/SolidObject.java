@@ -1,10 +1,9 @@
 package com.gmail.jakekinsella.map.SolidObjects;
 
 import com.gmail.jakekinsella.Paintable;
-import com.gmail.jakekinsella.robot.RotatedRectangle;
+import com.gmail.jakekinsella.robot.pathing.RotatedRectangle;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
 /**
  * Created by jakekinsella on 12/19/16.

@@ -2,6 +2,7 @@ package com.gmail.jakekinsella.communicator;
 
 import com.gmail.jakekinsella.communicator.socket.*;
 import com.gmail.jakekinsella.robot.Angle;
+import com.gmail.jakekinsella.robot.pathing.PathPart;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -50,6 +51,11 @@ public class SocketCommunicator implements Communicator {
     @Override
     public double getVelocity() {
         return 0;
+    }
+
+    @Override
+    public void followPath(PathPart path) {
+
     }
 
     @Override

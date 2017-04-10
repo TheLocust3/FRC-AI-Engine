@@ -4,7 +4,7 @@ import com.gmail.jakekinsella.Paintable;
 import com.gmail.jakekinsella.map.SolidObjects.*;
 import com.gmail.jakekinsella.map.SolidObjects.Robot;
 import com.gmail.jakekinsella.robot.RobotControl;
-import com.gmail.jakekinsella.robot.RotatedRectangle;
+import com.gmail.jakekinsella.robot.pathing.RotatedRectangle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,7 +1,7 @@
 package com.gmail.jakekinsella.map.SolidObjects;
 
 import com.gmail.jakekinsella.robot.Angle;
-import com.gmail.jakekinsella.robot.RotatedRectangle;
+import com.gmail.jakekinsella.robot.pathing.RotatedRectangle;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

@@ -1,32 +1,29 @@
-package com.gmail.jakekinsella.robot;
+package com.gmail.jakekinsella.robot.pathing.socket;
 
-import com.gmail.jakekinsella.Paintable;
-
-import java.awt.*;
+import com.gmail.jakekinsella.communicator.SocketCommunicator;
+import com.gmail.jakekinsella.robot.Angle;
+import com.gmail.jakekinsella.robot.RobotControl;
+import com.gmail.jakekinsella.robot.pathing.RotatedRectangle;
 
 /**
- * Created by jakekinsella on 1/31/17.
+ * Created by jakekinsella on 4/10/17.
  */
-public class PathPart implements Paintable {
+public class SocketFollower implements Follower {
 
     private static final int PIXEL_TOLERANCE = 20;
     private static final double ANGLE_TOLERANCE = 1;
+
+    private RotatedRectangle line;
+    private RobotControl robotControl;
 
     private boolean finished;
     private boolean shouldTurn = true;
     private boolean shouldMove = false;
 
-    private RotatedRectangle line;
-    private RobotControl robotControl;
-
-    public PathPart(RotatedRectangle line, RobotControl robotControl) {
+    public SocketFollower(RotatedRectangle line, RobotControl robotControl) {
         this.line = line;
         this.robotControl = robotControl;
         this.finished = false;
-    }
-
-    public RotatedRectangle getLine() {
-        return this.line;
     }
 
     public boolean isFinished() {
@@ -52,12 +49,7 @@ public class PathPart implements Paintable {
         }
     }
 
-    @Override
-    public void paint(Graphics2D graphics2D) {
-        this.line.paint(graphics2D);
-    }
-
-    private boolean isRobotAtEnd() { // TODO: Check if the robot overshot
+    private boolean isRobotAtEnd() {
         boolean atEnd = Math.abs(this.robotControl.getRobotBounds().getCenterX() - this.line.getEndX()) < PIXEL_TOLERANCE;
         atEnd = atEnd && Math.abs(this.robotControl.getRobotBounds().getCenterY() - this.line.getEndY()) < PIXEL_TOLERANCE;
         atEnd = atEnd && this.checkIfAnglesAreClose(this.robotControl.getAngle(), this.line.getAngle());
