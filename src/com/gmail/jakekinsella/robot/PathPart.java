@@ -9,7 +9,7 @@ import java.awt.*;
  */
 public class PathPart implements Paintable {
 
-    private static final int PIXEL_TOLERANCE = 50;
+    private static final int PIXEL_TOLERANCE = 20;
     private static final double ANGLE_TOLERANCE = 1;
 
     private boolean finished;
@@ -61,6 +61,7 @@ public class PathPart implements Paintable {
         boolean atEnd = Math.abs(this.robotControl.getRobotBounds().getCenterX() - this.line.getEndX()) < PIXEL_TOLERANCE;
         atEnd = atEnd && Math.abs(this.robotControl.getRobotBounds().getCenterY() - this.line.getEndY()) < PIXEL_TOLERANCE;
         atEnd = atEnd && this.checkIfAnglesAreClose(this.robotControl.getAngle(), this.line.getAngle());
+        atEnd = atEnd && !this.line.isPointOnLine(this.robotControl.getRobotBounds().getCenterX(), this.robotControl.getRobotBounds().getCenterY());
 
         return atEnd;
     }

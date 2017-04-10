@@ -62,6 +62,10 @@ public class RotatedRectangle implements Paintable {
         this.update(distance);
     }
 
+    public boolean isPointOnLine(double x, double y) {
+        return this.shape.contains(x, y);
+    }
+
     public void rotate(Angle angle) {
         this.angle = angle;
         this.update();

@@ -151,6 +151,9 @@ public class Map implements Paintable {
         newMap.add(new LoadingStation(this.FRAME_WIDTH - 25, 0, 90 - this.LOADING_STATION_ANGLE));
         newMap.add(new LoadingStation(this.FRAME_WIDTH - 60, -18, 90 - this.LOADING_STATION_ANGLE));
 
+        newMap.add(new LoadingStation(500, 200, 0));
+        newMap.add(new LoadingStation(500, 100, 0));
+
         /* No objects just to test the pathfinder
         // TODO: Properly place all of this crap
 
