@@ -10,17 +10,25 @@ import com.gmail.jakekinsella.robot.routines.Routine;
  */
 public class PickupGearFromStationSocketRoutine extends Routine {
 
+    private boolean firstTime;
+
     public PickupGearFromStationSocketRoutine(RobotControl robotControl, Communicator communicator) {
         super(robotControl, communicator);
+
+        this.firstTime = true;
     }
 
     @Override
     public void execute(Map map) {
-        this.robotControl.gotoLocation(100, 100, map);
+        if (this.firstTime) {
+            this.robotControl.gotoLocation(100, 100, map);
+
+            this.firstTime = false;
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return !this.robotControl.isFollowingPath();
+        return !this.firstTime && !this.robotControl.isFollowingPath();
     }
 }

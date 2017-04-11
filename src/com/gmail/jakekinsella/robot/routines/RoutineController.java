@@ -21,7 +21,9 @@ public abstract class RoutineController {
     public abstract void pickupGearFromStation();
 
     public void tick(Map map) {
-        this.currentRoutine.execute(map);
+        if (this.currentRoutine != null) {
+            this.currentRoutine.execute(map);
+        }
 
         if (this.isRoutineFinished()) {
             this.currentRoutine = null;
