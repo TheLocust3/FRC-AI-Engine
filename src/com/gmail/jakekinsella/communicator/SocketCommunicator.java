@@ -54,11 +54,6 @@ public class SocketCommunicator implements Communicator {
     }
 
     @Override
-    public void followPath(PathPart path) {
-
-    }
-
-    @Override
     public void move(double percentSpeed) {
         new MoveCommand(this.socket, percentSpeed).sendCommand();
     }
@@ -66,6 +61,16 @@ public class SocketCommunicator implements Communicator {
     @Override
     public void turn(double angle) {
         new TurnCommand(this.socket, (long) angle).sendCommand();
+    }
+
+    @Override
+    public void pickupGearFromStation() {
+        new PickupGearFromStationCommand(this.socket).sendCommand();
+    }
+
+    @Override
+    public void placeGear() {
+        new GearPlaceCommand(this.socket).sendCommand();
     }
 
     @Override

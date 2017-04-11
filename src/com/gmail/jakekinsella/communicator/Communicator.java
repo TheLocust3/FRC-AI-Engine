@@ -1,7 +1,5 @@
 package com.gmail.jakekinsella.communicator;
 
-import com.gmail.jakekinsella.robot.pathing.PathPart;
-
 import java.util.ArrayList;
 
 /**
@@ -12,8 +10,9 @@ public interface Communicator {
     double getDegrees();
     double getAcceleration();
     double getVelocity();
-    void followPath(PathPart path);
     void move(double speed);
     void turn(double angle);
+    void pickupGearFromStation();
+    void placeGear();
     ArrayList<double[]> getVisionUpdate();
 }

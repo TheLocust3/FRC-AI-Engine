@@ -82,6 +82,10 @@ public class RobotControl implements Paintable {
         return this.communicator instanceof SocketCommunicator;
     }
 
+    public boolean isFollowingPath() {
+        return this.currentPath != null && this.currentPath.getCurrentPath() != null;
+    }
+
     public void drive(double percentSpeed) {
         this.communicator.move(percentSpeed);
     }

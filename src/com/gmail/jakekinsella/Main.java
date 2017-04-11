@@ -6,6 +6,8 @@ import com.gmail.jakekinsella.communicator.SocketCommunicator;
 import com.gmail.jakekinsella.debug.DebugFrame;
 import com.gmail.jakekinsella.map.Map;
 import com.gmail.jakekinsella.robot.RobotControl;
+import com.gmail.jakekinsella.robot.routines.RoutineController;
+import com.gmail.jakekinsella.robot.routines.socket.SocketRoutineController;
 
 /**
  * Created by jakekinsella on 12/19/16.
@@ -17,6 +19,8 @@ public class Main {
 
         Communicator communicator = new SocketCommunicator();
         RobotControl robot = new RobotControl(communicator, 668, 100);
+        RoutineController routineController = new SocketRoutineController(robot, communicator);
+
         VisionCollector visionCollector = new VisionCollector(map, communicator, robot);
 
         DebugFrame debugFrame = new DebugFrame(map, robot);
@@ -26,7 +30,8 @@ public class Main {
 
         new Thread(visionCollector).start();
 
-        robot.gotoLocation(450, 250, map);
+        //robot.gotoLocation(450, 250, map);
+        routineController.pickupGearFromStation();
 
         long lastTick = System.currentTimeMillis();
         while (true) {
@@ -34,6 +39,7 @@ public class Main {
 
             map.tick(deltaSeconds);
             robot.tick(deltaSeconds, map);
+            routineController.tick(map);
 
             if (args[0].toLowerCase().equals("debug")) {
                 debugFrame.repaint();
