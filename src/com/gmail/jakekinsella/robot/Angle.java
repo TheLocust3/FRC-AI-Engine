@@ -28,7 +28,7 @@ public class Angle {
         if (this.getDegrees() > 0) {
             return this.getDegrees() % 360;
         } else {
-            return 360 - (this.getDegrees() % 360);
+            return 360 + (this.getDegrees() % 360);
         }
     }
 
@@ -43,7 +43,15 @@ public class Angle {
         return String.valueOf(this.getDegrees());
     }
 
+    public Angle calculateAngleBetween(Angle angle) {
+        return new Angle(angle.getNormalizedDegrees() - this.getNormalizedDegrees());
+    }
+
     public boolean equals(Angle angle) {
         return this.getDegrees() == angle.getDegrees();
+    }
+
+    public boolean checkIfAnglesClose(Angle angle, final double TOLERANCE) {
+        return Math.abs(this.getNormalizedDegrees() - angle.getNormalizedDegrees()) < TOLERANCE;
     }
 }

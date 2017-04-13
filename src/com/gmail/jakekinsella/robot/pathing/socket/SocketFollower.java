@@ -1,6 +1,5 @@
 package com.gmail.jakekinsella.robot.pathing.socket;
 
-import com.gmail.jakekinsella.communicator.SocketCommunicator;
 import com.gmail.jakekinsella.robot.Angle;
 import com.gmail.jakekinsella.robot.RobotControl;
 import com.gmail.jakekinsella.robot.pathing.RotatedRectangle;
@@ -31,6 +30,9 @@ public class SocketFollower implements Follower {
     }
 
     public void execute() {
+        System.out.println("Robot: " + this.robotControl.getAngle().getNormalizedDegrees());
+        System.out.println("Line: " + this.line.getAngle().getNormalizedDegrees());
+
         if (this.shouldTurn) {
             this.robotControl.turn(this.line.getAngle());
             this.shouldTurn = false;
@@ -52,7 +54,7 @@ public class SocketFollower implements Follower {
     private boolean isRobotAtEnd() {
         boolean atEnd = Math.abs(this.robotControl.getRobotBounds().getCenterX() - this.line.getEndX()) < PIXEL_TOLERANCE;
         atEnd = atEnd && Math.abs(this.robotControl.getRobotBounds().getCenterY() - this.line.getEndY()) < PIXEL_TOLERANCE;
-        atEnd = atEnd && this.checkIfAnglesAreClose(this.robotControl.getAngle(), this.line.getAngle());
+        atEnd = atEnd && this.robotControl.getAngle().checkIfAnglesClose(this.line.getAngle(), ANGLE_TOLERANCE);
         atEnd = atEnd && !this.line.isPointOnLine(this.robotControl.getRobotBounds().getCenterX(), this.robotControl.getRobotBounds().getCenterY());
 
         return atEnd;
