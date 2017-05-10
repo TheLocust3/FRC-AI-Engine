@@ -91,7 +91,10 @@ public class RobotControl implements Paintable {
     }
 
     public void turn(Angle angle) {
-        //this.communicator.turn(angle.getDegrees());
+        System.out.println("Angle: " + this.getAngle().getNormalizedDegrees());
+        System.out.println("New angle: " + angle.getNormalizedDegrees());
+        System.out.println("Difference: " + this.getAngle().calculateAngleBetween(angle).getDegrees());
+
         this.communicator.turn(this.getAngle().calculateAngleBetween(angle).getDegrees());
     }
 
@@ -107,7 +110,7 @@ public class RobotControl implements Paintable {
         Rectangle2D.Double rect = new Rectangle2D.Double();
         rect.setRect(this.boundingBox.getBounds().getCenterX() - (this.WIDTH / 2) + deltaX, this.boundingBox.getBounds().getCenterY() - (this.HEIGHT / 2) + deltaY, this.WIDTH, this.HEIGHT);
 
-        AffineTransform at = AffineTransform.getRotateInstance(angle.getRadians(), rect.getCenterX(), rect.getCenterY());
+        AffineTransform at = AffineTransform.getRotateInstance(angle.getRobotControlRadians(), rect.getCenterX(), rect.getCenterY());
         this.boundingBox = at.createTransformedShape(rect);
     }
 

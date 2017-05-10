@@ -1,7 +1,7 @@
 package com.gmail.jakekinsella.map.SolidObjects;
 
 import com.gmail.jakekinsella.robot.Angle;
-import com.gmail.jakekinsella.robot.pathing.RotatedRectangle;
+import com.gmail.jakekinsella.robot.pathing.PaddedLine;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -42,9 +42,9 @@ public class Wall extends SolidObject {
         return this.bounds.intersects(rectangle.getBounds().getX(), rectangle.getBounds().getY(), rectangle.getBounds().getWidth(), rectangle.getBounds().getHeight());
     }
 
-    public double[] getIntersection(RotatedRectangle rotatedRectangle) {
-        double pointSlope = (rotatedRectangle.getStartY() - rotatedRectangle.getEndY()) / (rotatedRectangle.getStartX() - rotatedRectangle.getEndX());
-        double pointBValue = rotatedRectangle.getStartY() - (pointSlope * rotatedRectangle.getStartX());
+    public double[] getIntersection(PaddedLine paddedLine) {
+        double pointSlope = (paddedLine.getStartY() - paddedLine.getEndY()) / (paddedLine.getStartX() - paddedLine.getEndX());
+        double pointBValue = paddedLine.getStartY() - (pointSlope * paddedLine.getStartX());
 
         double xIntersection, yIntersection;
         if (this.isVertical()) {

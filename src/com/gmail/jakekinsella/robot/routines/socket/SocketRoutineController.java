@@ -16,6 +16,6 @@ public class SocketRoutineController extends RoutineController {
 
     @Override
     public void pickupGearFromStation() {
-        this.currentRoutine = new PickupGearFromStationSocketRoutine(this.robotControl, this.communicator);
+        this.currentRoutine = new PickupGearFromStationSocketRoutine(1, this.robotControl, this.communicator);
     }
 }

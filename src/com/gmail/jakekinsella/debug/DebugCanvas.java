@@ -1,10 +1,12 @@
 package com.gmail.jakekinsella.debug;
 
 import com.gmail.jakekinsella.map.Map;
+import com.gmail.jakekinsella.robot.Angle;
 import com.gmail.jakekinsella.robot.RobotControl;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 /**
  * Created by jakekinsella on 3/6/17.
@@ -24,11 +26,11 @@ public class DebugCanvas extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         Graphics2D graphics2D = (Graphics2D) graphics;
-        robotControl.paint(graphics2D);
-        map.paint(graphics2D);
+        this.robotControl.paint(graphics2D);
+        this.map.paint(graphics2D);
 
-        if (robotControl.getCurrentPath() != null) {
-            robotControl.getCurrentPath().paint(graphics2D);
+        if (this.robotControl.getCurrentPath() != null) {
+            this.robotControl.getCurrentPath().paint(graphics2D);
         }
     }
 }

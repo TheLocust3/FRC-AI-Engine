@@ -4,7 +4,7 @@ import com.gmail.jakekinsella.Paintable;
 import com.gmail.jakekinsella.map.SolidObjects.*;
 import com.gmail.jakekinsella.map.SolidObjects.Robot;
 import com.gmail.jakekinsella.robot.RobotControl;
-import com.gmail.jakekinsella.robot.pathing.RotatedRectangle;
+import com.gmail.jakekinsella.robot.pathing.PaddedLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,10 +49,10 @@ public class Map implements Paintable {
         }
     }
 
-    public SolidObject getIntersection(RotatedRectangle rotatedRectangle) {
+    public SolidObject getIntersection(PaddedLine paddedLine) {
         for (int i = 0; i < this.map.size(); i++) {
             if (!(this.map.get(i) instanceof Ball)) {
-                if (this.map.get(i).doesIntersectWithRotatedRectangle(rotatedRectangle)) {
+                if (this.map.get(i).doesIntersectWithPaddedLine(paddedLine)) {
                     return this.map.get(i);
                 }
             }
@@ -61,14 +61,14 @@ public class Map implements Paintable {
         return null;
     }
 
-    public double getDistanceToClosestIntersectionWithWall(RotatedRectangle rotatedRectangle) {
+    public double getDistanceToClosestIntersectionWithWall(PaddedLine paddedLine) {
         double[] point;
         double closestDistance = Double.MAX_VALUE;
 
         for (Wall wall : this.walls) {
-            if (wall.doesIntersect(rotatedRectangle.getShape())) {
-                point = wall.getIntersection(rotatedRectangle);
-                double distance = calculateDistanceBetweenPoints(rotatedRectangle.getStartX(), rotatedRectangle.getStartY(), point[0], point[1]);
+            if (wall.doesIntersect(paddedLine.getShape())) {
+                point = wall.getIntersection(paddedLine);
+                double distance = calculateDistanceBetweenPoints(paddedLine.getStartX(), paddedLine.getStartY(), point[0], point[1]);
                 if (distance < closestDistance) {
                     closestDistance = distance;
                 }

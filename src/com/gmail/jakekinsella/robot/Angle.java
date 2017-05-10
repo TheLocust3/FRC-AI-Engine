@@ -25,18 +25,23 @@ public class Angle {
 
     // degrees 0-360
     public double getNormalizedDegrees() {
-        if (this.getDegrees() > 0) {
+        if (this.getDegrees() >= 0) {
             return this.getDegrees() % 360;
         } else {
             return 360 + (this.getDegrees() % 360);
         }
     }
 
-    //      90
-    //  180 -|- 0
-    //      270
-    public double getAffineTransformRadians() {
-        return this.getRadians() - 0.5 * Math.PI;
+    // Only used in PaddedLine
+    public double getPaddedLineRadians() {
+        //return 2 * Math.PI - this.getRadians();
+        //return -this.getRadians() - 0.5 * Math.PI;
+        return 2 * Math.PI - this.getRadians();
+    }
+
+    // Random hack
+    public double getRobotControlRadians() {
+        return 2 * Math.PI - this.getRadians();
     }
 
     public String toString() {
@@ -44,7 +49,7 @@ public class Angle {
     }
 
     public Angle calculateAngleBetween(Angle angle) {
-        return new Angle(angle.getNormalizedDegrees() - this.getNormalizedDegrees());
+        return new Angle(this.getNormalizedDegrees() - angle.getNormalizedDegrees());
     }
 
     public boolean equals(Angle angle) {
@@ -52,6 +57,6 @@ public class Angle {
     }
 
     public boolean checkIfAnglesClose(Angle angle, final double TOLERANCE) {
-        return Math.abs(this.getNormalizedDegrees() - angle.getNormalizedDegrees()) < TOLERANCE;
+        return Math.abs(angle.getNormalizedDegrees() - this.getNormalizedDegrees()) < TOLERANCE;
     }
 }

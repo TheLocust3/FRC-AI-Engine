@@ -1,9 +1,6 @@
 package com.gmail.jakekinsella.robot.pathing;
 
 import com.gmail.jakekinsella.Paintable;
-import com.gmail.jakekinsella.communicator.Communicator;
-import com.gmail.jakekinsella.communicator.SocketCommunicator;
-import com.gmail.jakekinsella.robot.Angle;
 import com.gmail.jakekinsella.robot.RobotControl;
 import com.gmail.jakekinsella.robot.pathing.socket.Follower;
 import com.gmail.jakekinsella.robot.pathing.socket.SocketFollower;
@@ -15,11 +12,11 @@ import java.awt.*;
  */
 public class PathPart implements Paintable {
 
-    private RotatedRectangle line;
+    private PaddedLine line;
     private RobotControl robotControl;
     private Follower follower;
 
-    public PathPart(RotatedRectangle line, RobotControl robotControl) {
+    public PathPart(PaddedLine line, RobotControl robotControl) {
         this.line = line;
         this.robotControl = robotControl;
 
@@ -30,7 +27,7 @@ public class PathPart implements Paintable {
         }
     }
 
-    public RotatedRectangle getLine() {
+    public PaddedLine getLine() {
         return this.line;
     }
 

@@ -9,14 +9,14 @@ import java.awt.geom.AffineTransform;
 /**
  * Created by jakekinsella on 1/30/17.
  */
-public class RotatedRectangle implements Paintable {
+public class PaddedLine implements Paintable {
 
     private double startX, startY, endX, endY;
     private double width;
     private Angle angle;
     private Shape shape;
 
-    public RotatedRectangle(double startX, double startY, double endX, double endY, double width) {
+    public PaddedLine(double startX, double startY, double endX, double endY, double width) {
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
@@ -67,6 +67,14 @@ public class RotatedRectangle implements Paintable {
         return this.shape.contains(x, y);
     }
 
+    // Special method for checking angles with padding lines. This is a hack
+    public boolean checkIfAngleClose(Angle angle, final double TOLERANCE) {
+        //System.out.println("Line (N): " + this.getAngle().getNormalizedDegrees());
+        System.out.println("Line: " + this.getAngle());
+        //System.out.println("Angle (N): " + angle.getNormalizedDegrees());
+        return Math.abs(angle.getNormalizedDegrees() - -this.getAngle().getDegrees()) < TOLERANCE;
+    }
+
     public void rotate(Angle angle) {
         this.angle = angle;
         this.update();
@@ -96,7 +104,7 @@ public class RotatedRectangle implements Paintable {
         int yValues[] = {(int) this.getStartY(), (int) this.getStartY(), (int) (this.getStartY() + this.getLineDistance()), (int) (this.getStartY() + this.getLineDistance())};
         Polygon polygon = new Polygon(xValues, yValues, 4);
 
-        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getAffineTransformRadians(), polygon.getBounds2D().getCenterX(), polygon.getBounds2D().getY());
+        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getPaddedLineRadians(), polygon.getBounds2D().getCenterX(), polygon.getBounds2D().getY());
         this.shape = at.createTransformedShape(polygon);
     }
 }

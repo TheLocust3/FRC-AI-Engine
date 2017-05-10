@@ -57,6 +57,7 @@ public class Command {
         } catch (IOException e) {
             logger.error("Error opening a write stream to the socket", e);
         }
+
         this.commandName = (String) jsonObject.get("command");
         this.args = (JSONArray) jsonObject.get("args");
     }

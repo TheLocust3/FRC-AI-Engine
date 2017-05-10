@@ -1,7 +1,7 @@
 package com.gmail.jakekinsella.map.SolidObjects;
 
 import com.gmail.jakekinsella.Paintable;
-import com.gmail.jakekinsella.robot.pathing.RotatedRectangle;
+import com.gmail.jakekinsella.robot.pathing.PaddedLine;
 
 import java.awt.*;
 
@@ -9,6 +9,7 @@ import java.awt.*;
  * Created by jakekinsella on 12/19/16.
  */
 public class SolidObject implements Paintable {
+
     private final double DECAY_PER_SECONDS = 0.1;
 
     private double chanceObjectIsReal; // Decays over time
@@ -81,24 +82,8 @@ public class SolidObject implements Paintable {
     }
 
     // TODO: This doesn't work with rotated shapes yet
-    public boolean doesIntersectWithRotatedRectangle(RotatedRectangle rotatedRectangle) {
-        if (rotatedRectangle.getShape().contains(this.getX(), this.getY())) {
-            return true;
-        }
-
-        if (rotatedRectangle.getShape().contains(this.getX() + this.getWidth(), this.getY())) {
-            return true;
-        }
-
-        if (rotatedRectangle.getShape().contains(this.getX(), this.getY() + this.getHeight())) {
-            return true;
-        }
-
-        if (rotatedRectangle.getShape().contains(this.getX() + this.getWidth(), this.getY() + this.getHeight())) {
-            return true;
-        }
-
-        return false;
+    public boolean doesIntersectWithPaddedLine(PaddedLine paddedLine) {
+        return paddedLine.getShape().intersects(this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 
     public void decayChanceObjectIsReal(double deltaSeconds) {
