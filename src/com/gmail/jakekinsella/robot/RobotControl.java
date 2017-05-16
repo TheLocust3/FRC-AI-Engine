@@ -91,10 +91,6 @@ public class RobotControl implements Paintable {
     }
 
     public void turn(Angle angle) {
-        System.out.println("Angle: " + this.getAngle().getNormalizedDegrees());
-        System.out.println("New angle: " + angle.getNormalizedDegrees());
-        System.out.println("Difference: " + this.getAngle().calculateAngleBetween(angle).getDegrees());
-
         this.communicator.turn(this.getAngle().calculateAngleBetween(angle).getDegrees());
     }
 

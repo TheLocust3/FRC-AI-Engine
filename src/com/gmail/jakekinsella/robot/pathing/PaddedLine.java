@@ -69,10 +69,11 @@ public class PaddedLine implements Paintable {
 
     // Special method for checking angles with padding lines. This is a hack
     public boolean checkIfAngleClose(Angle angle, final double TOLERANCE) {
-        //System.out.println("Line (N): " + this.getAngle().getNormalizedDegrees());
-        System.out.println("Line: " + this.getAngle());
-        //System.out.println("Angle (N): " + angle.getNormalizedDegrees());
-        return Math.abs(angle.getNormalizedDegrees() - -this.getAngle().getDegrees()) < TOLERANCE;
+        if (angle.getDegrees() > this.angle.getDegrees()) {
+            return Math.abs(angle.getNormalizedDegrees() - -this.getAngle().getDegrees()) < TOLERANCE; // TODO: What the heck is this
+        }
+
+        return Math.abs(this.getAngle().getNormalizedDegrees() - angle.getNormalizedDegrees()) < TOLERANCE;
     }
 
     public void rotate(Angle angle) {
@@ -84,7 +85,6 @@ public class PaddedLine implements Paintable {
     public void paint(Graphics2D graphics2D) {
         graphics2D.setColor(Color.GREEN);
         graphics2D.setStroke(new BasicStroke(4));
-
         graphics2D.drawLine((int) this.getStartX(), (int) this.getStartY(), (int) this.getEndX(), (int) this.getEndY());
     }
 
@@ -104,7 +104,7 @@ public class PaddedLine implements Paintable {
         int yValues[] = {(int) this.getStartY(), (int) this.getStartY(), (int) (this.getStartY() + this.getLineDistance()), (int) (this.getStartY() + this.getLineDistance())};
         Polygon polygon = new Polygon(xValues, yValues, 4);
 
-        AffineTransform at = AffineTransform.getRotateInstance(this.angle.getPaddedLineRadians(), polygon.getBounds2D().getCenterX(), polygon.getBounds2D().getY());
+        AffineTransform at = AffineTransform.getRotateInstance(Math.PI - this.angle.getPaddedLineRadians(), polygon.getBounds2D().getCenterX(), polygon.getBounds2D().getY());
         this.shape = at.createTransformedShape(polygon);
     }
 }

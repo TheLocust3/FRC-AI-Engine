@@ -27,16 +27,14 @@ public class Angle {
     public double getNormalizedDegrees() {
         if (this.getDegrees() >= 0) {
             return this.getDegrees() % 360;
-        } else {
-            return 360 + (this.getDegrees() % 360);
         }
+
+        return 360 + (this.getDegrees() % 360);
     }
 
     // Only used in PaddedLine
     public double getPaddedLineRadians() {
-        //return 2 * Math.PI - this.getRadians();
-        //return -this.getRadians() - 0.5 * Math.PI;
-        return 2 * Math.PI - this.getRadians();
+        return 1.5 * Math.PI - this.getRadians();
     }
 
     // Random hack
@@ -49,7 +47,11 @@ public class Angle {
     }
 
     public Angle calculateAngleBetween(Angle angle) {
-        return new Angle(this.getNormalizedDegrees() - angle.getNormalizedDegrees());
+        if (angle.getDegrees() > this.getDegrees()) {
+            return new Angle(angle.getNormalizedDegrees() - this.getNormalizedDegrees());
+        }
+
+       return new Angle(this.getNormalizedDegrees() - angle.getNormalizedDegrees());
     }
 
     public boolean equals(Angle angle) {
