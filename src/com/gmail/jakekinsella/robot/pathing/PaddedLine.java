@@ -69,11 +69,12 @@ public class PaddedLine implements Paintable {
 
     // Special method for checking angles with padding lines. This is a hack
     public boolean checkIfAngleClose(Angle angle, final double TOLERANCE) {
-        if (angle.getDegrees() > this.angle.getDegrees()) {
-            return Math.abs(angle.getNormalizedDegrees() - -this.getAngle().getDegrees()) < TOLERANCE; // TODO: What the heck is this
+        // TODO: Eventually, this is going to break
+        if (this.getAngle().getDegrees() < 0) {
+            return Math.abs(angle.getDegrees() + this.getAngle().getDegrees()) < TOLERANCE;
         }
 
-        return Math.abs(this.getAngle().getNormalizedDegrees() - angle.getNormalizedDegrees()) < TOLERANCE;
+        return Math.abs(angle.getDegrees() - this.getAngle().getDegrees()) < TOLERANCE;
     }
 
     public void rotate(Angle angle) {

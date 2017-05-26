@@ -1,6 +1,5 @@
 package com.gmail.jakekinsella.robot.pathing.socket;
 
-import com.gmail.jakekinsella.robot.Angle;
 import com.gmail.jakekinsella.robot.RobotControl;
 import com.gmail.jakekinsella.robot.pathing.PaddedLine;
 
