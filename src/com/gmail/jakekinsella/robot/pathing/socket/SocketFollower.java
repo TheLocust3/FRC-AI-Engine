@@ -8,7 +8,7 @@ import com.gmail.jakekinsella.robot.pathing.PaddedLine;
  */
 public class SocketFollower implements Follower {
 
-    private static final int PIXEL_TOLERANCE = 20;
+    private static final int PIXEL_TOLERANCE = 40;
     private static final double ANGLE_TOLERANCE = 1;
 
     private PaddedLine line;
