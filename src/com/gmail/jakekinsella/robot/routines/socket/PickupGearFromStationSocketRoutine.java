@@ -13,7 +13,8 @@ public class PickupGearFromStationSocketRoutine extends Routine {
 
     private Angle angle;
 
-    private boolean firstTime, shouldTurn, doneTurning;
+    private boolean firstTime, doneTurning;
+    private int shouldTurn;
     private double stationX, stationY;
 
     // 1 = blue leftmost
@@ -26,7 +27,7 @@ public class PickupGearFromStationSocketRoutine extends Routine {
 
         this.setupStationEndPoint(stationNumber);
         this.firstTime = true;
-        this.shouldTurn = true;
+        this.shouldTurn = 0;
         this.doneTurning = false;
     }
 
@@ -38,12 +39,12 @@ public class PickupGearFromStationSocketRoutine extends Routine {
             this.firstTime = false;
         }
 
-        if (!this.robotControl.isFollowingPath() && !this.doneTurning) {
-            this.shouldTurn = false;
+        if (!this.robotControl.isFollowingPath() && !this.doneTurning && this.shouldTurn < 2) {
+            this.shouldTurn++;
             this.robotControl.turn(this.angle);
         }
 
-        if (!this.shouldTurn && !this.doneTurning) {
+        if (this.shouldTurn >= 2 && !this.doneTurning) {
             this.doneTurning = this.robotControl.getAngle().checkIfAnglesClose(this.angle, 1);
         }
     }
@@ -59,7 +60,7 @@ public class PickupGearFromStationSocketRoutine extends Routine {
             case 1:
                 this.stationX = 60;
                 this.stationY = 60;
-                this.angle = new Angle(45);
+                this.angle = new Angle(135);
                 break;
             case 2:
                 break;

@@ -51,7 +51,7 @@ public class Angle {
             return new Angle(angle.getNormalizedDegrees() - this.getNormalizedDegrees());
         }
 
-       return new Angle(this.getNormalizedDegrees() - angle.getNormalizedDegrees());
+       return new Angle(angle.getDegrees() - this.getDegrees());
     }
 
     public boolean equals(Angle angle) {
