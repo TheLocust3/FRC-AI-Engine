@@ -16,9 +16,11 @@ import java.util.ArrayList;
  */
 public class Map implements Paintable {
 
+    public static final int LOADING_STATION_ANGLE = 66;
+
     // 54ft 4in by 27ft
     // 1ft = 15px
-    public final int FRAME_HEIGHT = 405, FRAME_WIDTH = 815;
+    public final int FRAME_HEIGHT = 405, FRAME_WIDTH = 743;
 
     private final int ROBOTS_ON_FIELD = 6;
     private final int CLOSE_ENOUGH = 50;
@@ -28,7 +30,6 @@ public class Map implements Paintable {
     private final int BOTTOM_CORNER_LENGTH = 62;
     private final int TOP_CORNER_ANGLE = 90 - 115;
     private final int BOTTOM_CORNER_ANGLE = 180 + 135;
-    private final int LOADING_STATION_ANGLE = 66;
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -153,26 +154,6 @@ public class Map implements Paintable {
 
         newMap.add(new LoadingStation(500, 200, 0));
         newMap.add(new LoadingStation(500, 100, 0));
-
-        /* No objects just to test the pathfinder
-        // TODO: Properly place all of this crap
-
-        newMap.add(new LoadingStation(50, 0));
-
-        // Create red loading stations
-
-        newMap.add(new LoadingStation(250, 600));
-
-        // Create hopper triggers
-        newMap.add(new HopperTrigger(100, 0));
-        newMap.add(new HopperTrigger(400, 0));
-        newMap.add(new HopperTrigger(700, 0));
-
-        newMap.add(new HopperTrigger(200, 1000));
-        newMap.add(new HopperTrigger(800, 1000));
-
-        newMap.add(new Boiler(0, 1000));
-        newMap.add(new Boiler(1000, 1000));*/
 
         return newMap;
     }

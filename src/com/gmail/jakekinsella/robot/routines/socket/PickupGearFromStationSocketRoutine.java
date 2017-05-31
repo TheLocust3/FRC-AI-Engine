@@ -60,9 +60,12 @@ public class PickupGearFromStationSocketRoutine extends Routine {
             case 1:
                 this.stationX = 60;
                 this.stationY = 60;
-                this.angle = new Angle(135);
+                this.angle = new Angle(90 + Map.LOADING_STATION_ANGLE / 2);
                 break;
             case 2:
+                this.stationX = 70;
+                this.stationY = 60;
+                this.angle = new Angle(90 + Map.LOADING_STATION_ANGLE / 2);
                 break;
             case 3:
                 break;
